@@ -12,27 +12,28 @@
         <li class=active><a href={{url_for("catalog")}}>Каталог</a></li>
         <li><a>Список избранного</a></li>
 
-        {% if user_session == False %}
+        {% if user_role == 'guest' %}
+
         <form action="" method="get">
             <input type="submit" name="authorization_button" value="Войти"
                    style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
         </form>
         {% else %}
-        {% if user_role == "admin" %}
-        <li class=active><a href={{url_for("admin_profile")}}>Личный кабинет</a></li>
+        {% if user_role == 'admin' %}
+        <li class=active><a href={{ url_for("admin_profile")}}>Личный кабинет</a></li>
         {% else %}
-        <li class=active><a href={{url_for("profile")}}>Личный кабинет</a></li>
+        <li class=active><a href={{ url_for("user_profile")}}>Личный кабинет</a></li>
         {% endif %}
         {% endif %}
     </ul>
 </div>
 
 {% if is_authorization == True %}
-    {{ macros.authorization() }}
+{{ macros.authorization(user_data_error, auth_form) }}
 {% endif %}
 
 {% if is_registration == True %}
-    {{ macros.registration() }}
+{{ macros.registration(user_data_error, reg_form) }}
 {% endif %}
 
 <div class="catalog">
