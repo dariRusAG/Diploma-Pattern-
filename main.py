@@ -19,24 +19,25 @@ VALUES
 CREATE TABLE IF NOT EXISTS pattern (
  pattern_id INTEGER PRIMARY KEY AUTOINCREMENT,
  pattern_name VARCHAR(70),
+ complexity INTEGER,
  category_id INTEGER,
  FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE
 );
 
-INSERT INTO pattern (pattern_name, category_id)
+INSERT INTO pattern (pattern_name, category_id, complexity)
 VALUES
-('Футболка поло', 4),
-('Футболка Дженни', 4),
-('Классическая футболка', 4),
-('Классическая рубашка', 3),
-('Пляжная рубашка', 3),
-('Юбка-карандаш', 5),
-('Юбка-солнце', 5),
-('Классические брюки', 1),
-('Брюки бананы', 1),
-('Брюки скинни', 1),
-('Брюки карго', 1), 
-('Платье-футляр', 2);
+('Футболка поло', 4, 3),
+('Футболка Дженни', 4, 3),
+('Классическая футболка', 4, 2),
+('Классическая рубашка', 3, 4),
+('Пляжная рубашка', 3, 4),
+('Юбка-карандаш', 5, 3),
+('Юбка-солнце', 5, 1),
+('Классические брюки', 1, 4),
+('Брюки бананы', 1, 3),
+('Брюки скинни', 1, 3),
+('Брюки карго', 1, 4), 
+('Платье-футляр', 2, 5);
 
 CREATE TABLE IF NOT EXISTS users (
  users_id INTEGER PRIMARY KEY AUTOINCREMENT,

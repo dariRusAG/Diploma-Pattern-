@@ -8,16 +8,14 @@ from forms import *
 @app.route('/', methods=['GET', 'POST'])
 def catalog():
     conn = get_db_connection()
-    # нажата ли кнопка "войти"
-    is_authorization = False
-    # нажата ли кнопка "зарегистрироваться"
-    is_registration = False
-    # ошибка данных
-    user_data_error = False
-    # форма авторизации
-    auth_form = AuthorizationForm(request.form)
-    # форма регистрации
-    reg_form = RegistrationForm(request.form)
+
+    is_authorization = False  # нажата ли кнопка "войти"
+    is_registration = False  # нажата ли кнопка "зарегистрироваться"
+    user_data_error = False  # ошибка данных
+    
+    auth_form = AuthorizationForm(request.form)  # форма авторизации
+    reg_form = RegistrationForm(request.form)  # форма регистрации
+
 
     # нажата кнопка войти на странице каталога
     if request.values.get('authorization_button'):
@@ -29,15 +27,17 @@ def catalog():
 
     # нажата кнопка авторизации после ввода данных
     elif request.values.get('authorization_user_button'):
+
         login = request.values.get('auth_login')
         password = request.values.get('auth_password')
         print(login)
         match is_correct_login_and_password(conn, login,password):
+
             case "user":
-                session['user_id'] =f'{get_user_id(conn, login)}'
+                session['user_id'] = f'{get_user_id(conn, login)}'
                 session['user_role'] = "user"
             case "admin":
-                session['user_id'] =f'{get_user_id(conn, login)}'
+                session['user_id'] = f'{get_user_id(conn, login)}'
                 session['user_role'] = "admin"
             case "error":
                 is_authorization = True
@@ -64,14 +64,41 @@ def catalog():
     if 'user_id' not in session:
         session['user_role'] = "guest"
 
-    html = render_template(
+    df_category = get_category(conn)
+
+    # Если нажата кнопка "Найти"
+    if request.values.get('search'):
+        category = request.form.getlist('category')
+        complexity = request.form.getlist('complexity')
+
+    # Если нажата кнопка "Очистить" или вход на сайт впервые
+    else:
+        category = []
+        complexity = []
+
+    df_pattern = get_pattern(conn, category, complexity)
+
+    return render_template(
         'catalog.html',
+
+        # Пользователь
         is_authorization=is_authorization,
         is_registration=is_registration,
         user_data_error=user_data_error,
+
         user_role=session['user_role'],
         auth_form=auth_form,
         reg_form=reg_form
     )
 
-    return html
+
+        # Выбор фильтров
+        category=df_category,
+        choice_category=category,
+        choice_complexity=complexity,
+        len=len,
+        str=str,
+
+        # Выкройки
+        pattern=df_pattern
+    )

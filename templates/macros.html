@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+<!--Авторизация пользователя-->
 <!--поле для заполнения (логин, пароль и т.д.)-->
 {% macro render_field(field) %}
   {{ field.label }}
@@ -15,6 +16,7 @@
 
 <!--окно авторизации-->
 {% macro authorization(user_data_error,auth_form) %}
+
 <div class="gray_page">
 </div>
 <div class="authorization_registration">
@@ -34,7 +36,7 @@
 </div>
 {% endmacro %}
 
-<!--окно регистрации-->
+<!--Регистрация пользователя-->
 {% macro registration(user_data_error, reg_form) %}
 <div class="gray_page">
 </div>
@@ -59,6 +61,75 @@
                style="width:70%; height:20%;margin-top:5%;">
     </form>
 </div>
+{% endmacro %}
+
+<!--Генерация формы выбора категории-->
+{% macro render_block_choice(category, choice_category, choice_complexity, len, str) %}
+<p><b>Категории:</b></p>
+{% for i in range(len(category)) %}
+<p>
+    {% set value=category.loc[i, "category_name"] %}
+    {% if value in choice_category %}
+    <input type="checkbox" name="category" value="{{ value }}" checked>
+    {% else %}
+    <input type="checkbox" name="category" value="{{ value }}">
+    {% endif %}
+    {{ value }}
+</p>
+{% endfor %}
+
+<p><b>Сложность:</b></p>
+{% for i in range(5) %}
+<p>
+    <input type="checkbox" name="complexity" value="{{ i + 1 }}"
+           {% if str(i + 1) in choice_complexity %} checked {% endif %}>
+    {% for j in range(i + 1) %}
+    <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
+    {% endfor %}
+
+    {% for j in range(5 - (i + 1)) %}
+    <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
+    {% endfor %}
+</p>
+{% endfor %}
+{% endmacro %}
+
+<!--Макрос для вывода выкроек-->
+{% macro render_pattern(pattern, len) %}
+{% for i in range(len(pattern)) %}
+<div class="block">
+    <div class="data">
+        {% for name in pattern.dtypes.index %}
+        {% if name != "ID" %}
+        <p>
+            <b>{{ name }}:</b>
+            {% set value=pattern.loc[i, name] %}
+            {% if name != "Сложность" %}
+            {{ value }}
+
+            {% else %}
+            {% for i in range(value) %}
+                <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
+            {% endfor %}
+
+            {% for j in range(5 - value) %}
+                <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
+            {% endfor %}
+
+            {% endif %}
+
+        {% endif %}
+        {% endfor %}
+        </p>
+
+        <p>
+            <input type="radio" name="pattern" value="{{ pattern.loc[i, 'ID'] }}"
+                   {% if pattern.loc[i, 'ID'] == pattern.values[0][0] %} checked {% endif %}> Выбрать для построения
+            <input type="radio" name="pattern" value="{{ pattern.loc[i, 'ID'] }}"> Добавить в избранное
+        </p>
+    </div>
+</div>
+{% endfor %}
 {% endmacro %}
 
 <!--кнопка выход-->
