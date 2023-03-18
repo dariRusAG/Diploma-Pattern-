@@ -88,9 +88,7 @@ def catalog():
 
         user_role=session['user_role'],
         auth_form=auth_form,
-        reg_form=reg_form
-    )
-
+        reg_form=reg_form,
 
         # Выбор фильтров
         category=df_category,
