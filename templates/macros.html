@@ -1,39 +1,70 @@
 <!DOCTYPE html>
 
-{% macro authorization() %}
+<!--поле для заполнения (логин, пароль и т.д.)-->
+{% macro render_field(field) %}
+  {{ field.label }}
+  {{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+<!--окно авторизации-->
+{% macro authorization(user_data_error,auth_form) %}
 <div class="gray_page">
 </div>
-<div class="authorization">
+<div class="authorization_registration">
     <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%;">
     Войдите в аккаунт:
     <form action="" method="get">
-        Логин: <input type="text" name="login" style="height:10%; ">
+        {{ render_field(auth_form.auth_login) }}
         <br>
-        Пароль: <input type="text" name="password" style="height:10%; ">
+        {{ render_field(auth_form.auth_password) }}
         <br>
-        <input type="submit" value="Авторизоваться" name="authorization_user_button" style="width:70%; height:20%; margin-top:20%;">
+        <input type="submit" value="Авторизоваться" name="authorization_user_button"
+               style="width:70%; height:20%; margin-top:20%;">
         <br>
-        <input type="submit" value="Создать аккаунт" name="registration_button" style="width:70%; height:20%;margin-top:5%;">
+        <input type="submit" value="Создать аккаунт" name="registration_button"
+               style="width:70%; height:20%;margin-top:5%;">
     </form>
 </div>
 {% endmacro %}
 
-{% macro registration() %}
+<!--окно регистрации-->
+{% macro registration(user_data_error, reg_form) %}
 <div class="gray_page">
 </div>
-<div class="authorization">
+<div class="authorization_registration">
     <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%;">
     Создайте аккаунт:
     <form action="" method="get">
-        Логин: <input type="text" name="login" style="height:10%; ">
+        {{ render_field(reg_form.reg_login) }}
         <br>
-        Пароль: <input type="text" name="password" style="height:10%; ">
+        {{ render_field(reg_form.reg_password) }}
         <br>
-        Подтверждение пароля: <input type="text" name="password" style="height:10%; ">
+        {{ render_field(reg_form.password_confirm) }}
         <br>
-        <input type="submit" value="Зарегистрироваться" name="registration_user_button" style="width:70%; height:20%; margin-top:20%;">
+        {% if user_data_error == True %}
+        Ошибка
+        {% endif %}
         <br>
-        <input type="submit" value="Уже есть аккаунт" name="authorization_button" style="width:70%; height:20%;margin-top:5%;">
+        <input type="submit" value="Зарегистрироваться" name="registration_user_button"
+               style="width:70%; height:20%; margin-top:20%;">
+        <br>
+        <input type="submit" value="Уже есть аккаунт" name="authorization_button"
+               style="width:70%; height:20%;margin-top:5%;">
     </form>
 </div>
+{% endmacro %}
+
+<!--кнопка выход-->
+{% macro exit() %}
+<form action={{url_for('catalog')}} method="get">
+    <input type="submit" name="exit_button" value="Выйти"
+           style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+</form>
 {% endmacro %}
