@@ -1,7 +1,8 @@
 from app import app
-from flask import render_template, request, session, make_response
+from flask import render_template, request, session
 from utils import get_db_connection
 from models.catalog_model import *
+
 
 @app.route('/', methods=['GET', 'POST'])
 def catalog():

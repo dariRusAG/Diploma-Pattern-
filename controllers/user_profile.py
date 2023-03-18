@@ -1,5 +1,6 @@
 from app import app
-from flask import render_template, request, session, make_response
+from flask import render_template
+
 
 @app.route('/profile', methods=['GET', 'POST'])
 def user_profile():

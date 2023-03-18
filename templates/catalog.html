@@ -16,19 +16,21 @@
         </form>
         {% else %}
         {% if user_role == "admin" %}
-        <li class=active><a href={{ url_for("admin_profile")}}>Личный кабинет</a></li>
+        <li class=active><a href={{url_for("admin_profile")}}>Личный кабинет</a></li>
         {% else %}
-        <li class=active><a href={{ url_for("profile")}}>Личный кабинет</a></li>
+        <li class=active><a href={{url_for("profile")}}>Личный кабинет</a></li>
         {% endif %}
         {% endif %}
     </ul>
 </div>
 
 {% if is_authorization == True %}
-{{macros.authorization()}}
+    {{ macros.authorization() }}
 {% endif %}
+
 {% if is_registration == True %}
-{{macros.registration()}}
+    {{ macros.registration() }}
 {% endif %}
+
 </body>
 </html>

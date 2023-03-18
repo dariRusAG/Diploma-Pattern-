@@ -1,5 +1,6 @@
 from app import app
-from flask import render_template, request, session, make_response
+from flask import render_template
+
 
 @app.route('/admin_profile', methods=['GET', 'POST'])
 def admin_profile():
