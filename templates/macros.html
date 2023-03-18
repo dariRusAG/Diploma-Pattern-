@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+{% macro authorization() %}
+<div class="gray_page">
+</div>
+<div class="authorization">
+    <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%;">
+    Войдите в аккаунт:
+    <form action="" method="get">
+        Логин: <input type="text" name="login" style="height:10%; ">
+        <br>
+        Пароль: <input type="text" name="password" style="height:10%; ">
+        <br>
+        <input type="submit" value="Авторизоваться" name="authorization_user_button" style="width:70%; height:20%; margin-top:20%;">
+        <br>
+        <input type="submit" value="Создать аккаунт" name="registration_button" style="width:70%; height:20%;margin-top:5%;">
+    </form>
+</div>
+{% endmacro %}
+
+{% macro registration() %}
+<div class="gray_page">
+</div>
+<div class="authorization">
+    <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%;">
+    Создайте аккаунт:
+    <form action="" method="get">
+        Логин: <input type="text" name="login" style="height:10%; ">
+        <br>
+        Пароль: <input type="text" name="password" style="height:10%; ">
+        <br>
+        Подтверждение пароля: <input type="text" name="password" style="height:10%; ">
+        <br>
+        <input type="submit" value="Зарегистрироваться" name="registration_user_button" style="width:70%; height:20%; margin-top:20%;">
+        <br>
+        <input type="submit" value="Уже есть аккаунт" name="authorization_button" style="width:70%; height:20%;margin-top:5%;">
+    </form>
+</div>
+{% endmacro %}
