@@ -4,9 +4,9 @@ import pandas as pd
 def is_correct_login_and_password(conn, login, password):
     try:
         return pd.read_sql('''
-        SELECT role
-        FROM user
-        WHERE login = :login AND password = :password;
+        SELECT users_role
+        FROM users
+        WHERE users_login = :login AND users_password = :password;
         ''', conn, params={"login": login, "password": password}).values[0][0]
 
     except IndexError:
@@ -40,16 +40,17 @@ def get_pattern(conn, category, complexity):
     
 def get_user_id(conn, login):
     try:
-        return pd.read_sql('''SELECT user_id 
-        FROM user 
-        WHERE login = :login
+        return pd.read_sql('''SELECT users_id 
+        FROM users
+        WHERE users_login = :login
         ''', conn, params={"login": login}).values[0][0]
     except IndexError:
         return "error"
+
 def registration(conn, login, password):
     cur = conn.cursor()
     cur.execute('''
-    INSERT INTO user(login,password,role) 
+    INSERT INTO users(users_login,users_password,users_role) 
     VALUES (:login,:password,"user")
      ''', {"login": login,"password": password})
     conn.commit()

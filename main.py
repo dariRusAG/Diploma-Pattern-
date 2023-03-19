@@ -42,12 +42,15 @@ VALUES
 CREATE TABLE IF NOT EXISTS users (
  users_id INTEGER PRIMARY KEY AUTOINCREMENT,
  users_login VARCHAR(30),
- users_password VARCHAR(30)
+ users_password VARCHAR(30),
+ users_role VARCHAR(10)
 );
 
-INSERT INTO users (users_login, users_password)
+INSERT INTO users (users_login, users_password, users_role)
 VALUES
-('srf_adlr','qwertyasdfg');
+('nakao.pd','1234567','admin'),
+('srf_adlr','qwerty','admin'),
+('burakov.aa','burpass','user');
 ''')
 
 # сохраняем информацию в базе данных

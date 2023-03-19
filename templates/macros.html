@@ -1,17 +1,37 @@
 <!DOCTYPE html>
 
+{% macro render_menu(user_role) %}
+<div class=menu>
+    <ul>
+        <li class=active><a href={{url_for("catalog")}}>Каталог</a></li>
+        <li><a>Список избранного</a></li>
+        {% if user_role == 'guest' %}
+        <form action="" method="get">
+            <input type="submit" name="authorization_button" value="Войти"
+                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+        </form>
+        {% else %}
+        {% if user_role == 'admin' %}
+        <li class=active><a href={{ url_for("admin_profile")}}>Личный кабинет</a></li>
+        {% else %}
+        <li class=active><a href={{ url_for("user_profile")}}>Личный кабинет</a></li>
+        {% endif %}
+        {% endif %}
+    </ul>
+</div>
+{% endmacro %}
 <!--Авторизация пользователя-->
 <!--поле для заполнения (логин, пароль и т.д.)-->
 {% macro render_field(field) %}
-  {{ field.label }}
-  {{ field(**kwargs)|safe }}
-  {% if field.errors %}
-    <ul class=errors>
+{{ field.label }}
+{{ field(**kwargs)|safe }}
+{% if field.errors %}
+<ul class=errors>
     {% for error in field.errors %}
-      <li>{{ error }}</li>
+    <li>{{ error }}</li>
     {% endfor %}
-    </ul>
-  {% endif %}
+</ul>
+{% endif %}
 {% endmacro %}
 
 <!--окно авторизации-->
@@ -29,9 +49,10 @@
         <br>
         <input type="submit" value="Авторизоваться" name="authorization_user_button"
                style="width:70%; height:20%; margin-top:20%;">
-        <br>
+    </form>
+    <form action="" method="get">
         <input type="submit" value="Создать аккаунт" name="registration_button"
-               style="width:70%; height:20%;margin-top:5%;">
+               style="width:70%; height:100%;margin-top:5%;">
     </form>
 </div>
 {% endmacro %}
@@ -56,9 +77,10 @@
         <br>
         <input type="submit" value="Зарегистрироваться" name="registration_user_button"
                style="width:70%; height:20%; margin-top:20%;">
-        <br>
+    </form>
+    <form action="" method="get">
         <input type="submit" value="Уже есть аккаунт" name="authorization_button"
-               style="width:70%; height:20%;margin-top:5%;">
+               style="width:70%; height:100%;margin-top:5%;">
     </form>
 </div>
 {% endmacro %}
@@ -109,17 +131,17 @@
 
             {% else %}
             {% for i in range(value) %}
-                <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
+            <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
             {% endfor %}
 
             {% for j in range(5 - value) %}
-                <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
+            <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
             {% endfor %}
 
             {% endif %}
 
-        {% endif %}
-        {% endfor %}
+            {% endif %}
+            {% endfor %}
         </p>
 
         <p>
