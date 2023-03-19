@@ -95,15 +95,17 @@ html {
     text-transform: uppercase;
     letter-spacing: 1px;
     padding: 2px 12px;
-    margin: 6px 0;
     width: 100%;
+    margin: 6px 0;
 }
 
 /*Блок вывода выкроек*/
 .pattern_view {
-    justify-content: center;
-    margin-left: 19%;
+    margin-left: 20%;
     padding: 0 14px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 /*Поле каждой выкройки блока выкроек*/
@@ -115,13 +117,37 @@ html {
     color: #fff;
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
     font-size: 14px;
-    display: flex;
-    margin: 15px 0;
+    margin: 15px 15px;
+    width: 350px;
 }
 
 /*Содержимое поля каждой выкройки*/
 .data {
-    padding: 0 20px;
+    margin-right: 30px;
     display: block;
     width: 100%;
+}
+
+.fig {
+    text-align: center;
+}
+
+.product-title {
+    padding: 2px 15px;
+    display: block;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.product-caption {
+    display: block;
+    padding: 0 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.h {
+    display: flex;
+    justify-content: space-between;
 }

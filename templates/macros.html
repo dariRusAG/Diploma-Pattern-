@@ -120,32 +120,41 @@
     <div class="data">
         {% for name in pattern.dtypes.index %}
         {% if name != "ID" %}
-        <p>
-            <b>{{ name }}:</b>
+
+        <p class="fig">
             {% set value=pattern.loc[i, name] %}
-            {% if name != "Сложность" %}
-            {{ value }}
+
+            {% if name == "Сложность" %}
+                {% for i in range(value) %}
+                    <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
+                {% endfor %}
+
+                {% for j in range(5 - value) %}
+                    <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
+                {% endfor %}
+
+            {% elif name == "Изображение" %}
+                <img src="{{value}}" alt="поля ЛОйфХакер" width="auto" height="310px">
+
+            {% elif name == "Название" %}
+                <span class="product-title">{{ value }}</span>
+
+            {% elif name == "Категория" %}
+                <span class="product-caption">{{ value }}</span>
 
             {% else %}
-            {% for i in range(value) %}
-            <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
-            {% endfor %}
-
-            {% for j in range(5 - value) %}
-            <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
-            {% endfor %}
-
+                <b>{{ name }}: </b>{{ value }}
             {% endif %}
+        {% endif %}
+            </p>
+        {% endfor %}
 
-            {% endif %}
-            {% endfor %}
-        </p>
-
-        <p>
-            <input type="radio" name="pattern" value="{{ pattern.loc[i, 'ID'] }}"
-                   {% if pattern.loc[i, 'ID'] == pattern.values[0][0] %} checked {% endif %}> Выбрать для построения
-            <input type="radio" name="pattern" value="{{ pattern.loc[i, 'ID'] }}"> Добавить в избранное
-        </p>
+        <a class="h">
+<!--            <input type="radio" name="pattern" value="{{ pattern.loc[i, 'ID'] }}"-->
+<!--                   {% if pattern.loc[i, 'ID'] == pattern.values[0][0] %} checked {% endif %}> Выбрать для построения-->
+            <img width="25px" height="25px" alt="поля ЛОйфХакер" {% if pattern.loc[i, 'ID'] == pattern.values[0][0] %} src="/static/image/icons/shaded_heart_icon.png" {% else %}
+            src="/static/image/icons/empty_heart_icon.png" {% endif %}>
+        </a>
     </div>
 </div>
 {% endfor %}

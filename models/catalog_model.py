@@ -29,7 +29,8 @@ def get_pattern(conn, category, complexity):
         pattern_id AS ID,
         pattern_name AS Название, 
         category_name AS Категория,
-        complexity AS Сложность
+        picture AS Изображение,
+        complexity AS Сложность        
     FROM pattern
     JOIN category USING (category_id)
     WHERE (category_name IN ({str(category).strip('[]')}) OR {not category})
@@ -37,7 +38,8 @@ def get_pattern(conn, category, complexity):
     GROUP BY pattern_id
     ORDER BY pattern_name
     ''', conn)
-    
+
+
 def get_user_id(conn, login):
     try:
         return pd.read_sql('''SELECT users_id 
@@ -46,6 +48,7 @@ def get_user_id(conn, login):
         ''', conn, params={"login": login}).values[0][0]
     except IndexError:
         return "error"
+
 
 def registration(conn, login, password):
     cur = conn.cursor()

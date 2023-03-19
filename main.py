@@ -1,4 +1,5 @@
 import sqlite3
+
 con = sqlite3.connect("DB.sqlite")
 
 con.executescript('''
@@ -20,24 +21,25 @@ CREATE TABLE IF NOT EXISTS pattern (
  pattern_id INTEGER PRIMARY KEY AUTOINCREMENT,
  pattern_name VARCHAR(70),
  complexity INTEGER,
+ picture VARCHAR(70),
  category_id INTEGER,
  FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE
 );
 
-INSERT INTO pattern (pattern_name, category_id, complexity)
+INSERT INTO pattern (pattern_name, category_id, complexity, picture)
 VALUES
-('Футболка поло', 4, 3),
-('Футболка Дженни', 4, 3),
-('Классическая футболка', 4, 2),
-('Классическая рубашка', 3, 4),
-('Пляжная рубашка', 3, 4),
-('Юбка-карандаш', 5, 3),
-('Юбка-солнце', 5, 1),
-('Классические брюки', 1, 4),
-('Брюки бананы', 1, 3),
-('Брюки скинни', 1, 3),
-('Брюки карго', 1, 4), 
-('Платье-футляр', 2, 5);
+('Футболка поло', 4, 3, '/static/image/picture_pattern/Футболка%20поло.jpg'),
+('Футболка Дженни', 4, 3, ''),
+('Классическая футболка', 4, 2, '/static/image/picture_pattern/Классическая%20футболка.jpg'),
+('Классическая рубашка', 3, 4, '/static/image/picture_pattern/Классическая%20рубашка.jpg'),
+('Пляжная рубашка', 3, 4, ''),
+('Юбка-карандаш', 5, 3, ''),
+('Юбка-солнце', 5, 1, '/static/image/picture_pattern/Юбка-солнце.jpg'),
+('Классические брюки', 1, 4, ''),
+('Брюки бананы', 1, 3, '/static/image/picture_pattern/Брюки%20бананы.jpg'),
+('Брюки скинни', 1, 3, ''),
+('Брюки карго', 1, 4, '/static/image/picture_pattern/Брюки%20карго.jpg'),
+('Платье-футляр', 2, 5, '');
 
 CREATE TABLE IF NOT EXISTS users (
  users_id INTEGER PRIMARY KEY AUTOINCREMENT,

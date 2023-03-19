@@ -12,10 +12,9 @@ def catalog():
     is_authorization = False  # нажата ли кнопка "войти"
     is_registration = False  # нажата ли кнопка "зарегистрироваться"
     user_data_error = ""  # ошибка данных
-    
+
     auth_form = AuthorizationForm(request.form)  # форма авторизации
     reg_form = RegistrationForm(request.form)  # форма регистрации
-
 
     # нажата кнопка войти на странице каталога
     if request.values.get('authorization_button'):
@@ -31,7 +30,7 @@ def catalog():
         login = request.values.get('auth_login')
         password = request.values.get('auth_password')
         print(login)
-        match is_correct_login_and_password(conn, login,password):
+        match is_correct_login_and_password(conn, login, password):
 
             case "user":
                 session['user_id'] = f'{get_user_id(conn, login)}'
@@ -49,9 +48,9 @@ def catalog():
         password = request.values.get('reg_password')
         password_confirmation = request.values.get('password_confirm')
         if get_user_id(conn, login) == "error":
-            if (password == password_confirmation):
+            if password == password_confirmation:
                 registration(conn, login, password)
-                session['user_id'] =f'{get_user_id(conn, login)}'
+                session['user_id'] = f'{get_user_id(conn, login)}'
                 session['user_role'] = "user"
             else:
                 is_registration = True
