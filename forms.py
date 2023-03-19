@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField, validators, widgets
+from wtforms import Form, StringField, PasswordField, validators
 
 
 class AuthorizationForm(Form):
@@ -11,6 +11,6 @@ class RegistrationForm(Form):
     reg_password = PasswordField('Пароль', [
         validators.InputRequired(),
         validators.Length(min=8, max=60),
-        validators.EqualTo('password_confirm', message='Пароли должны совпадать')
+        validators.EqualTo('password_confirm')
     ])
     password_confirm = PasswordField('Повторите пароль')

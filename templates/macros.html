@@ -25,13 +25,6 @@
 {% macro render_field(field) %}
 {{ field.label }}
 {{ field(**kwargs)|safe }}
-{% if field.errors %}
-<ul class=errors>
-    {% for error in field.errors %}
-    <li>{{ error }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
 {% endmacro %}
 
 <!--окно авторизации-->
@@ -46,6 +39,10 @@
         {{ render_field(auth_form.auth_login) }}
         <br>
         {{ render_field(auth_form.auth_password) }}
+        <br>
+        {% if user_data_error != "" %}
+        {{user_data_error}}
+        {% endif %}
         <br>
         <input type="submit" value="Авторизоваться" name="authorization_user_button"
                style="width:70%; height:20%; margin-top:20%;">
@@ -71,8 +68,8 @@
         <br>
         {{ render_field(reg_form.password_confirm) }}
         <br>
-        {% if user_data_error == True %}
-        Ошибка
+        {% if user_data_error != "" %}
+        {{user_data_error}}
         {% endif %}
         <br>
         <input type="submit" value="Зарегистрироваться" name="registration_user_button"
