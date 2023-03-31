@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% macro render_menu(user_role) %}
-<div class=menu xmlns="http://www.w3.org/1999/html">
+<div class=menu>
     <ul>
         <li class=active><a href={{url_for("catalog")}}>Каталог</a></li>
         {% if user_role == 'guest' %}
@@ -13,7 +13,7 @@
         {% if user_role == 'admin' %}
         <li class=active><a href={{ url_for("admin_profile")}}>Личный кабинет</a></li>
         {% else %}
-         <li><a href={{url_for("favorites")}}>Список избранного</a></li>
+        <li><a href={{url_for("favorites")}}>Список избранного</a></li>
         <li class=active><a href={{ url_for("user_profile")}}>Личный кабинет</a></li>
         {% endif %}
         {% endif %}
@@ -126,28 +126,28 @@
             {% set value=pattern.loc[i, name] %}
 
             {% if name == "Сложность" %}
-                {% for i in range(value) %}
-                    <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
-                {% endfor %}
+            {% for i in range(value) %}
+            <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
+            {% endfor %}
 
-                {% for j in range(5 - value) %}
-                    <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
-                {% endfor %}
+            {% for j in range(5 - value) %}
+            <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
+            {% endfor %}
 
             {% elif name == "Изображение" %}
-                <img src="{{value}}" alt="" width="auto" height="310px">
+            <img src="{{value}}" alt="" width="auto" height="310px">
 
             {% elif name == "Название" %}
-                <span class="product-title">{{ value }}</span>
+            <span class="product-title">{{ value }}</span>
 
             {% elif name == "Категория" %}
-                <span class="product-caption">{{ value }}</span>
+            <span class="product-caption">{{ value }}</span>
 
             {% else %}
-                <b>{{ name }}: </b>{{ value }}
+            <b>{{ name }}: </b>{{ value }}
             {% endif %}
-        {% endif %}
-            </p>
+            {% endif %}
+        </p>
         {% endfor %}
 
         <form action="{{ url_for('catalog') }}" method="get">
@@ -173,7 +173,7 @@
 {% macro exit() %}
 <form action={{url_for('catalog')}} method="get">
     <input type="submit" name="exit_button" value="Выйти"
-           style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+           style="background:#fc6c85; color: #fff0f5; height:10%; border: none;">
 </form>
 {% endmacro %}
 
@@ -188,7 +188,7 @@
             <input type="text" name="data_user" class="write_personal"
                    placeholder="{{ data_user.loc[i, name] }}" value="{{ data_user.loc[i, name] }}">
 
-        {% endfor %}
+            {% endfor %}
         </td>
     </tr>
     {% endfor %}
@@ -220,4 +220,51 @@
     </tr>
     {% endfor %}
 </table>
+{% endmacro %}
+
+<!--Макрос для вывода категорий на панели администратора-->
+{% macro admin_panel_category(category, len) %}
+Добавление новой категории:
+<form action="{{url_for('admin_profile')}}" method="get">
+    <div class="admin_panel_right_data_text">
+        <input type="text" name="new_category" placeholder="Введите название категории" style="width:100%">
+        <input type="submit" name="add_category" value="+">
+    </div>
+</form>
+<br>
+Список категорий:
+<br>
+
+{% for i in range(len(category)) %}
+<form action="{{url_for('admin_profile')}}" method="get">
+    <div class="admin_panel_right_data_text">
+        {{ category.loc[i, "category_name"] }}
+        <input type="submit" name="" value="Изменить" style="margin-left:10px;" disabled="disabled">
+        <input type="hidden" name="delete_category" value={{ category['category_id'].values[i] }}>
+        <input type="submit" value="Удалить" style="margin-left:10px;">
+        <br>
+</form>
+</div>
+{% endfor %}
+
+{% endmacro %}
+
+<!--Макрос для вывода деталей на панели администратора-->
+{% macro admin_panel_details() %}
+Детали
+{% endmacro %}
+
+<!--Макрос для вывода формул на панели администратора-->
+{% macro admin_panel_formuls() %}
+Формулы
+{% endmacro %}
+
+<!--Макрос для вывода выкроек на панели администратора-->
+{% macro admin_panel_patterns() %}
+Выкройки
+{% endmacro %}
+
+<!--Макрос для вывода 3D-моделей панели администратора-->
+{% macro admin_panel_3D() %}
+3D-модели
 {% endmacro %}
