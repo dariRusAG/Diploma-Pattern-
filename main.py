@@ -1,6 +1,6 @@
 import sqlite3
 
-con = sqlite3.connect("DB.sqlite")
+con = sqlite3.connect("DB2.sqlite")
 
 con.executescript('''
 CREATE TABLE IF NOT EXISTS category (
@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS favorite (
 
 INSERT INTO favorite (users_id, pattern_id)
 VALUES
-(1,1), (1,4), (1,6), (1,7), (1,11),
-(2,2), (2,5), (2,12);
+(4,1), (4,4), (4,6), (4,7), (4,11),
+(3,2), (3,5), (3,12);
 
 CREATE TABLE IF NOT EXISTS param (
  param_id INTEGER PRIMARY KEY AUTOINCREMENT,

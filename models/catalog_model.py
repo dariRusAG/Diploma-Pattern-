@@ -53,7 +53,7 @@ def get_user_id(conn, login):
 def registration(conn, login, password):
     cur = conn.cursor()
     cur.execute('''
-    INSERT INTO users(users_login,users_password,users_role) 
+    INSERT INTO users(users_login, users_password, users_role) 
     VALUES (:login,:password,"user")
      ''', {"login": login, "password": password})
     conn.commit()
@@ -64,7 +64,27 @@ def to_delete_user(conn, user_id):
     cur = conn.cursor()
     cur.execute(f'''
     DELETE FROM users
-    WHERE users_id=:user_id;
+    WHERE users_id = :user_id;
      ''', {"user_id": user_id})
     conn.commit()
     return cur.lastrowid
+
+
+def add_pattern(conn, user_id, pattern_id):
+    cur = conn.cursor()
+    cur.execute('''
+        INSERT INTO favorite(users_id, pattern_id) 
+        VALUES (:user, :pattern)
+    ''', {"user": user_id, "pattern": pattern_id})
+
+    return conn.commit()
+
+
+def del_pattern(conn, pattern_id):
+    cur = conn.cursor()
+    cur.execute(f'''
+        DELETE FROM favorite
+        WHERE pattern_id = :pattern;
+     ''', {"pattern": pattern_id})
+
+    return conn.commit()

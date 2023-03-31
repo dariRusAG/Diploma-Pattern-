@@ -10,7 +10,6 @@ def favorites():
     conn = get_db_connection()
 
     is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
-
     df_favorite_pattern, favorite_list = favorites_pattern(conn)
 
     return render_template(

@@ -10,8 +10,18 @@ def catalog():
     conn = get_db_connection()
 
     is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
-    df_favorite_pattern, favorite_list = favorites_pattern(conn)
 
+    if request.values.get('empty'):
+        choice_favorite_pattern = request.values.get('pattern')
+        if (choice_favorite_pattern != 0) or ('user_id' in session):
+            add_pattern(conn, session['user_id'], choice_favorite_pattern)
+
+    elif request.values.get('shaded'):
+        choice_favorite_pattern = request.values.get('pattern')
+        if (choice_favorite_pattern != 0) or ('user_id' in session):
+            del_pattern(conn, choice_favorite_pattern)
+
+    df_favorite_pattern, favorite_list = favorites_pattern(conn)
     df_category = get_category(conn)
 
     # Если нажата кнопка "Найти"

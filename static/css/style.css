@@ -150,4 +150,6 @@ html {
 .h {
     display: flex;
     justify-content: space-between;
+    background: transparent;
+    border: transparent;
 }

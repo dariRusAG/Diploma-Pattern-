@@ -3,7 +3,7 @@ from models.favorites_model import *
 
 
 def favorites_pattern(conn):
-    if session['user_id'] is None:
+    if 'user_id' not in session:
         user_id = 0
     else:
         user_id = session['user_id']

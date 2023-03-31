@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 {% macro render_menu(user_role) %}
-<div class=menu>
+<div class=menu xmlns="http://www.w3.org/1999/html">
     <ul>
         <li class=active><a href={{url_for("catalog")}}>Каталог</a></li>
         {% if user_role == 'guest' %}
@@ -150,10 +150,19 @@
             </p>
         {% endfor %}
 
-        <a class="h">
-            <img width="25px" height="25px" alt="" {% if pattern.loc[i, 'ID'] in favorite_list %} src="/static/image/icons/shaded_heart_icon.png"
-            {% else %} src="/static/image/icons/empty_heart_icon.png" {% endif %}>
-        </a>
+        <form action="{{ url_for('catalog') }}" method="get">
+            <button type="submit" name="shaded" value=" " class="h">
+                {% if pattern.loc[i, 'ID'] in favorite_list %}
+                    <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
+                {% else %}
+                    <img width="25px" height="25px" alt="" src="/static/image/icons/empty_heart_icon.png">
+                {% endif %}
+            </button>
+
+            <label>
+                <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
+            </label>
+        </form>
 
     </div>
 </div>
