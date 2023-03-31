@@ -2,6 +2,7 @@ from app import app
 from flask import render_template
 from functions.role import *
 from utils import get_db_connection
+from functions.overall import *
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -9,6 +10,7 @@ def catalog():
     conn = get_db_connection()
 
     is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
+    df_favorite_pattern, favorite_list = favorites_pattern(conn)
 
     df_category = get_category(conn)
 
@@ -44,5 +46,6 @@ def catalog():
         str=str,
 
         # Выкройки
-        pattern=df_pattern
+        pattern=df_pattern,
+        favorite_list=favorite_list
     )

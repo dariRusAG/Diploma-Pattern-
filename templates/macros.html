@@ -115,7 +115,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода выкроек-->
-{% macro render_pattern(pattern, len) %}
+{% macro render_pattern(pattern, len, favorite_list) %}
 {% for i in range(len(pattern)) %}
 <div class="block">
     <div class="data">
@@ -135,7 +135,7 @@
                 {% endfor %}
 
             {% elif name == "Изображение" %}
-                <img src="{{value}}" alt="поля ЛОйфХакер" width="auto" height="310px">
+                <img src="{{value}}" alt="" width="auto" height="310px">
 
             {% elif name == "Название" %}
                 <span class="product-title">{{ value }}</span>
@@ -151,11 +151,10 @@
         {% endfor %}
 
         <a class="h">
-<!--            <input type="radio" name="pattern" value="{{ pattern.loc[i, 'ID'] }}"-->
-<!--                   {% if pattern.loc[i, 'ID'] == pattern.values[0][0] %} checked {% endif %}> Выбрать для построения-->
-            <img width="25px" height="25px" alt="поля ЛОйфХакер" {% if pattern.loc[i, 'ID'] == pattern.values[0][0] %} src="/static/image/icons/shaded_heart_icon.png" {% else %}
-            src="/static/image/icons/empty_heart_icon.png" {% endif %}>
+            <img width="25px" height="25px" alt="" {% if pattern.loc[i, 'ID'] in favorite_list %} src="/static/image/icons/shaded_heart_icon.png"
+            {% else %} src="/static/image/icons/empty_heart_icon.png" {% endif %}>
         </a>
+
     </div>
 </div>
 {% endfor %}
