@@ -59,6 +59,10 @@ def role(conn):
     elif request.values.get('exit_button'):
         session.pop('user_id', None)
 
+    elif request.values.get('remove_profile_button'):
+        to_delete_user(conn, session['user_id'])
+        session.pop('user_id', None)
+
     # если пользователь не вошел, то он гость
     if 'user_id' not in session:
         session['user_role'] = "guest"

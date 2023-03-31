@@ -55,6 +55,16 @@ def registration(conn, login, password):
     cur.execute('''
     INSERT INTO users(users_login,users_password,users_role) 
     VALUES (:login,:password,"user")
-     ''', {"login": login,"password": password})
+     ''', {"login": login, "password": password})
+    conn.commit()
+    return cur.lastrowid
+
+
+def to_delete_user(conn, user_id):
+    cur = conn.cursor()
+    cur.execute(f'''
+    DELETE FROM users
+    WHERE users_id=:user_id;
+     ''', {"user_id": user_id})
     conn.commit()
     return cur.lastrowid

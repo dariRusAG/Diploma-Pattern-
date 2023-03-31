@@ -4,7 +4,6 @@
 <div class=menu>
     <ul>
         <li class=active><a href={{url_for("catalog")}}>Каталог</a></li>
-        <li><a href={{url_for("favorites")}}>Список избранного</a></li>
         {% if user_role == 'guest' %}
         <form action="" method="get">
             <input type="submit" name="authorization_button" value="Войти"
@@ -14,6 +13,7 @@
         {% if user_role == 'admin' %}
         <li class=active><a href={{ url_for("admin_profile")}}>Личный кабинет</a></li>
         {% else %}
+         <li><a href={{url_for("favorites")}}>Список избранного</a></li>
         <li class=active><a href={{ url_for("user_profile")}}>Личный кабинет</a></li>
         {% endif %}
         {% endif %}
@@ -166,4 +166,49 @@
     <input type="submit" name="exit_button" value="Выйти"
            style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
 </form>
+{% endmacro %}
+
+<!--Макрос для вывода информации о пользователе-->
+{% macro render_data_user(data_user, len) %}
+<table>
+    {% for i in range(len(data_user)) %}
+    {% for name in data_user.dtypes.index %}
+    <tr>
+        <td>{{ name }}:</td>
+        <td>
+            <input type="text" name="data_user" class="write_personal"
+                   placeholder="{{ data_user.loc[i, name] }}" value="{{ data_user.loc[i, name] }}">
+
+        {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endmacro %}
+
+<!--Макрос для вывода параметров пользователя-->
+{% macro render_param_user(param_user, error_param, len) %}
+<table>
+    {% for i in range(len(param_user)) %}
+    <tr>
+        <td>
+            {{ param_user.loc[i, "param_full_name"] }}
+            ({{ param_user.loc[i, "param_name"] }}):
+        </td>
+        <td>
+            {% if error_param[i] != 'q' and error_param != [] %}
+            <input type="text" name="param_user" class="error_personal"
+                   {% if param_user.loc[i,"param_value"] == '' %} placeholder=''
+            {% else %} placeholder={{param_user.loc[i,"param_value"]}} {% endif %} value={{error_param[i]}}>
+            {% else %}
+            <input type="text" name="param_user" class="write_personal"
+                   {% if param_user.loc[i,"param_value"] != '' %}
+            placeholder={{param_user.loc[i,"param_value"]}} value={{param_user.loc[i,"param_value"]}}
+            {% else %} placeholder='' value='' {% endif %}>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 {% endmacro %}
