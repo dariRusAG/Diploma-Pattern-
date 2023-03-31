@@ -151,14 +151,15 @@
         {% endfor %}
 
         <form action="{{ url_for('catalog') }}" method="get">
+            {% if pattern.loc[i, 'ID'] in favorite_list %}
             <button type="submit" name="shaded" value=" " class="h">
-                {% if pattern.loc[i, 'ID'] in favorite_list %}
-                    <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
-                {% else %}
-                    <img width="25px" height="25px" alt="" src="/static/image/icons/empty_heart_icon.png">
-                {% endif %}
+                <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
             </button>
-
+            {% else %}
+            <button type="submit" name="empty" value=" " class="h">
+                <img width="25px" height="25px" alt="" src="/static/image/icons/empty_heart_icon.png">
+            </button>
+            {% endif %}
             <label>
                 <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
             </label>
