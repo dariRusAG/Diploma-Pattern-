@@ -6,7 +6,8 @@ from flask import render_template, request, session
 def admin_profile():
 
     html = render_template(
-        'admin_profile.html'
+        'admin_profile.html',
+        user_role=session['user_role'],
     )
 
     return html

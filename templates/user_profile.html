@@ -17,11 +17,17 @@
         <p><b>Мерки тела</b></p>
         {{ macros.render_param_user(param_user, error_param, len) }}
 
-        <div class=key>
+        <div>
             <input type="submit" name="save" value="Сохранить изменения" class="key_button">
+            <br><br>
             <input type="button" value="Отменить изменения" class="key_button"
                    onclick="window.location='{{url_for('user_profile')}}'">
+            <br><br>
         </div>
+    </form>
+
+    <form action="{{url_for('catalog')}}" method="get">
+        <input type="submit" name="remove_profile_button" value="Удалить аккаунт" disabled="disabled">
     </form>
 </div>
 
