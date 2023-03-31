@@ -1,8 +1,19 @@
-from flask import session
+from flask import session, request
 from models.favorites_model import *
+from models.overall_model import *
 
 
 def favorites_pattern(conn):
+    if request.values.get('empty'):
+        choice_favorite_pattern = request.values.get('pattern')
+        if (choice_favorite_pattern != 0) or ('user_id' in session):
+            add_pattern(conn, session['user_id'], choice_favorite_pattern)
+
+    elif request.values.get('shaded'):
+        choice_favorite_pattern = request.values.get('pattern')
+        if (choice_favorite_pattern != 0) or ('user_id' in session):
+            del_pattern(conn, choice_favorite_pattern)
+
     if 'user_id' not in session:
         user_id = 0
     else:

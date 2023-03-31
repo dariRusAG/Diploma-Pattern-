@@ -22,10 +22,3 @@ def get_favorite_pattern(conn, user_id):
     ORDER BY pattern_name
     ''', conn)
 
-
-# def get_favorite_id(conn, user_id):
-#     return pd.read_sql(f'''
-#     SELECT pattern_id
-#     FROM favorite
-#     WHERE users_id == {user_id}
-#     ''', conn)

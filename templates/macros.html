@@ -115,7 +115,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода выкроек-->
-{% macro render_pattern(pattern, len, favorite_list) %}
+{% macro render_pattern(pattern, len, favorite_list, page) %}
 {% for i in range(len(pattern)) %}
 <div class="block">
     <div class="data">
@@ -150,7 +150,12 @@
         </p>
         {% endfor %}
 
-        <form action="{{ url_for('catalog') }}" method="get">
+        {% if page == "catalog" %}
+        <form action={{url_for('catalog')}} method="get">
+            {% elif page == "favorites" %}
+
+            <form action={{url_for('favorites')}} method="get">
+                {% endif %}
             {% if pattern.loc[i, 'ID'] in favorite_list %}
             <button type="submit" name="shaded" value=" " class="h">
                 <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
