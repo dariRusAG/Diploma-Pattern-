@@ -7,7 +7,24 @@
     {% import "macros.html" as macros %}
 </head>
 <body>
-Тут живет пользователь
+
+{{ macros.render_menu(user_role) }}
+
+<div>
+    <form action="{{url_for('user_profile')}}" method="post">
+        <p><b>Личные данные</b></p>
+        {{ macros.render_data_user(data_user, len) }}
+        <p><b>Мерки тела</b></p>
+        {{ macros.render_param_user(param_user, error_param, len) }}
+
+        <div class=key>
+            <input type="submit" name="save" value="Сохранить изменения" class="key_button">
+            <input type="button" value="Отменить изменения" class="key_button"
+                   onclick="window.location='{{url_for('user_profile')}}'">
+        </div>
+    </form>
+</div>
+
 {{ macros.exit() }}
 </body>
 </html>

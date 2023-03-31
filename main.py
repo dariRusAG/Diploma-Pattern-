@@ -52,7 +52,8 @@ INSERT INTO users (users_login, users_password, users_role)
 VALUES
 ('nakao.pd','1234567','admin'),
 ('srf_adlr','qwerty','admin'),
-('burakov.aa','burpass','user');
+('burakov.aa','burpass','user'),
+('test','test','user');
 
 CREATE TABLE IF NOT EXISTS favorite (
  favorite_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -65,7 +66,47 @@ CREATE TABLE IF NOT EXISTS favorite (
 INSERT INTO favorite (users_id, pattern_id)
 VALUES
 (1,1), (1,4), (1,6), (1,7), (1,11),
-(2,2), (2,5), (2,12)
+(2,2), (2,5), (2,12);
+
+CREATE TABLE IF NOT EXISTS param (
+ param_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ param_name VARCHAR(10),
+ param_full_name VARCHAR(50),
+ param_value INTEGER
+);
+
+INSERT INTO param (param_name, param_full_name)
+VALUES
+('ОПл', 'Обхват плеча'),
+('ОТ', 'Обхват талии'),
+('ОБ', 'Обхват бедер'),
+('ОШ', 'Обхват шеи'),
+('ДПдТ', 'Длина переда до талии'),
+('ДСдТ', 'Длина спины до талии'), 
+('ДПл', 'Длина плеча'),
+('ШПр', 'Ширина проймы'),
+('ШС', 'Ширина спины'),
+('ШГ', 'Ширина груди'),
+('ВПлПК', 'Высота плеча переда косая'),
+('ВПлК', 'Высота плеча косая'),
+('ОЗ', 'Обхват запястья'),
+('ВБ', 'Высота бедер'),
+('ВГ', 'Высота груди');
+
+CREATE TABLE IF NOT EXISTS user_param (
+ user_param_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ param_value INTEGER,
+ users_id INTEGER,
+ param_id INTEGER,
+ FOREIGN KEY (users_id) REFERENCES users (users_id) ON DELETE CASCADE,
+ FOREIGN KEY (param_id) REFERENCES param (param_id) ON DELETE CASCADE
+);
+
+INSERT INTO user_param (users_id, param_id, param_value)
+VALUES
+(3, 1, 28), (3, 2, 68), (3, 3, 94), (3, 4, 23), (3, 5, 48), 
+(3, 6, 72), (3, 7, 75), (3, 8, 80), (3, 9, 56), (3, 10, 103), 
+(3, 11, 132), (3, 12, 88), (3, 13, 97), (3, 14, 48), (3, 15, 14);
 ''')
 
 # сохраняем информацию в базе данных
