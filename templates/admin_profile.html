@@ -8,7 +8,45 @@
 </head>
 <body>
 {{ macros.render_menu(user_role) }}
-Тут живет админ
+Разделы базы данных
+<br>
+
+<div class="admin_panel">
+    <div class="admin_panel_left">
+        <form action="{{url_for('admin_profile')}}" method="get">
+            <input type="submit" name="panel" value="Категории" class="admin_panel_button">
+            <input type="submit" name="panel" value="Детали" class="admin_panel_button">
+            <input type="submit" name="panel" value="Формулы" class="admin_panel_button">
+            <input type="submit" name="panel" value="Выкройки" class="admin_panel_button">
+            <input type="submit" name="panel" value="3Dмодель" class="admin_panel_button">
+        </form>
+    </div>
+    <div class="admin_panel_right">
+        {% if admin_panel_button == 'Категории' %}
+        <div class="admin_panel_right_data">
+            {{ macros.admin_panel_category(category, len) }}
+        </div>
+        {% elif admin_panel_button == 'Детали'%}
+        <div class="admin_panel_right_data">
+            {{ macros.admin_panel_details() }}
+        </div>
+        {% elif admin_panel_button == 'Формулы'%}
+        <div class="admin_panel_right_data">
+            {{ macros.admin_panel_formuls() }}
+        </div>
+        {% elif admin_panel_button == 'Выкройки'%}
+        <div class="admin_panel_right_data">
+            {{ macros.admin_panel_patterns() }}
+        </div>
+        {% elif admin_panel_button == '3Dмодель'%}
+        <div class="admin_panel_right_data">
+            {{ macros.admin_panel_3D() }}
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
 {{ macros.exit() }}
 </body>
 </html>

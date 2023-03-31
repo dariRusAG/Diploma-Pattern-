@@ -151,3 +151,55 @@ html {
     display: flex;
     justify-content: space-between;
 }
+
+/*Панель администратора*/
+.admin_panel {
+    display: flex;
+    flex-direction: row;
+    height:83vh;
+    overflow: auto
+}
+
+.admin_panel_left {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width:15%;
+    height:auto;
+}
+
+.admin_panel_right {
+background:white;
+    display: flex;
+    width:81%;
+    height:auto;
+    margin-left:2%;
+    border-radius: 5px;
+}
+
+.admin_panel_right_data {
+    display: flex;
+    flex-direction: column;
+    width:90%;
+    height:auto;
+    margin-left:2%;
+    margin-top:2%;
+    border-radius: 5px;
+}
+
+.admin_panel_right_data_text {
+    display: flex;
+    width:auto;
+    height:auto;
+    margin-top:1%;
+    border-radius: 5px;
+}
+
+.admin_panel_button{
+    width: 100%;
+    height:40px;
+    border-radius: 10px;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    margin-top:2%;
+    margin-bottom:3%;
+}
