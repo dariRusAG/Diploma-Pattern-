@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <title>Список избранного</title>
+    {% import "macros.html" as macros %}
+</head>
+<body>
+
+{{ macros.render_menu(user_role) }}
+
+{% for i in range(len(pattern)) %}
+<p>
+    {% set value=pattern.loc[i, "pattern_id"] %}
+    {{ value }}
+</p>
+{% endfor %}
+
+</body>
+</html>

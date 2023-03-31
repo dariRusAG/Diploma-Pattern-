@@ -53,6 +53,19 @@ VALUES
 ('nakao.pd','1234567','admin'),
 ('srf_adlr','qwerty','admin'),
 ('burakov.aa','burpass','user');
+
+CREATE TABLE IF NOT EXISTS favorite (
+ favorite_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ users_id INTEGER,
+ pattern_id INTEGER,
+ FOREIGN KEY (users_id) REFERENCES users (users_id) ON DELETE CASCADE,
+ FOREIGN KEY (pattern_id) REFERENCES pattern (pattern_id) ON DELETE CASCADE
+);
+
+INSERT INTO favorite (users_id, pattern_id)
+VALUES
+(1,1), (1,4), (1,6), (1,7), (1,11),
+(2,2), (2,5), (2,12)
 ''')
 
 # сохраняем информацию в базе данных

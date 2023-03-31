@@ -4,7 +4,7 @@
 <div class=menu>
     <ul>
         <li class=active><a href={{url_for("catalog")}}>Каталог</a></li>
-        <li><a>Список избранного</a></li>
+        <li><a href={{url_for("favorites")}}>Список избранного</a></li>
         {% if user_role == 'guest' %}
         <form action="" method="get">
             <input type="submit" name="authorization_button" value="Войти"
@@ -20,6 +20,7 @@
     </ul>
 </div>
 {% endmacro %}
+
 <!--Авторизация пользователя-->
 <!--поле для заполнения (логин, пароль и т.д.)-->
 {% macro render_field(field) %}
