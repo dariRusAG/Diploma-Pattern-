@@ -6,27 +6,43 @@ from functions.overall import *
 
 
 @app.route('/', methods=['GET', 'POST'])
-def catalog():
+def catalog_favorites():
     conn = get_db_connection()
 
     is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
-    df_favorite_pattern, favorite_list = favorites_pattern(conn)
-    df_category = get_category(conn)
+
+    # Если нажата кнопка "Список избранного"
+    if request.values.get('favorites'):
+        session['title'] = "Список избранного"
+        session['page'] = "favorites"
+
+    # Если нажата кнопка "Каталог"
+    elif request.values.get('catalog'):
+        session['title'] = "Каталог"
+        session['page'] = "catalog"
 
     # Если нажата кнопка "Найти"
     if request.values.get('search'):
         category = request.form.getlist('category')
         complexity = request.form.getlist('complexity')
 
-    # Если нажата кнопка "Очистить" или вход на сайт впервые
+    # Если нажата кнопка "Очистить"
     else:
         category = []
         complexity = []
 
-    df_pattern = get_pattern(conn, category, complexity)
+    df_favorite_pattern, favorite_list = favorites_pattern(conn, category, complexity)
+    df_category = get_category(conn)
+
+    if session['page'] == "catalog":
+        df_pattern = get_pattern(conn, category, complexity)
+    else:
+        df_pattern = df_favorite_pattern
 
     return render_template(
-        'catalog.html',
+        'catalog_favorites.html',
+        title=session['title'],
+        page=session['page'],
 
         # Пользователь
         is_authorization=is_authorization,
@@ -41,10 +57,12 @@ def catalog():
         category=df_category,
         choice_category=category,
         choice_complexity=complexity,
-        len=len,
-        str=str,
 
         # Выкройки
         pattern=df_pattern,
-        favorite_list=favorite_list
+        favorite_list=favorite_list,
+
+        # Функции
+        len=len,
+        str=str
     )

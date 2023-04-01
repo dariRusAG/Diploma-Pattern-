@@ -69,3 +69,26 @@ def to_delete_user(conn, user_id):
     conn.commit()
     return cur.lastrowid
 
+
+def get_favorite_pattern(conn, user_id, category, complexity):
+    return pd.read_sql(f'''
+    WITH get_favorite_id(pattern_id)
+    AS(
+        SELECT pattern_id
+        FROM favorite 
+        WHERE users_id == {user_id} 
+    )
+    SELECT
+        pattern_id AS ID,
+        pattern_name AS Название,
+        category_name AS Категория, 
+        picture AS Изображение,
+        complexity AS Сложность       
+    FROM pattern
+    JOIN category USING (category_id)
+    JOIN get_favorite_id USING (pattern_id)
+    WHERE (category_name IN ({str(category).strip('[]')}) OR {not category})
+    AND (complexity IN ({str(complexity).strip('[]')}) OR {not complexity})
+    GROUP BY pattern_id
+    ORDER BY pattern_name
+    ''', conn)

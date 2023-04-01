@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
-    <title>Каталог</title>
+    <title>{{ title }}</title>
     {% import "macros.html" as macros %}
 </head>
 <body>
@@ -19,7 +19,7 @@
 
 <div class="catalog">
     <div class="block_choice">
-        <form action="{{url_for('catalog')}}" method="post">
+        <form action="{{url_for('catalog_favorites')}}" method="post">
             {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
             <div class=key_search>
                 <input type="submit" name="search" value="Показать" class="key_button_search">
@@ -28,9 +28,18 @@
         </form>
     </div>
 
-    <div class="pattern_view">
-        {{ macros.render_pattern(pattern, len, favorite_list, "catalog", user_role) }}
-    </div>
+    {{ title }}
+    {% if favorite_list == [] %}
+        {% if choice_category == [] and choice_complexity == [] %}
+            Список избранного пуст
+        {% else %}
+            Ничего не найдено
+        {% endif %}
+    {% else %}
+        <div class="pattern_view">
+            {{ macros.render_pattern(pattern, len, favorite_list, page, user_role) }}
+        </div>
+    {% endif %}
 
 </div>
 

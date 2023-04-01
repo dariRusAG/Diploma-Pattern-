@@ -3,18 +3,28 @@
 {% macro render_menu(user_role) %}
 <div class=menu>
     <ul>
-        <li class=active><a href={{url_for("catalog")}}>Каталог</a></li>
+        <form action="" method="get">
+            <input type="submit" name="catalog" value="Каталог"
+                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+        </form>
+
         {% if user_role == 'guest' %}
         <form action="" method="get">
             <input type="submit" name="authorization_button" value="Войти"
                    style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
         </form>
         {% else %}
+
         {% if user_role == 'admin' %}
-        <li class=active><a href={{ url_for("admin_profile")}}>Личный кабинет</a></li>
+        <li class=active><a href={{url_for("admin_profile")}}>Личный кабинет</a></li>
         {% else %}
-        <li><a href={{url_for("favorites")}}>Список избранного</a></li>
-        <li class=active><a href={{ url_for("user_profile")}}>Личный кабинет</a></li>
+
+        <form action="" method="get">
+            <input type="submit" name="favorites" value="Список избранного"
+                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+        </form>
+
+        <li class=active><a href={{url_for("user_profile")}}>Личный кабинет</a></li>
         {% endif %}
         {% endif %}
     </ul>
@@ -150,26 +160,21 @@
         </p>
         {% endfor %}
         {% if user_role != "admin" %}
-        {% if page == "catalog" %}
-        <form action={{url_for('catalog')}} method="get">
-            {% elif page == "favorites" %}
-
-            <form action={{url_for('favorites')}} method="get">
-                {% endif %}
-                {% if pattern.loc[i, 'ID'] in favorite_list %}
-                <button type="submit" name="shaded" value=" " class="h">
-                    <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
-                </button>
-                {% else %}
-                <button type="submit" name="empty" value=" " class="h">
-                    <img width="25px" height="25px" alt="" src="/static/image/icons/empty_heart_icon.png">
-                </button>
-                {% endif %}
-                <label>
-                    <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
-                </label>
-            </form>
+        <form action={{url_for('catalog_favorites')}} method="get">
+            {% if pattern.loc[i, 'ID'] in favorite_list %}
+            <button type="submit" name="shaded" value=" " class="h">
+                <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
+            </button>
+            {% else %}
+            <button type="submit" name="empty" value=" " class="h">
+                <img width="25px" height="25px" alt="" src="/static/image/icons/empty_heart_icon.png">
+            </button>
             {% endif %}
+            <label>
+                <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
+            </label>
+        </form>
+        {% endif %}
     </div>
 </div>
 {% endfor %}
@@ -177,7 +182,7 @@
 
 <!--кнопка выход-->
 {% macro exit() %}
-<form action={{url_for('catalog')}} method="get">
+<form action={{url_for('catalog_favorites')}} method="get">
     <input type="submit" name="exit_button" value="Выйти"
            style="background:#fc6c85; color: #fff0f5; height:10%; border: none;">
 </form>

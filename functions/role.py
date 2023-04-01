@@ -1,6 +1,6 @@
 from flask import request, session
 from forms import *
-from models.catalog_model import *
+from models.catalog_favorites_model import *
 
 
 def role(conn):
