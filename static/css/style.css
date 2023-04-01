@@ -6,76 +6,76 @@ html {
 
 /* Верхнее меню */
 .menu {
- background-color: #f1f1f1;
- box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
- width: 100%;
+    background-color: #f1f1f1;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    width: 100%;
 }
 
 .menu li {
- display: inline-block;
- vertical-align: top;
- padding: 12px;
+    display: inline-block;
+    vertical-align: top;
+    padding: 12px;
 }
 
 .menu a {
- text-decoration: none;
- }
+    text-decoration: none;
+}
 
 .menu li:hover {
- background-color: #fc6c85;
- cursor: pointer;
- color: #ffd1d9;
+    background-color: #fc6c85;
+    cursor: pointer;
+    color: #ffd1d9;
 }
 
 .menu ul {
- display: flex;
- justify-content:space-between;
- padding: 0;
+    display: flex;
+    justify-content:space-between;
+    padding: 0;
 }
 
-.active{
- background-color: #fc6c85;
- color: #ffd1d9;
+.active {
+    background-color: #fc6c85;
+    color: #ffd1d9;
 }
 
 .active a:visited {
- color: #ffd1d9;
+    color: #ffd1d9;
 }
 
 .menu a:hover {
- color: #ffd1d9;
+    color: #ffd1d9;
 }
 
 /* Авторизация */
 .authorization_registration {
- background: #fddde6;
- top: 0;
- left: 0;
- position: fixed;
- margin-left: 37%;
- margin-top: 2%;
- width: 30%;
- height: 50%;
- font-size: 15px;
- padding: 7px;
- border-radius: 10%;
- text-align: left;
- display: flex;
- justify-content: space-around;
- align-content: center;
- flex-direction: column;
- flex-wrap: wrap;
+    background: #fddde6;
+    top: 0;
+    left: 0;
+    position: fixed;
+    margin-left: 37%;
+    margin-top: 2%;
+    width: 30%;
+    height: 50%;
+    font-size: 15px;
+    padding: 7px;
+    border-radius: 10%;
+    text-align: left;
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 /* Серый экран авторизации */
 .gray_page {
- background: gray;
- top: 0;
- left: 0;
- position:fixed;
- width: 100%;
- height: 100%;
- opacity: 0.95;
+    background: gray;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    opacity: 0.95;
 }
 
 /*Блок выбора фильтра*/
@@ -108,18 +108,34 @@ html {
     justify-content: center;
 }
 
+.scheme_view {
+    display: flex;
+    padding: 0 14px;
+    justify-content: center;
+}
+
 /*Поле каждой выкройки блока выкроек*/
 .block {
-    padding: 20px 25px;
+    padding: 15px 20px;
     background: #d16192;
-    border: 2px dashed #e3c3d4;
     border-radius: 10px;
     color: #fff;
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
     font-size: 14px;
     margin: 15px 15px;
-    width: 350px;
+    width: 260px;
 }
+
+.block_scheme {
+    padding: 15px 20px;
+    background: #d16192;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    margin: 15px 15px;
+}
+
 
 /*Содержимое поля каждой выкройки*/
 .data {
@@ -152,13 +168,14 @@ html {
     justify-content: space-between;
     background: transparent;
     border: transparent;
+    margin: auto;
 }
 
 /*Панель администратора*/
 .admin_panel {
     display: flex;
     flex-direction: row;
-    height:83vh;
+    height: 83vh;
     overflow: auto
 }
 

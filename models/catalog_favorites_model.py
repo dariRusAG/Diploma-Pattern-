@@ -1,18 +1,6 @@
 import pandas as pd
 
 
-def is_correct_login_and_password(conn, login, password):
-    try:
-        return pd.read_sql('''
-        SELECT users_role
-        FROM users
-        WHERE users_login = :login AND users_password = :password;
-        ''', conn, params={"login": login, "password": password}).values[0][0]
-
-    except IndexError:
-        return "error"
-
-
 # Вывод всех категорий выкроек
 def get_category(conn):
     return pd.read_sql('''
@@ -40,36 +28,6 @@ def get_pattern(conn, category, complexity):
     ''', conn)
 
 
-def get_user_id(conn, login):
-    try:
-        return pd.read_sql('''SELECT users_id 
-        FROM users
-        WHERE users_login = :login
-        ''', conn, params={"login": login}).values[0][0]
-    except IndexError:
-        return "error"
-
-
-def registration(conn, login, password):
-    cur = conn.cursor()
-    cur.execute('''
-    INSERT INTO users(users_login, users_password, users_role) 
-    VALUES (:login,:password,"user")
-     ''', {"login": login, "password": password})
-    conn.commit()
-    return cur.lastrowid
-
-
-def to_delete_user(conn, user_id):
-    cur = conn.cursor()
-    cur.execute(f'''
-    DELETE FROM users
-    WHERE users_id = :user_id;
-     ''', {"user_id": user_id})
-    conn.commit()
-    return cur.lastrowid
-
-
 def get_favorite_pattern(conn, user_id, category, complexity):
     return pd.read_sql(f'''
     WITH get_favorite_id(pattern_id)
@@ -92,3 +50,23 @@ def get_favorite_pattern(conn, user_id, category, complexity):
     GROUP BY pattern_id
     ORDER BY pattern_name
     ''', conn)
+
+
+def add_pattern(conn, user_id, pattern_id):
+    cur = conn.cursor()
+    cur.execute('''
+        INSERT INTO favorite(users_id, pattern_id) 
+        VALUES (:user, :pattern)
+    ''', {"user": user_id, "pattern": pattern_id})
+
+    return conn.commit()
+
+
+def del_pattern(conn, pattern_id):
+    cur = conn.cursor()
+    cur.execute(f'''
+        DELETE FROM favorite
+        WHERE pattern_id = :pattern;
+     ''', {"pattern": pattern_id})
+
+    return conn.commit()

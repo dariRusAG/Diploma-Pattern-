@@ -2,12 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <title>Личный кабинет</title>
-    {% import "macros.html" as macros %}
+    {% import "macros_general.html" as macros_general %}
+    {% import "admin_profile_macros.html" as macros %}
 </head>
 <body>
-{{ macros.render_menu(user_role) }}
+{{ macros_general.render_menu(user_role) }}
 Разделы базы данных
 <br>
 
@@ -50,6 +51,6 @@
 
     </div>
 </div>
-{{ macros.exit() }}
+{{ macros_general.exit() }}
 </body>
 </html>

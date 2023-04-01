@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<!--Макрос для вывода данных схемы выкройки-->
+{% macro render_pattern_scheme(pattern) %}
+<div class="block_scheme">
+    <div class="data">
+        <p class="fig">
+            <span class="product-title">{{ pattern.loc[0, "Название"] }}</span>
+        </p>
+        <p class="fig">
+            <span class="product-caption">{{ pattern.loc[0, "Категория"] }}</span>
+        </p>
+        <p class="fig">
+            <img src="{{pattern.loc[0,'Изображение']}}" alt="">
+        </p>
+        <p class="fig">
+            <a href="{{pattern.loc[0,'Изображение']}}" download>
+                <input type="button" value="Скачать изображение" class="key_button_search">
+            </a>
+        </p>
+    </div>
+</div>
+{% endmacro %}

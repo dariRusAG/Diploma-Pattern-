@@ -8,6 +8,7 @@ def get_category(conn):
     ORDER BY category_name
     ''', conn)
 
+
 def add_category(conn, category):
     cur = conn.cursor()
     cur.execute('''
@@ -17,6 +18,7 @@ def add_category(conn, category):
     conn.commit()
     return cur.lastrowid
 
+
 def delete_category(conn, category_id):
     cur = conn.cursor()
     cur.execute(f'''
@@ -25,6 +27,7 @@ def delete_category(conn, category_id):
      ''', {"category_id": category_id})
     conn.commit()
     return cur.lastrowid
+
 
 def update_category(conn, category_id, category_name):
     cur = conn.cursor()

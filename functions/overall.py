@@ -1,6 +1,5 @@
 from flask import session, request
 from models.catalog_favorites_model import *
-from models.overall_model import *
 
 
 def favorites_pattern(conn, category, complexity):

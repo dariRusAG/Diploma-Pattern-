@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     <title>Личный кабинет</title>
-    {% import "macros.html" as macros %}
+    {% import "macros_general.html" as macros_general %}
+    {% import "user_profile_macros.html" as macros %}
 </head>
 <body>
 
-{{ macros.render_menu(user_role) }}
+{{ macros_general.render_menu(user_role) }}
 
 <div>
     <form action="{{url_for('user_profile')}}" method="post">
@@ -31,6 +32,6 @@
     </form>
 </div>
 
-{{ macros.exit() }}
+{{ macros_general.exit() }}
 </body>
 </html>

@@ -35,13 +35,11 @@ def admin_profile():
         admin_panel_button = "Категории"
         update_category(conn, category_id, category_name)
 
-
-
     df_category = get_category(conn)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
-        admin_panel_button = admin_panel_button,
+        admin_panel_button=admin_panel_button,
         category=df_category,
         checked_value=checked_value,
         len=len

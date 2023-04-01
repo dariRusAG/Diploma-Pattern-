@@ -3,18 +3,19 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     <title>{{ title }}</title>
-    {% import "macros.html" as macros %}
+    {% import "macros_general.html" as macros_general %}
+    {% import "catalog_favorites_macros.html" as macros %}
 </head>
 <body>
 
-{{ macros.render_menu(user_role) }}
+{{ macros_general.render_menu(user_role) }}
 
 {% if is_authorization == True %}
-{{ macros.authorization(user_data_error, auth_form) }}
+{{ macros_general.authorization(user_data_error, auth_form) }}
 {% endif %}
 
 {% if is_registration == True %}
-{{ macros.registration(user_data_error, reg_form) }}
+{{ macros_general.registration(user_data_error, reg_form) }}
 {% endif %}
 
 <div class="catalog">
