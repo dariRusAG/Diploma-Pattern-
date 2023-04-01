@@ -1,6 +1,6 @@
 import sqlite3
 
-con = sqlite3.connect("DB2.sqlite")
+con = sqlite3.connect("DB.sqlite")
 
 con.executescript('''
 CREATE TABLE IF NOT EXISTS category (

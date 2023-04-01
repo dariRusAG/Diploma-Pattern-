@@ -7,7 +7,9 @@ from models.admin_profile_model import *
 @app.route('/admin_profile', methods=['GET', 'POST'])
 def admin_profile():
     conn = get_db_connection()
-
+    # переменная для проверки нажатия кнопок
+    checked_value = False
+    # отвечает за то, какая вкладка на панели администратора открыта
     admin_panel_button = None
 
     if request.values.get('panel'):
@@ -22,14 +24,26 @@ def admin_profile():
         admin_panel_button = "Категории"
         delete_category(conn, category_id)
 
+    elif request.values.get('is_edit_category'):
+        checked_value = True
+        admin_panel_button = "Категории"
+
+    elif request.values.get('edit_category'):
+        category_id = int(request.values.get('edit_category'))
+        category_name = request.values.get('edit_category_name')
+        checked_value = False
+        admin_panel_button = "Категории"
+        update_category(conn, category_id, category_name)
+
+
 
     df_category = get_category(conn)
-    print(df_category)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
         admin_panel_button = admin_panel_button,
         category=df_category,
+        checked_value=checked_value,
         len=len
     )
 

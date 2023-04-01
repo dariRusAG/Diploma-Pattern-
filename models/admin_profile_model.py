@@ -25,3 +25,13 @@ def delete_category(conn, category_id):
      ''', {"category_id": category_id})
     conn.commit()
     return cur.lastrowid
+
+def update_category(conn, category_id, category_name):
+    cur = conn.cursor()
+    cur.execute('''
+    UPDATE category
+    SET 
+        category_name= :category_name
+    WHERE category_id = :category_id
+    ''', {"category_id": category_id, "category_name": category_name})
+    return conn.commit()

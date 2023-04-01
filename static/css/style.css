@@ -205,3 +205,20 @@ background:white;
     margin-top:2%;
     margin-bottom:3%;
 }
+
+.admin_panel_right_data_list{
+    overflow-y: auto;
+    width:100%;
+    height:80%;
+    margin-top:1%;
+    border-radius: 5px;
+    border: 2px solid #e3c3d4;
+}
+
+.admin_panel_right_data_list_small{
+    overflow-y: auto;
+    width:100%;
+    height:35%;
+    border-radius: 5px;
+    border: 2px solid #e3c3d4;
+}

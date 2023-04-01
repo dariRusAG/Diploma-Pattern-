@@ -15,24 +15,28 @@
     <div class="admin_panel_left">
         <form action="{{url_for('admin_profile')}}" method="get">
             <input type="submit" name="panel" value="Категории" class="admin_panel_button">
-            <input type="submit" name="panel" value="Детали" class="admin_panel_button">
             <input type="submit" name="panel" value="Формулы" class="admin_panel_button">
+            <input type="submit" name="panel" value="Детали" class="admin_panel_button">
             <input type="submit" name="panel" value="Выкройки" class="admin_panel_button">
             <input type="submit" name="panel" value="3Dмодель" class="admin_panel_button">
+            {% if admin_panel_button == 'Детали'%}
+            <input type="submit" name="panel" value="Список деталей" class="admin_panel_button" style="margin-top:100%">
+            <input type="submit" name="panel" value="Список линий" class="admin_panel_button">
+            {% endif %}
         </form>
     </div>
     <div class="admin_panel_right">
         {% if admin_panel_button == 'Категории' %}
         <div class="admin_panel_right_data">
-            {{ macros.admin_panel_category(category, len) }}
-        </div>
-        {% elif admin_panel_button == 'Детали'%}
-        <div class="admin_panel_right_data">
-            {{ macros.admin_panel_details() }}
+            {{ macros.admin_panel_category(category, len, checked_value) }}
         </div>
         {% elif admin_panel_button == 'Формулы'%}
         <div class="admin_panel_right_data">
             {{ macros.admin_panel_formuls() }}
+        </div>
+        {% elif admin_panel_button == 'Детали'%}
+        <div class="admin_panel_right_data">
+            {{ macros.admin_panel_details() }}
         </div>
         {% elif admin_panel_button == 'Выкройки'%}
         <div class="admin_panel_right_data">
@@ -46,7 +50,6 @@
 
     </div>
 </div>
-
 {{ macros.exit() }}
 </body>
 </html>

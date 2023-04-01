@@ -115,7 +115,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода выкроек-->
-{% macro render_pattern(pattern, len, favorite_list, page) %}
+{% macro render_pattern(pattern, len, favorite_list, page, user_role) %}
 {% for i in range(len(pattern)) %}
 <div class="block">
     <div class="data">
@@ -149,27 +149,27 @@
             {% endif %}
         </p>
         {% endfor %}
-
+        {% if user_role != "admin" %}
         {% if page == "catalog" %}
         <form action={{url_for('catalog')}} method="get">
             {% elif page == "favorites" %}
 
             <form action={{url_for('favorites')}} method="get">
                 {% endif %}
-            {% if pattern.loc[i, 'ID'] in favorite_list %}
-            <button type="submit" name="shaded" value=" " class="h">
-                <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
-            </button>
-            {% else %}
-            <button type="submit" name="empty" value=" " class="h">
-                <img width="25px" height="25px" alt="" src="/static/image/icons/empty_heart_icon.png">
-            </button>
+                {% if pattern.loc[i, 'ID'] in favorite_list %}
+                <button type="submit" name="shaded" value=" " class="h">
+                    <img width="25px" height="25px" alt="" src="/static/image/icons/shaded_heart_icon.png">
+                </button>
+                {% else %}
+                <button type="submit" name="empty" value=" " class="h">
+                    <img width="25px" height="25px" alt="" src="/static/image/icons/empty_heart_icon.png">
+                </button>
+                {% endif %}
+                <label>
+                    <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
+                </label>
+            </form>
             {% endif %}
-            <label>
-                <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
-            </label>
-        </form>
-
     </div>
 </div>
 {% endfor %}
@@ -229,7 +229,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода категорий на панели администратора-->
-{% macro admin_panel_category(category, len) %}
+{% macro admin_panel_category(category, len, checked_value) %}
 Добавление новой категории:
 <form action="{{url_for('admin_profile')}}" method="get">
     <div class="admin_panel_right_data_text">
@@ -241,36 +241,106 @@
 Список категорий:
 <br>
 
-{% for i in range(len(category)) %}
-<form action="{{url_for('admin_profile')}}" method="get">
+<div class="admin_panel_right_data_list">
+    {% for i in range(len(category)) %}
     <div class="admin_panel_right_data_text">
         {{ category.loc[i, "category_name"] }}
-        <input type="submit" name="" value="Изменить" style="margin-left:10px;" disabled="disabled">
-        <input type="hidden" name="delete_category" value={{ category['category_id'].values[i] }}>
-        <input type="submit" value="Удалить" style="margin-left:10px;">
+        {% if checked_value == False %}
+        <form action="{{url_for('admin_profile')}}" method="get">
+            <input type="submit" name="is_edit_category" value="Изменить" style="margin-left:10px;">
+        </form>
+        <form action="{{url_for('admin_profile')}}" method="get">
+            <input type="submit" value="Удалить" style="margin-left:10px;">
+            <input type="hidden" name="delete_category" value={{ category['category_id'].values[i] }}>
+        </form>
+        {% else %}
+        <form action="{{url_for('admin_profile')}}" method="get">
+            <input type="text" name="edit_category_name" placeholder="" style="margin-left:10px; width:40%">
+            <input type="submit" value="Изменить" style="margin-left:10px;">
+            <input type="hidden" name="edit_category" value={{ category['category_id'].values[i] }}>
+        </form>
+        {% endif %}
         <br>
-</form>
+
+    </div>
+    {% endfor %}
 </div>
-{% endfor %}
 
-{% endmacro %}
-
-<!--Макрос для вывода деталей на панели администратора-->
-{% macro admin_panel_details() %}
-Детали
 {% endmacro %}
 
 <!--Макрос для вывода формул на панели администратора-->
 {% macro admin_panel_formuls() %}
-Формулы
+Добавление новой формулы:
+<form action="{{url_for('admin_profile')}}" method="get">
+    <div class="admin_panel_right_data_text">
+        <input type="text" name="" placeholder="Введите название формулы" style="width:50%">
+        <input type="text" name="" placeholder="Введите формулу" style="width:50%; margin-left:1%;">
+        <input type="submit" name="" value="+">
+    </div>
+</form>
+<br>
+Список формул:
+<br>
+<div class="admin_panel_right_data_list_small">
+    {% for i in range(10) %}
+    <div class="admin_panel_right_data_text">
+        info
+    </div>
+    {% endfor %}
+</div>
+<br>
+Список мерок и их обозначений:
+<br>
+<div class="admin_panel_right_data_list_small">
+    {% for i in range(10) %}
+    <div class="admin_panel_right_data_text">
+        info
+    </div>
+    {% endfor %}
+</div>
+{% endmacro %}
+
+<!--Макрос для вывода деталей на панели администратора-->
+{% macro admin_panel_details() %}
+Добавление новой детали:
+<form action="{{url_for('admin_profile')}}" method="get">
+    <div class="admin_panel_right_data_text">
+        <input type="text" name="" placeholder="Введите название детали" style="width:100%">
+        <input type="submit" name="" value="+">
+    </div>
+</form>
+<br>
 {% endmacro %}
 
 <!--Макрос для вывода выкроек на панели администратора-->
 {% macro admin_panel_patterns() %}
-Выкройки
+Добавление новой выкройки:
+<form action="{{url_for('admin_profile')}}" method="get">
+    <div class="admin_panel_right_data_text">
+        <input type="text" name="" placeholder="Введите название выкройки" style="width:100%">
+        <input type="submit" name="" value="+">
+    </div>
+</form>
 {% endmacro %}
 
 <!--Макрос для вывода 3D-моделей панели администратора-->
 {% macro admin_panel_3D() %}
-3D-модели
+Добавление новой 3D-модели:
+<form action="{{url_for('admin_profile')}}" method="get">
+    <div class="admin_panel_right_data_text">
+        <input type="text" name="" placeholder="Введите название 3D-модели" style="width:50%">
+        <input type="text" name="" placeholder="Выберите файл" style="width:50%; margin-left:1%;">
+        <input type="submit" name="" value="+">
+    </div>
+</form>
+<br>
+Список 3D-моделей:
+<br>
+<div class="admin_panel_right_data_list">
+    {% for i in range(20) %}
+    <div class="admin_panel_right_data_text">
+        info
+    </div>
+    {% endfor %}
+</div>
 {% endmacro %}
