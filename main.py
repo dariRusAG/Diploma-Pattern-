@@ -107,7 +107,88 @@ VALUES
 (3, 1, 28), (3, 2, 68), (3, 3, 94), (3, 4, 23), (3, 5, 48), 
 (3, 6, 72), (3, 7, 75), (3, 8, 80), (3, 9, 56), (3, 10, 103), 
 (3, 11, 132), (3, 12, 88), (3, 13, 97), (3, 14, 48), (3, 15, 14);
+
+CREATE TABLE IF NOT EXISTS detail (
+ detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ detail_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS formula (
+ formula_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ formula_name VARCHAR(50),
+ formula_value VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS detail_formula (
+ detail_formula_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ detail_id INTEGER,
+ formula_id INTEGER,
+ FOREIGN KEY (detail_id) REFERENCES detail (detail_id) ON DELETE CASCADE,
+ FOREIGN KEY (formula_id) REFERENCES formula (formula_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS line (
+ line_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ detail_id INTEGER,
+ x_first_coord varchar(70),
+ y_first_coord varchar(70),
+ x_second_coord varchar(70),
+ y_second_coord varchar(70),
+ line_type varchar(10),
+ x_deviation REAL,
+ y_deviation REAL,
+ line_design varchar(15),
+ FOREIGN KEY (detail_id) REFERENCES detail (detail_id) ON DELETE CASCADE
+);
+
+INSERT INTO formula (formula_name, formula_value)
+VALUES
+('ah', 'dlina_izd'),
+('hh', '0.5 * obhvat_bed_1 + 1'),
+('ab', 'dlina_izd - vusota_bed'),
+('c', '0.5*obhvat_bed_1 - 0.5*obhvat_t'),
+('bok_v', '0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t)'),
+('tr', '0.5*(0.5 * obhvat_bed_1 + 1)-(0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t))*0.5');
+
+INSERT INTO line (x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design)
+VALUES
+('1', 'ah', '1', '1', 'line','','','normal'),
+('1', '1', '0.5*hh', '1', 'line','','','normal'),
+('0.5*hh', '1', '0.5*hh', 'ab', 'line','','','normal'),
+('0.5*hh', 'ab', '1', 'ab', 'line','','','normal'),
+
+('1', 'ab', '0.5*hh', 'ab', 'line','','','dotted'),
+('0.5*hh', 'ab', '0.5*hh', 'ah+1', 'line','','','dotted'),
+('0.5*hh', 'ah+1','tr', 'ah+1', 'line','','','dotted'),
+('0.5*hh', 'ah','1', 'ah', 'line','','','dotted'),
+('0.25*hh', 'ab', '0.25*hh', 'ah', 'line','','','dotted'),
+('0.25*hh', 'ah', '0.25*hh', 'ah-13', 'line','','','dotted'),
+('0.25*hh', 'ah-13', '0.25*hh-2', 'ah+0.1', 'line','','','dotted'),
+('0.25*hh-2', 'ah+0.1', '0.25*hh', 'ah-13', 'line','','','dotted'),
+('0.25*hh', 'ah-13', '0.25*hh+2', 'ah+0.3', 'line','','','dotted');
 ''')
+
+
+# ('1', 'ah', 'line','','','FALSE'),
+# ('1', '1', 'line','','','FALSE'),
+# ('0.5*hh', '1', 'line','','','FALSE'),
+# ('0.5*hh', 'ab', 'line','','','FALSE'),
+# ('1', 'ab', 'line','','','FALSE'),
+# ('0.5*hh', 'ab', 'line','','','FALSE'),
+# ('0.5*hh', 'ah+1', 'line','','','FALSE'),
+# ('tr', 'ah+1', 'line','','','FALSE'),
+#
+# ('0.5*hh', 'ah', 'line','','','TRUE'),
+#
+# ('1', 'ah', 'line','','','TRUE'),
+# ('0.25*hh', 'ab', 'line','','','TRUE'),
+# ('0.25*hh', 'ah', 'line','','','FALSE'),
+#
+# ('0.25*hh', 'ah-13', 'line','','','FALSE'),
+# ('0.25*hh-2', 'ah+0.1', 'line','','','FALSE'),
+# ('0.25*hh', 'ah-13', 'line','','','FALSE'),
+# ('0.25*hh+2', 'ah+0.3', 'line','','','FALSE');
+
 
 # сохраняем информацию в базе данных
 con.commit()

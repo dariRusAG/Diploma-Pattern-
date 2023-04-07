@@ -38,3 +38,18 @@ def update_category(conn, category_id, category_name):
     WHERE category_id = :category_id
     ''', {"category_id": category_id, "category_name": category_name})
     return conn.commit()
+
+
+
+
+def get_formula(conn):
+    return pd.read_sql('''
+    SELECT formula_name, formula_value
+    FROM formula
+    ''', conn)
+
+def get_line(conn):
+    return pd.read_sql('''
+    SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_design
+    FROM line
+    ''', conn)
