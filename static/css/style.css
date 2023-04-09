@@ -239,3 +239,8 @@ background:white;
     border-radius: 5px;
     border: 2px solid #e3c3d4;
 }
+
+.block_measure {
+    display: block;
+    float: left;
+}
