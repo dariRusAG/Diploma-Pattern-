@@ -2,33 +2,44 @@
 
 <!--Генерация формы выбора категории-->
 {% macro render_block_choice(category, choice_category, choice_complexity, len, str) %}
-<p><b>Категории:</b></p>
-{% for i in range(len(category)) %}
-<p>
-    {% set value=category.loc[i, "category_name"] %}
-    {% if value in choice_category %}
-    <input type="checkbox" name="category" value="{{ value }}" checked>
-    {% else %}
-    <input type="checkbox" name="category" value="{{ value }}">
-    {% endif %}
-    {{ value }}
-</p>
-{% endfor %}
+<div class="catalog">
+    <div class="block_choice">
+        <form action="{{url_for('catalog_favorites')}}" method="post">
+            <p><b>Категории:</b></p>
+            {% for i in range(len(category)) %}
+            <p>
+                {% set value=category.loc[i, "category_name"] %}
+                {% if value in choice_category %}
+                <input type="checkbox" name="category" value="{{ value }}" checked>
+                {% else %}
+                <input type="checkbox" name="category" value="{{ value }}">
+                {% endif %}
+                {{ value }}
+            </p>
+            {% endfor %}
 
-<p><b>Сложность:</b></p>
-{% for i in range(5) %}
-<p>
-    <input type="checkbox" name="complexity" value="{{ i + 1 }}"
-           {% if str(i + 1) in choice_complexity %} checked {% endif %}>
-    {% for j in range(i + 1) %}
-    <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
-    {% endfor %}
+            <p><b>Сложность:</b></p>
+            {% for i in range(5) %}
+            <p>
+                <input type="checkbox" name="complexity" value="{{ i + 1 }}"
+                       {% if str(i + 1) in choice_complexity %} checked {% endif %}>
+                {% for j in range(i + 1) %}
+                <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
+                {% endfor %}
 
-    {% for j in range(5 - (i + 1)) %}
-    <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
-    {% endfor %}
-</p>
-{% endfor %}
+                {% for j in range(5 - (i + 1)) %}
+                <img src="/static/image/icons/empty_star_icon.png" alt="" width="18px" height="18px">
+                {% endfor %}
+            </p>
+            {% endfor %}
+
+            <div class=key_search>
+                <input type="submit" name="search" value="Показать" class="key_button_search">
+                <input type="submit" name="clear" value="Очистить" class="key_button_search">
+            </div>
+        </form>
+    </div>
+</div>
 {% endmacro %}
 
 <!--Макрос для вывода выкроек-->

@@ -3,11 +3,14 @@ from flask import render_template
 from functions.role import *
 from utils import get_db_connection
 from functions.overall import *
+from models.catalog_favorites_model import *
 
 
 @app.route('/', methods=['GET', 'POST'])
 def catalog_favorites():
     conn = get_db_connection()
+
+    # session.pop('page', None)
 
     is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
 
@@ -36,8 +39,13 @@ def catalog_favorites():
 
     if session['page'] == "catalog":
         df_pattern = get_pattern(conn, category, complexity)
-    else:
+    elif session['page'] == "favorites":
         df_pattern = df_favorite_pattern
+    else:
+        session['page'] = "catalog"
+        category = []
+        complexity = []
+        df_pattern = get_pattern(conn, category, complexity)
 
     return render_template(
         'catalog_favorites.html',

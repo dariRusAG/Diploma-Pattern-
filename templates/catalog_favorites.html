@@ -18,30 +18,27 @@
 {{ macros_general.registration(user_data_error, reg_form) }}
 {% endif %}
 
-<div class="catalog">
-    <div class="block_choice">
-        <form action="{{url_for('catalog_favorites')}}" method="post">
-            {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
-            <div class=key_search>
-                <input type="submit" name="search" value="Показать" class="key_button_search">
-                <input type="submit" name="clear" value="Очистить" class="key_button_search">
-            </div>
-        </form>
-    </div>
 
-    {{ title }}
+{% if title == "Список избранного" %}
     {% if favorite_list == [] %}
         {% if choice_category == [] and choice_complexity == [] %}
             Список избранного пуст
         {% else %}
+            {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
             Ничего не найдено
         {% endif %}
     {% else %}
-        <div class="pattern_view">
-            {{ macros.render_pattern(pattern, len, favorite_list, page, user_role) }}
-        </div>
+        {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
     {% endif %}
+{% else %}
+    {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
+        {% if len(pattern) == 0 %}
+            Ничего не найдено
+        {% endif %}
+{% endif %}
 
+<div class="pattern_view">
+    {{ macros.render_pattern(pattern, len, favorite_list, page, user_role) }}
 </div>
 
 </body>
