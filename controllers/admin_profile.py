@@ -3,6 +3,7 @@ from flask import render_template, request, session
 from utils import get_db_connection
 from functions.create_scheme import *
 
+
 @app.route('/admin_profile', methods=['GET', 'POST'])
 def admin_profile():
     conn = get_db_connection()
