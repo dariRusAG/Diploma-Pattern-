@@ -18,6 +18,15 @@
 {{ macros_general.registration(user_data_error, reg_form) }}
 {% endif %}
 
+<div class="block_measure">
+    <p><b>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</b></p>
+    {% for i in range(len(measure)) %}
+    <p>
+        {{ measure.loc[i, "Полное_название"] }} ({{ measure.loc[i, "Обозначение"] }})
+    </p>
+    {% endfor %}
+</div>
+
 {{ index }}
 <div class="scheme_view">
     {{ macros.render_pattern_scheme(pattern) }}

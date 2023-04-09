@@ -14,6 +14,8 @@ def scheme():
     index_pattern = request.values.get('pattern')
     df_pattern = get_scheme_pattern(conn, int(index_pattern))
 
+    df_measure = get_measure_pattern(conn, int(index_pattern))
+
     return render_template(
         'scheme.html',
 
@@ -27,5 +29,9 @@ def scheme():
         reg_form=reg_form,
 
         # Выкройки
-        pattern=df_pattern
+        pattern=df_pattern,
+        measure=df_measure,
+
+        # Функции
+        len=len
     )

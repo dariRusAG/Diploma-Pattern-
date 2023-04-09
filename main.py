@@ -41,6 +41,58 @@ VALUES
 ('Брюки карго', 1, 4, '/static/image/picture_pattern/Брюки%20карго.jpg'),
 ('Платье-футляр', 2, 5, '');
 
+CREATE TABLE IF NOT EXISTS measure (
+ measure_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ measure_name VARCHAR(10),
+ measure_full_name VARCHAR(50)
+);
+
+INSERT INTO measure (measure_name, measure_full_name)
+VALUES
+('ОПл', 'Обхват плеча'),
+('ОТ', 'Обхват талии'),
+('ОБ', 'Обхват бедер'),
+('ОШ', 'Обхват шеи'),
+('ДР', 'Длина рукава'),
+('ДПдТ', 'Длина переда до талии'),
+('ДСдТ', 'Длина спины до талии'), 
+('ДИпС', 'Длина изделия по спинке'),
+('ДПл', 'Длина плеча'),
+('ШПр', 'Ширина проймы'),
+('ШС', 'Ширина спины'),
+('ШГ', 'Ширина груди'),
+('ВПлПК', 'Высота плеча переда косая'),
+('ВПлК', 'Высота плеча косая'),
+('ГП', 'Глубина проймы'),
+('ОЗ', 'Обхват запястья'),
+('ОГ', 'Длина горловины'),
+('ВБ', 'Высота бедер'),
+('ДИ', 'Длина изделия'),
+('ВГ', 'Высота груди');
+
+CREATE TABLE IF NOT EXISTS pattern_measure (
+ pattern_measure_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ pattern_id INTEGER,
+ measure_id INTEGER,
+ FOREIGN KEY (pattern_id) REFERENCES pattern (pattern_id) ON DELETE CASCADE,
+ FOREIGN KEY (measure_id) REFERENCES measure (measure_id) ON DELETE CASCADE
+);
+
+INSERT INTO pattern_measure (pattern_id, measure_id)
+VALUES
+(1, 1), (1, 2), (1, 3),
+(2, 1), (2, 2), (2, 3),
+(3, 1), (3, 2), (3, 3),
+(4, 4), (4, 5), (4, 6), (4, 7), (4, 8), (4, 9),
+(5, 7), (5, 8),
+(6, 10), (6, 11),
+(7, 12),
+(8, 13),
+(9, 14), (9, 15),
+(10, 14), (10, 15),
+(11, 14), (11, 15), (11, 16),
+(12, 17), (12, 18), (12, 19), (12, 20);
+
 CREATE TABLE IF NOT EXISTS users (
  users_id INTEGER PRIMARY KEY AUTOINCREMENT,
  users_login VARCHAR(30),
@@ -104,14 +156,9 @@ CREATE TABLE IF NOT EXISTS user_param (
 
 INSERT INTO user_param (users_id, param_id, param_value)
 VALUES
-(3, 1, 28), (3, 2, 68), (3, 3, 94), (3, 4, 23), (3, 5, 48), 
-(3, 6, 72), (3, 7, 75), (3, 8, 80), (3, 9, 56), (3, 10, 103), 
-(3, 11, 132), (3, 12, 88), (3, 13, 97), (3, 14, 48), (3, 15, 14);
-
-CREATE TABLE IF NOT EXISTS detail (
- detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
- detail_name VARCHAR(50)
-);
+(4, 1, 28), (4, 2, 68), (4, 3, 94), (4, 4, 23), (4, 5, 48), 
+(4, 6, 72), (4, 7, 75), (4, 8, 80), (4, 9, 56), (4, 10, 103), 
+(4, 11, 132), (4, 12, 88), (4, 13, 97), (4, 14, 48), (4, 15, 14);
 
 CREATE TABLE IF NOT EXISTS formula (
  formula_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,13 +166,14 @@ CREATE TABLE IF NOT EXISTS formula (
  formula_value VARCHAR(100)
 );
 
-CREATE TABLE IF NOT EXISTS detail_formula (
- detail_formula_id INTEGER PRIMARY KEY AUTOINCREMENT,
- detail_id INTEGER,
- formula_id INTEGER,
- FOREIGN KEY (detail_id) REFERENCES detail (detail_id) ON DELETE CASCADE,
- FOREIGN KEY (formula_id) REFERENCES formula (formula_id) ON DELETE CASCADE
-);
+INSERT INTO formula (formula_name, formula_value)
+VALUES
+('ah', 'dlina_izd'),
+('hh', '0.5 * obhvat_bed_1 + 1'),
+('ab', 'dlina_izd - vusota_bed'),
+('c', '0.5*obhvat_bed_1 - 0.5*obhvat_t'),
+('bok_v', '0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t)'),
+('tr', '0.5*(0.5 * obhvat_bed_1 + 1)-(0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t))*0.5');
 
 CREATE TABLE IF NOT EXISTS line (
  line_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -140,15 +188,6 @@ CREATE TABLE IF NOT EXISTS line (
  line_design varchar(15),
  FOREIGN KEY (detail_id) REFERENCES detail (detail_id) ON DELETE CASCADE
 );
-
-INSERT INTO formula (formula_name, formula_value)
-VALUES
-('ah', 'dlina_izd'),
-('hh', '0.5 * obhvat_bed_1 + 1'),
-('ab', 'dlina_izd - vusota_bed'),
-('c', '0.5*obhvat_bed_1 - 0.5*obhvat_t'),
-('bok_v', '0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t)'),
-('tr', '0.5*(0.5 * obhvat_bed_1 + 1)-(0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t))*0.5');
 
 INSERT INTO line (x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design)
 VALUES
@@ -166,6 +205,20 @@ VALUES
 ('0.25*hh', 'ah-13', '0.25*hh-2', 'ah+0.1', 'line','','','dotted'),
 ('0.25*hh-2', 'ah+0.1', '0.25*hh', 'ah-13', 'line','','','dotted'),
 ('0.25*hh', 'ah-13', '0.25*hh+2', 'ah+0.3', 'line','','','dotted');
+
+CREATE TABLE IF NOT EXISTS detail (
+ detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ detail_name VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS detail_formula (
+ detail_formula_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ detail_id INTEGER,
+ formula_id INTEGER,
+ FOREIGN KEY (detail_id) REFERENCES detail (detail_id) ON DELETE CASCADE,
+ FOREIGN KEY (formula_id) REFERENCES formula (formula_id) ON DELETE CASCADE
+);
+
 ''')
 
 # сохраняем информацию в базе данных

@@ -70,3 +70,5 @@ def del_pattern(conn, pattern_id):
      ''', {"pattern": pattern_id})
 
     return conn.commit()
+
+
