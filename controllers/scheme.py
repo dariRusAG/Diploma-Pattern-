@@ -15,6 +15,7 @@ def scheme():
     df_pattern = get_scheme_pattern(conn, int(index_pattern))
 
     df_measure = get_measure_pattern(conn, int(index_pattern))
+    df_param = get_param_user(conn, session['user_id'])
 
     return render_template(
         'scheme.html',
@@ -31,6 +32,7 @@ def scheme():
         # Выкройки
         pattern=df_pattern,
         measure=df_measure,
+        param=df_param,
 
         # Функции
         len=len

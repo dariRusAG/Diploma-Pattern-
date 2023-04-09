@@ -28,6 +28,7 @@ def get_pattern(conn, category, complexity):
     ''', conn)
 
 
+# Вывод всех избранных выкроек
 def get_favorite_pattern(conn, user_id, category, complexity):
     return pd.read_sql(f'''
     WITH get_favorite_id(pattern_id)
@@ -52,6 +53,7 @@ def get_favorite_pattern(conn, user_id, category, complexity):
     ''', conn)
 
 
+# Добавление выкройки в избранное
 def add_pattern(conn, user_id, pattern_id):
     cur = conn.cursor()
     cur.execute('''
@@ -62,6 +64,7 @@ def add_pattern(conn, user_id, pattern_id):
     return conn.commit()
 
 
+# Удаление выкройки из избранного
 def del_pattern(conn, pattern_id):
     cur = conn.cursor()
     cur.execute(f'''
