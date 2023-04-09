@@ -195,7 +195,6 @@ VALUES
 ('1', '1', '0.5*hh', '1', 'line','','','normal'),
 ('0.5*hh', '1', '0.5*hh', 'ab', 'line','','','normal'),
 ('0.5*hh', 'ab', '1', 'ab', 'line','','','normal'),
-
 ('1', 'ab', '0.5*hh', 'ab', 'line','','','dotted'),
 ('0.5*hh', 'ab', '0.5*hh', 'ah+1', 'line','','','dotted'),
 ('0.5*hh', 'ah+1','tr', 'ah+1', 'line','','','dotted'),
@@ -204,7 +203,9 @@ VALUES
 ('0.25*hh', 'ah', '0.25*hh', 'ah-13', 'line','','','dotted'),
 ('0.25*hh', 'ah-13', '0.25*hh-2', 'ah+0.1', 'line','','','dotted'),
 ('0.25*hh-2', 'ah+0.1', '0.25*hh', 'ah-13', 'line','','','dotted'),
-('0.25*hh', 'ah-13', '0.25*hh+2', 'ah+0.3', 'line','','','dotted');
+('0.25*hh', 'ah-13', '0.25*hh+2', 'ah+0.3', 'line','','','dotted'),
+('tr', 'dlina_izd + 1', '0.5*hh', 'ab', 'curve', '1/4', '3/4', 'normal'),
+('1', 'dlina_izd', 'tr', 'dlina_izd + 1', 'curve', '2/3', '4/5', 'normal');
 
 CREATE TABLE IF NOT EXISTS detail (
  detail_id INTEGER PRIMARY KEY AUTOINCREMENT,

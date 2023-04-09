@@ -50,6 +50,6 @@ def get_formula(conn):
 
 def get_line(conn):
     return pd.read_sql('''
-    SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_design
+    SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design
     FROM line
     ''', conn)
