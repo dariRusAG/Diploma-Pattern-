@@ -1,27 +1,10 @@
 import matplotlib.pyplot as plt
-import bezier
 import numpy as np
 from models.admin_profile_model import *
+from functions.bezie import Bezier
 
-
-def get_plot(x_up, y_up, x_down, y_down, otstup_a, otstup_b):
-    P1 = np.array([x_up, y_up])
-    P2 = np.array([x_down, y_down])
-    P3 = P2 + (P1 - P2) * np.array([otstup_a, otstup_b])
-    nodes1 = np.asfortranarray([
-        [P1[0], P3[0], P2[0]],
-        [P1[1], P3[1], P2[1]],
-    ])
-    curve = bezier.Curve(nodes1, degree=2)
-    xx = np.linspace(0, 1, 10)
-    yy = map(lambda x: curve.evaluate(x), xx)
-    x_ = []
-    y_ = []
-    for _ in np.array(list(yy)):
-        x_.append(_[0])
-        y_.append(_[1])
-    return [x_, y_]
-
+def cm_to_inch(value):
+  return value/2.54
 
 def create_user_scheme(conn):
     # список всех формул
@@ -76,7 +59,7 @@ def create_user_scheme(conn):
         else:
             curve_design = f"{row['line_design']}"
             x_deviation_ = eval(f"{row['x_deviation']}", {}, df_formula)
-            y_deviation_ = eval(f"{row['x_deviation']}", {}, df_formula)
+            y_deviation_ = eval(f"{row['y_deviation']}", {}, df_formula)
             x_coord_curve.append(x1)
             y_coord_curve.append(y1)
             x_coord_curve.append(x2)
@@ -84,6 +67,8 @@ def create_user_scheme(conn):
             design_for_curve.append(curve_design)
             x_deviation.append(x_deviation_)
             y_deviation.append(y_deviation_)
+
+    plt.figure(figsize=(cm_to_inch(dlina_izd), cm_to_inch(dlina_izd + 5)))
 
     # построение линий в зависимости от их типа
     for x in range(0, len(x_coord_line) - 1, 2):
@@ -95,16 +80,20 @@ def create_user_scheme(conn):
                      c='black', ls='-.', lw=0.8)
 
     for x in range(0, len(x_coord_curve) - 1, 2):
-        if design_for_line[int(x / 2)] == "normal":
-            curve = get_plot(x_coord_curve[x], x_coord_curve[x + 1], y_coord_curve[x], y_coord_curve[x + 1],
-                             x_deviation[int(x / 2)], y_deviation[int(x / 2)])
-            plt.plot(curve[0], curve[1], c='black', lw=0.8)
-        else:
-            curve = get_plot(x_coord_curve[x], x_coord_curve[x + 1], y_coord_curve[x], y_coord_curve[x + 1],
-                             x_deviation[int(x / 2)], y_deviation[int(x / 2)])
-            plt.plot(curve[0], curve[1], c='black', ls='-.', lw=0.8)
+        t_points = np.arange(0, 1, 0.009)
+        d_x = x_deviation[int(x / 2)]
+        d_y = y_deviation[int(x / 2)]
+        k= ((x_coord_curve[x] + x_coord_curve[x+1])/2) * d_x
+        kk=((y_coord_curve[x] + y_coord_curve[x + 1])/2) * d_y
+        print(d_x)
+        print(d_y)
+        points1 = np.array([[x_coord_curve[x], y_coord_curve[x]], [k, kk], [x_coord_curve[x + 1], y_coord_curve[x + 1]]])
+        curve1 = Bezier.Curve(t_points, points1)
+        plt.plot(
+            curve1[:, 0],
+            curve1[:, 1]
+        )
 
-    plt.legend
     plt.xlim([0, dlina_izd])
     plt.ylim([0, dlina_izd + 5])
     plt.savefig("pict.jpg")

@@ -204,8 +204,8 @@ VALUES
 ('0.25*hh', 'ah-13', '0.25*hh-2', 'ah+0.1', 'line','','','dotted'),
 ('0.25*hh-2', 'ah+0.1', '0.25*hh', 'ah-13', 'line','','','dotted'),
 ('0.25*hh', 'ah-13', '0.25*hh+2', 'ah+0.3', 'line','','','dotted'),
-('tr', 'dlina_izd + 1', '0.5*hh', 'ab', 'curve', '1/4', '3/4', 'normal'),
-('1', 'dlina_izd', 'tr', 'dlina_izd + 1', 'curve', '2/3', '4/5', 'normal');
+('tr', 'ah + 1', '0.5*hh', 'ab', 'curve', '1.1', '1.1', 'normal'),
+('1', 'ah', 'tr', 'ah + 1', 'curve', '1.3', '1', 'normal');
 
 CREATE TABLE IF NOT EXISTS detail (
  detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
