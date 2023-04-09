@@ -33,6 +33,17 @@ def registration(conn, login, password):
     return cur.lastrowid
 
 
+def new_user_params(conn, users_id):
+    cur = conn.cursor()
+    for param_id in range(1, 15):
+        cur.execute('''
+        INSERT INTO user_param(users_id, param_id, param_value) 
+        VALUES (:users_id,:param_id,'')
+         ''', {"users_id": users_id, "param_id": param_id})
+        conn.commit()
+    return cur.lastrowid
+
+
 def to_delete_user(conn, user_id):
     cur = conn.cursor()
     cur.execute(f'''
@@ -41,6 +52,3 @@ def to_delete_user(conn, user_id):
      ''', {"user_id": user_id})
     conn.commit()
     return cur.lastrowid
-
-
-

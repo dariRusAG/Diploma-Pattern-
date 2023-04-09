@@ -37,12 +37,14 @@ def catalog_favorites():
     df_favorite_pattern, favorite_list = favorites_pattern(conn, category, complexity)
     df_category = get_category(conn)
 
-    if session['page'] == "catalog":
-        df_pattern = get_pattern(conn, category, complexity)
-    elif session['page'] == "favorites":
-        df_pattern = df_favorite_pattern
+    if 'page' in session:
+        if session['page'] == "catalog":
+            df_pattern = get_pattern(conn, category, complexity)
+        elif session['page'] == "favorites":
+            df_pattern = df_favorite_pattern
     else:
         session['page'] = "catalog"
+        session['title'] = "Каталог"
         category = []
         complexity = []
         df_pattern = get_pattern(conn, category, complexity)

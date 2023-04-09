@@ -47,6 +47,7 @@ def role(conn):
             if password == password_confirmation:
                 registration(conn, login, password)
                 session['user_id'] = f'{get_user_id(conn, login)}'
+                new_user_params(conn, session['user_id'])
                 session['user_role'] = "user"
             else:
                 is_registration = True
