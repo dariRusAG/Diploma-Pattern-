@@ -21,3 +21,41 @@
     </div>
 </div>
 {% endmacro %}
+
+<!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
+{% macro render_measure_pattern(measure, param, len) %}
+<table>
+    {% for i in range(len(measure)) %}
+    <tr>
+        <td>
+            {{ measure.loc[i, "Полное_название"] }} ({{ measure.loc[i, "Обозначение"] }}):
+            <label>
+                <input hidden type="text" name="param_designation" value="{{measure.loc[i,'Обозначение']}}">
+            </label>
+        </td>
+        <td>
+            {% if measure.loc[i, "Обозначение"] not in param["Обозначение"].unique() %}
+                <label>
+                    <input type="text" name="param_value" class="write_personal" value="" placeholder="необходимо заполнить">
+                </label>
+            {% endif %}
+
+            {% for j in range(len(param)) %}
+                {% if param.loc[j, "Обозначение"] == measure.loc[i, "Обозначение"] %}
+            <label>
+                {% if param.loc[j, "Значение"] != '' %}
+                    <input type="text" name="param_value" class="write_personal" value={{param.loc[j,"Значение"]}} placeholder={{param.loc[j,"Значение"]}}>
+                {% else %}
+                    <input type="text" name="param_value" class="write_personal" value="" placeholder="необходимо заполнить">
+                {% endif %}
+            </label>
+                {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<input type="submit" name="build_scheme" value="Построить">
+<input type="submit" value="Отменить изменения" onclick="window.location.reload()">
+{% endmacro %}

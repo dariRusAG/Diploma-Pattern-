@@ -17,6 +17,20 @@ def scheme():
     df_measure = get_measure_pattern(conn, int(index_pattern))
     df_param = get_param_user(conn, session['user_id'])
 
+    param_value = []
+    empty = 0
+
+    # Если нажата кнопка "Построить"
+    if request.values.get('build_scheme'):
+        param_value = request.form.getlist('param_value')
+        param_designation = request.form.getlist('param_designation')
+        df_param = pd.DataFrame(list(zip(param_designation, param_value)), columns=['Обозначение', 'Значение'])
+
+    for index, row in df_param.iterrows():
+        if df_param.loc[index, 'Значение'] == '':
+            empty = 1
+            break
+
     return render_template(
         'scheme.html',
 
@@ -33,6 +47,8 @@ def scheme():
         pattern=df_pattern,
         measure=df_measure,
         param=df_param,
+        param_value=param_value,
+        empty=empty,
 
         # Функции
         len=len

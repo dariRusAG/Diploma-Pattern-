@@ -19,27 +19,23 @@
 {% endif %}
 
 <div class="block_measure">
-    <p><b>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</b></p>
-    {% for i in range(len(measure)) %}
-    <p>
-        {% for j in range(len(param)) %}
-            {% if param.loc[j, "Обозначение"] == measure.loc[i, "Обозначение"] %}
-                {{ measure.loc[i, "Полное_название"] }} ({{ measure.loc[i, "Обозначение"] }}):
-                <input type="text" name="measure" class="write_personal"
-                       value={{param.loc[j,"Значение"]}} placeholder={{param.loc[j,"Значение"]}}>
-            {% endif %}
-        {% endfor %}
-    </p>
-    {% endfor %}
-
-    <input type="submit" name="build_scheme" value="Построить">
-    <input type="submit" value="Отменить изменения" onclick="window.location.reload()">
+    <form action="{{url_for('scheme')}}" method="post">
+        <p><b>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</b></p>
+        <label>
+            <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
+        </label>
+        {{ macros.render_measure_pattern(measure, param, len) }}
+    </form>
 </div>
 
-
-<div class="scheme_view">
-    {{ macros.render_pattern_scheme(pattern) }}
-</div>
+{% if empty != 1 %}
+    {{ param_value }}
+    <div class="scheme_view">
+        {{ macros.render_pattern_scheme(pattern) }}
+    </div>
+{% else %}
+    Введите недостающие параметры!
+{% endif %}
 
 </body>
 </html>

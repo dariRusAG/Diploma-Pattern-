@@ -10,8 +10,6 @@ from models.catalog_favorites_model import *
 def catalog_favorites():
     conn = get_db_connection()
 
-    # session.pop('page', None)
-
     is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
 
     # Если нажата кнопка "Список избранного"
