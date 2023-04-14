@@ -1,61 +1,71 @@
 <!DOCTYPE html>
 
 <!--Макрос для вывода данных схемы выкройки-->
-{% macro render_pattern_scheme(pattern) %}
-<div class="block_scheme">
-    <div class="data">
-        <p class="fig">
-            <span class="product-title">{{ pattern.loc[0, "Название"] }}</span>
-        </p>
-        <p class="fig">
-            <span class="product-caption">{{ pattern.loc[0, "Категория"] }}</span>
-        </p>
-        <p class="fig">
-            <img src="{{pattern.loc[0,'Изображение']}}" alt="">
-        </p>
-        <p class="fig">
-            <a href="{{pattern.loc[0,'Изображение']}}" download>
-                <input type="button" value="Скачать изображение" class="key_button_search">
-            </a>
-        </p>
+{% macro render_pattern_scheme(pattern, checked_value) %}
+    <div class="block_scheme">
+        <div class="data">
+            <p class="fig">
+                <span class="product-title">{{ pattern.loc[0, "Название"] }}</span>
+            </p>
+            <p class="fig">
+                <span class="product-caption">{{ pattern.loc[0, "Категория"] }}</span>
+            </p>
+            {% if checked_value == True %}
+                <p class="fig">
+                    <img src="static/scheme.jpg" alt=""
+                         style="width: 350px; height: 900px; object-fit: cover; object-position: 2% 100%;">
+                </p>
+                <p class="fig">
+                    <a href="static/scheme.jpg" download>
+                        <input type="button" value="Скачать изображение" class="key_button_search">
+                    </a>
+                </p>
+            {% else %}
+                <p class="fig">
+                    <img src="{{ pattern.loc[0,'Изображение']}}" alt="">
+                </p>
+            {% endif %}
+        </div>
     </div>
-</div>
 {% endmacro %}
 
 <!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
 {% macro render_measure_pattern(measure, param, len) %}
-<table>
-    {% for i in range(len(measure)) %}
-    <tr>
-        <td>
-            {{ measure.loc[i, "Полное_название"] }} ({{ measure.loc[i, "Обозначение"] }}):
-            <label>
-                <input hidden type="text" name="param_designation" value="{{measure.loc[i,'Обозначение']}}">
-            </label>
-        </td>
-        <td>
-            {% if measure.loc[i, "Обозначение"] not in param["Обозначение"].unique() %}
-                <label>
-                    <input type="text" name="param_value" class="write_personal" value="" placeholder="необходимо заполнить">
-                </label>
-            {% endif %}
+    <table>
+        {% for i in range(len(measure)) %}
+            <tr>
+                <td>
+                    {{ measure.loc[i, "Полное_название"] }} ({{ measure.loc[i, "Обозначение"] }}):
+                    <label>
+                        <input hidden type="text" name="param_designation" value="{{ measure.loc[i,'Обозначение']}}">
+                    </label>
+                </td>
+                <td>
+                    {% if measure.loc[i, "Обозначение"] not in param["Обозначение"].unique() %}
+                        <label>
+                            <input type="text" name="param_value" class="write_personal" value=""
+                                   placeholder="необходимо заполнить">
+                        </label>
+                    {% endif %}
 
-            {% for j in range(len(param)) %}
-                {% if param.loc[j, "Обозначение"] == measure.loc[i, "Обозначение"] %}
-            <label>
-                {% if param.loc[j, "Значение"] != '' %}
-                    <input type="text" name="param_value" class="write_personal" value={{param.loc[j,"Значение"]}} placeholder={{param.loc[j,"Значение"]}}>
-                {% else %}
-                    <input type="text" name="param_value" class="write_personal" value="" placeholder="необходимо заполнить">
-                {% endif %}
-            </label>
-                {% endif %}
-            {% endfor %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+                    {% for j in range(len(param)) %}
+                        {% if param.loc[j, "Обозначение"] == measure.loc[i, "Обозначение"] %}
+                            <label>
+                                {% if param.loc[j, "Значение"] != '' %}
+                                    <input type="text" name="param_value" class="write_personal"
+                                           value={{ param.loc[j,"Значение"]}} placeholder={{ param.loc[j,"Значение"]}}>
+                                {% else %}
+                                    <input type="text" name="param_value" class="write_personal" value=""
+                                           placeholder="необходимо заполнить">
+                                {% endif %}
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 
-<input type="submit" name="build_scheme" value="Построить">
-<input type="submit" value="Отменить изменения" onclick="window.location.reload()">
+    <input type="submit" name="build_scheme" value="Построить">
+    <input type="submit" value="Отменить изменения" onclick="window.location.reload()">
 {% endmacro %}

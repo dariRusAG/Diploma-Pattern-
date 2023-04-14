@@ -3,6 +3,7 @@ from flask import render_template
 from functions.role import *
 from utils import get_db_connection
 from models.scheme_model import *
+from functions.create_scheme import *
 
 
 @app.route('/scheme', methods=['GET', 'POST'])
@@ -19,6 +20,7 @@ def scheme():
 
     param_value = []
     empty = 0
+    checked_value = False
 
     # Если нажата кнопка "Построить"
     if request.values.get('build_scheme'):
@@ -26,10 +28,14 @@ def scheme():
         param_designation = request.form.getlist('param_designation')
         df_param = pd.DataFrame(list(zip(param_designation, param_value)), columns=['Обозначение', 'Значение'])
 
-    for index, row in df_param.iterrows():
-        if df_param.loc[index, 'Значение'] == '':
-            empty = 1
-            break
+        for index, row in df_param.iterrows():
+            if df_param.loc[index, 'Значение'] == '':
+                empty = 1
+                break
+        else:
+            if empty == 0:
+                create_user_scheme(conn, df_param)
+                checked_value = True
 
     return render_template(
         'scheme.html',
@@ -49,6 +55,9 @@ def scheme():
         param=df_param,
         param_value=param_value,
         empty=empty,
+
+        # Счетчики
+        checked_value=checked_value,
 
         # Функции
         len=len

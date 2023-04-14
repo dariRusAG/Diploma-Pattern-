@@ -33,13 +33,13 @@ VALUES
 ('Классическая футболка', 4, 2, '/static/image/picture_pattern/Классическая%20футболка.jpg'),
 ('Классическая рубашка', 3, 4, '/static/image/picture_pattern/Классическая%20рубашка.jpg'),
 ('Пляжная рубашка', 3, 4, ''),
-('Юбка-карандаш', 5, 3, ''),
+('Юбка-карандаш', 5, 3, '/static/image/picture_pattern/Юбка-карандаш.jpg'),
 ('Юбка-солнце', 5, 1, '/static/image/picture_pattern/Юбка-солнце.jpg'),
 ('Классические брюки', 1, 4, ''),
 ('Брюки бананы', 1, 3, '/static/image/picture_pattern/Брюки%20бананы.jpg'),
-('Брюки скинни', 1, 3, ''),
+('Брюки скинни', 1, 3, '/static/image/picture_pattern/Брюки%20скинни.jpg'),
 ('Брюки карго', 1, 4, '/static/image/picture_pattern/Брюки%20карго.jpg'),
-('Платье-футляр', 2, 5, '');
+('Платье-футляр', 2, 5, '/static/image/picture_pattern/Платье%20футляр.jpg');
 
 CREATE TABLE IF NOT EXISTS measure (
  measure_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -85,7 +85,7 @@ VALUES
 (3, 1), (3, 2), (3, 3),
 (4, 4), (4, 5), (4, 6), (4, 7), (4, 8), (4, 9),
 (5, 7), (5, 8),
-(6, 10), (6, 11),
+(6, 2), (6, 3), (6, 18), (6, 19),
 (7, 12),
 (8, 13),
 (9, 14), (9, 15),

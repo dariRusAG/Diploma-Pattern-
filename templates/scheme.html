@@ -29,9 +29,8 @@
 </div>
 
 {% if empty != 1 %}
-    {{ param_value }}
     <div class="scheme_view">
-        {{ macros.render_pattern_scheme(pattern) }}
+        {{ macros.render_pattern_scheme(pattern, checked_value) }}
     </div>
 {% else %}
     Введите недостающие параметры!

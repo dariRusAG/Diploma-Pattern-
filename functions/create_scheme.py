@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from models.admin_profile_model import *
 from functions.bezie import Bezier
+from PIL import Image
 
 def cm_to_inch(value):
   return value/2.54
 
-def create_user_scheme(conn):
+def create_user_scheme(conn, user_param):
     # список всех формул
     df_formula = get_formula(conn)
     # список всех линий
@@ -14,16 +15,17 @@ def create_user_scheme(conn):
     # создание словаря формул
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
     # мерки выкроек
-    dlina_izd = 80
-    obhvat_bed_1 = 120
-    vusota_bed = 40
-    obhvat_t = 82
+    dlina_izd = eval(user_param[user_param["Обозначение"] == 'ДИ']["Значение"].values[0])
+    obhvat_bed_1 = eval(user_param[user_param["Обозначение"] == 'ОБ']["Значение"].values[0])
+    vusota_bed = eval(user_param[user_param["Обозначение"] == 'ВБ']["Значение"].values[0])
+    obhvat_t = eval(user_param[user_param["Обозначение"] == 'ОТ']["Значение"].values[0])
+
     measurements = {'dlina_izd': dlina_izd, 'obhvat_bed_1': obhvat_bed_1, 'vusota_bed': vusota_bed,
                     'obhvat_t': obhvat_t}
 
     # расчёт всех формул в зависимости от значений мерок
     for formula in df_formula:
-        df_formula[formula] = eval(eval(formula, {}, df_formula)[0])
+        df_formula[formula] = eval(eval(formula, measurements, df_formula)[0])
 
     # список всех x координат прямых линий
     x_coord_line = list()
@@ -74,10 +76,10 @@ def create_user_scheme(conn):
     for x in range(0, len(x_coord_line) - 1, 2):
         if design_for_line[int(x / 2)] == "normal":
             plt.plot([x_coord_line[x], x_coord_line[x + 1]], [y_coord_line[x], y_coord_line[x + 1]],
-                     c='black', lw=0.8)
+                     c='black', lw=2.8)
         else:
             plt.plot([x_coord_line[x], x_coord_line[x + 1]], [y_coord_line[x], y_coord_line[x + 1]],
-                     c='black', ls='-.', lw=0.8)
+                     c='black', ls='-.', lw=2.8)
 
     for x in range(0, len(x_coord_curve) - 1, 2):
         t_points = np.arange(0, 1, 0.009)
@@ -85,15 +87,19 @@ def create_user_scheme(conn):
         d_y = y_deviation[int(x / 2)]
         k= ((x_coord_curve[x] + x_coord_curve[x+1])/2) * d_x
         kk=((y_coord_curve[x] + y_coord_curve[x + 1])/2) * d_y
-        print(d_x)
-        print(d_y)
         points1 = np.array([[x_coord_curve[x], y_coord_curve[x]], [k, kk], [x_coord_curve[x + 1], y_coord_curve[x + 1]]])
         curve1 = Bezier.Curve(t_points, points1)
         plt.plot(
             curve1[:, 0],
-            curve1[:, 1]
+            curve1[:, 1], lw=2.8
         )
+
 
     plt.xlim([0, dlina_izd])
     plt.ylim([0, dlina_izd + 5])
-    plt.savefig("pict.jpg")
+    # ax = plt.gca()
+    # ax.get_xaxis().set_visible(False)
+    # ax.get_yaxis().set_visible(False)
+    plt.savefig("static/scheme.jpg", bbox_inches='tight')
+    im = Image.open('static/scheme.jpg')
+    im.crop((0, 0, im.size[0]-im.size[0]*0.50, im.size[1])).save('static/scheme.jpg')

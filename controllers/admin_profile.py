@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template, request, session
+from models.admin_profile_model import *
 from utils import get_db_connection
-from functions.create_scheme import *
 
 
 @app.route('/admin_profile', methods=['GET', 'POST'])
@@ -11,8 +11,6 @@ def admin_profile():
     checked_value = False
     # отвечает за то, какая вкладка на панели администратора открыта
     admin_panel_button = None
-
-    create_user_scheme(conn)
 
     if request.values.get('panel'):
         admin_panel_button = request.values.get('panel').title()
