@@ -33,7 +33,7 @@
         </div>
         {% elif admin_panel_button == 'Формулы'%}
         <div class="admin_panel_right_data">
-            {{ macros.admin_panel_formuls() }}
+            {{ macros.admin_panel_formuls(formula_list, measure_list, len) }}
         </div>
         {% elif admin_panel_button == 'Детали'%}
         <div class="admin_panel_right_data">

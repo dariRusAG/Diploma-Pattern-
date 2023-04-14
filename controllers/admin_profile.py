@@ -35,13 +35,22 @@ def admin_profile():
         admin_panel_button = "Категории"
         update_category(conn, category_id, category_name)
 
+    elif request.values.get('add_formula'):
+        add_formula(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value'))
+        admin_panel_button = "Формулы"
+
     df_category = get_category(conn)
+    df_formula = get_formula(conn)
+    df_measure = get_measure(conn)
+    print(df_measure)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
         admin_panel_button=admin_panel_button,
         category=df_category,
         checked_value=checked_value,
+        formula_list=df_formula,
+        measure_list=df_measure,
         len=len
     )
 

@@ -19,7 +19,7 @@
 {% endif %}
 
 
-{% if title == "Список избранного" %}
+{% if (title == "Список избранного") and (user_role == "user") %}
     {% if favorite_list == [] %}
         {% if choice_category == [] and choice_complexity == [] %}
             Список избранного пуст

@@ -29,13 +29,13 @@ CREATE TABLE IF NOT EXISTS pattern (
 INSERT INTO pattern (pattern_name, category_id, complexity, picture)
 VALUES
 ('Футболка поло', 4, 3, '/static/image/picture_pattern/Футболка%20поло.jpg'),
-('Футболка Дженни', 4, 3, ''),
+('Футболка Дженни', 4, 3, '/static/image/picture_pattern/Футболка%20дженни.jpg'),
 ('Классическая футболка', 4, 2, '/static/image/picture_pattern/Классическая%20футболка.jpg'),
 ('Классическая рубашка', 3, 4, '/static/image/picture_pattern/Классическая%20рубашка.jpg'),
-('Пляжная рубашка', 3, 4, ''),
+('Пляжная рубашка', 3, 4, '/static/image/picture_pattern/Пляжная%20рубашка.jpg'),
 ('Юбка-карандаш', 5, 3, '/static/image/picture_pattern/Юбка-карандаш.jpg'),
 ('Юбка-солнце', 5, 1, '/static/image/picture_pattern/Юбка-солнце.jpg'),
-('Классические брюки', 1, 4, ''),
+('Классические брюки', 1, 4, '/static/image/picture_pattern/Классические%20брюки.jpg'),
 ('Брюки бананы', 1, 3, '/static/image/picture_pattern/Брюки%20бананы.jpg'),
 ('Брюки скинни', 1, 3, '/static/image/picture_pattern/Брюки%20скинни.jpg'),
 ('Брюки карго', 1, 4, '/static/image/picture_pattern/Брюки%20карго.jpg'),

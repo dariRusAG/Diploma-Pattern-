@@ -95,7 +95,7 @@
 <!--кнопка выход-->
 {% macro exit() %}
 <form action={{url_for('catalog_favorites')}} method="get">
-    <input type="submit" name="exit_button" value="Выйти"
+    <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';"
            style="background:#fc6c85; color: #fff0f5; height:10%; border: none;">
 </form>
 {% endmacro %}

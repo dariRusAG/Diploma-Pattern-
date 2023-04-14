@@ -59,10 +59,12 @@ def role(conn):
     # нажата кнопка выйти в личном кабинете
     elif request.values.get('exit_button'):
         session.pop('user_id', None)
+        session.pop('page', None)
 
     elif request.values.get('remove_profile_button'):
         to_delete_user(conn, session['user_id'])
         session.pop('user_id', None)
+        session.pop('page', None)
 
     # если пользователь не вошел, то он гость
     if 'user_id' not in session:

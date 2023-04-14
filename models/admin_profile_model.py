@@ -9,6 +9,37 @@ def get_category(conn):
     ''', conn)
 
 
+def get_formula(conn):
+    return pd.read_sql('''
+    SELECT formula_name, formula_value
+    FROM formula
+    ''', conn)
+
+
+def get_line(conn):
+    return pd.read_sql('''
+    SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design
+    FROM line
+    ''', conn)
+
+def get_measure(conn):
+    return pd.read_sql('''
+    SELECT measure_name, measure_full_name
+    FROM measure
+    ORDER BY measure_name
+    ''', conn)
+
+
+def add_formula(conn, formula_name, formula_value):
+    cur = conn.cursor()
+    cur.execute('''
+    INSERT INTO formula (formula_name, formula_value)
+    VALUES (:formula_name, :formula_value)
+     ''', {"formula_name": formula_name, "formula_value": formula_value})
+    conn.commit()
+    return cur.lastrowid
+
+
 def add_category(conn, category):
     cur = conn.cursor()
     cur.execute('''
@@ -39,17 +70,3 @@ def update_category(conn, category_id, category_name):
     ''', {"category_id": category_id, "category_name": category_name})
     return conn.commit()
 
-
-
-
-def get_formula(conn):
-    return pd.read_sql('''
-    SELECT formula_name, formula_value
-    FROM formula
-    ''', conn)
-
-def get_line(conn):
-    return pd.read_sql('''
-    SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design
-    FROM line
-    ''', conn)
