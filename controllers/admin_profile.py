@@ -16,7 +16,8 @@ def admin_profile():
         admin_panel_button = request.values.get('panel').title()
 
     if request.values.get('add_category'):
-        add_category(conn, request.values.get('new_category'))
+        if get_category_id(conn, request.values.get('new_category')) == "error" and request.values.get('new_category') != '':
+            add_category(conn, request.values.get('new_category'))
         admin_panel_button = "Категории"
 
     elif request.values.get('delete_category'):
@@ -30,19 +31,21 @@ def admin_profile():
 
     elif request.values.get('edit_category'):
         category_id = int(request.values.get('edit_category'))
-        category_name = request.values.get('edit_category_name')
+        if get_category_id(conn, request.values.get('edit_category_name')) == "error" and request.values.get('edit_category') != '':
+            category_name = request.values.get('edit_category_name')
+            update_category(conn, category_id, category_name)
         checked_value = False
         admin_panel_button = "Категории"
-        update_category(conn, category_id, category_name)
 
     elif request.values.get('add_formula'):
-        add_formula(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value'))
+        if get_formula_id(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value')) == "error" \
+            and request.values.get('new_formula_name') != '' and request.values.get('new_formula_value') != '':
+            add_formula(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value'))
         admin_panel_button = "Формулы"
 
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
-    print(df_measure)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],

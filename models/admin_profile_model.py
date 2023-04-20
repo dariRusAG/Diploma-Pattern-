@@ -30,6 +30,25 @@ def get_measure(conn):
     ''', conn)
 
 
+def get_category_id(conn, category_name):
+    try:
+        return pd.read_sql('''SELECT category_id
+        FROM category
+        WHERE category_name = :category_name
+        ''', conn, params={"category_name": category_name}).values[0][0]
+    except IndexError:
+        return "error"
+
+
+def get_formula_id(conn, formula_name, formula_value):
+    try:
+        return pd.read_sql('''SELECT formula_id
+        FROM formula
+        WHERE formula_name = :formula_name OR formula_value = :formula_value
+        ''', conn, params={"formula_name": formula_name, "formula_value": formula_value}).values[0][0]
+    except IndexError:
+        return "error"
+
 def add_formula(conn, formula_name, formula_value):
     cur = conn.cursor()
     cur.execute('''

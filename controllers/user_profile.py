@@ -2,6 +2,7 @@ from app import app
 from flask import render_template, request, session
 from utils import get_db_connection
 from models.user_profile_model import *
+from models.model_general import is_correct_login_and_password
 
 
 @app.route('/user_profile', methods=['GET', 'POST'])
@@ -18,7 +19,9 @@ def user_profile():
     # Если нажата кнопка "Сохранить изменения"
     if request.values.get('save'):
         new_data_user = request.form.getlist('data_user')
-        update_data_user(conn, session['user_id'], new_data_user)
+        if new_data_user[0] != '' and new_data_user[1] != '' and \
+                is_correct_login_and_password(conn, new_data_user[0], new_data_user[1]) == "error":
+            update_data_user(conn, session['user_id'], new_data_user)
 
         def update(elem_, new_param_user_):
             update_param_user(conn, session['user_id'], elem_, new_param_user_)
