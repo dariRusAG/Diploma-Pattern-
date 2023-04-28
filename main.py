@@ -168,12 +168,12 @@ CREATE TABLE IF NOT EXISTS formula (
 
 INSERT INTO formula (formula_name, formula_value)
 VALUES
-('ah', 'dlina_izd'),
-('hh', '0.5 * obhvat_bed_1 + 1'),
-('ab', 'dlina_izd - vusota_bed'),
-('c', '0.5*obhvat_bed_1 - 0.5*obhvat_t'),
-('bok_v', '0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t)'),
-('tr', '0.5*(0.5 * obhvat_bed_1 + 1)-(0.5*(0.5*obhvat_bed_1 - 0.5*obhvat_t))*0.5');
+('ah', 'ДИ'),
+('hh', '0.5 * ОБ + 1'),
+('ab', 'ДИ - ВБ'),
+('c', '0.5 * ОБ - 0.5 * ОТ'),
+('bok_v', '0.5 * (0.5 * ОБ - 0.5 * ОТ)'),
+('tr', '0.5 * (0.5 * ОБ + 1) - (0.5 * (0.5 * ОБ - 0.5 * ОТ)) * 0.5');
 
 CREATE TABLE IF NOT EXISTS line (
  line_id INTEGER PRIMARY KEY AUTOINCREMENT,

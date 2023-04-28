@@ -15,13 +15,13 @@ def create_user_scheme(conn, user_param):
     # создание словаря формул
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
     # мерки выкроек
-    dlina_izd = eval(user_param[user_param["Обозначение"] == 'ДИ']["Значение"].values[0])
-    obhvat_bed_1 = eval(user_param[user_param["Обозначение"] == 'ОБ']["Значение"].values[0])
-    vusota_bed = eval(user_param[user_param["Обозначение"] == 'ВБ']["Значение"].values[0])
-    obhvat_t = eval(user_param[user_param["Обозначение"] == 'ОТ']["Значение"].values[0])
+    ДИ = eval(user_param[user_param["Обозначение"] == 'ДИ']["Значение"].values[0])
+    ОБ = eval(user_param[user_param["Обозначение"] == 'ОБ']["Значение"].values[0])
+    ВБ = eval(user_param[user_param["Обозначение"] == 'ВБ']["Значение"].values[0])
+    ОТ = eval(user_param[user_param["Обозначение"] == 'ОТ']["Значение"].values[0])
 
-    measurements = {'dlina_izd': dlina_izd, 'obhvat_bed_1': obhvat_bed_1, 'vusota_bed': vusota_bed,
-                    'obhvat_t': obhvat_t}
+    measurements = {'ДИ': ДИ, 'ОБ': ОБ, 'ВБ': ВБ,
+                    'ОТ': ОТ}
 
     # расчёт всех формул в зависимости от значений мерок
     for formula in df_formula:
@@ -70,7 +70,7 @@ def create_user_scheme(conn, user_param):
             x_deviation.append(x_deviation_)
             y_deviation.append(y_deviation_)
 
-    plt.figure(figsize=(cm_to_inch(dlina_izd), cm_to_inch(dlina_izd + 5)))
+    plt.figure(figsize=(cm_to_inch(ДИ), cm_to_inch(ДИ + 5)))
 
     # построение линий в зависимости от их типа
     for x in range(0, len(x_coord_line) - 1, 2):
@@ -95,8 +95,8 @@ def create_user_scheme(conn, user_param):
         )
 
 
-    plt.xlim([0, dlina_izd])
-    plt.ylim([0, dlina_izd + 5])
+    plt.xlim([0, ДИ])
+    plt.ylim([0, ДИ + 5])
     # ax = plt.gca()
     # ax.get_xaxis().set_visible(False)
     # ax.get_yaxis().set_visible(False)

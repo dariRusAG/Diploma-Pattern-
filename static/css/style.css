@@ -223,6 +223,14 @@ background:white;
     margin-bottom:3%;
 }
 
+.admin_panel_button_small{
+    width: 10%;
+    border-radius: 10px;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    margin-top:1%;
+    margin-left: 95%;
+}
+
 .admin_panel_right_data_list{
     overflow-y: auto;
     width:100%;
@@ -238,6 +246,36 @@ background:white;
     height:35%;
     border-radius: 5px;
     border: 2px solid #e3c3d4;
+}
+
+.admin_panel_right_data_list_vertical_middle{
+    overflow-y: auto;
+    width:40%;
+    height:95%;
+    border-radius: 5px;
+    border: 2px solid #e3c3d4;
+}
+
+.admin_panel_right_data_list_vertical_small{
+    overflow-y: auto;
+    width:30%;
+    height:88%;
+    border-radius: 5px;
+    border: 2px solid #e3c3d4;
+}
+
+.admin_panel_right_data_two_table{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 65vh;
+}
+
+.admin_panel_right_data_three_table{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 73vh;
 }
 
 .block_measure {

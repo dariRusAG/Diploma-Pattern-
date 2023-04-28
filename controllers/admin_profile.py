@@ -8,7 +8,7 @@ from utils import get_db_connection
 def admin_profile():
     conn = get_db_connection()
     # переменная для проверки нажатия кнопок
-    checked_value = False
+    checked_value = ['False', '']
     # отвечает за то, какая вкладка на панели администратора открыта
     admin_panel_button = None
 
@@ -26,12 +26,13 @@ def admin_profile():
         delete_category(conn, category_id)
 
     elif request.values.get('is_edit_category'):
-        checked_value = True
+        checked_value[0] = True
+        checked_value[1] = int(request.values.get('is_edit_category_id'))
         admin_panel_button = "Категории"
 
     elif request.values.get('edit_category'):
         category_id = int(request.values.get('edit_category'))
-        if get_category_id(conn, request.values.get('edit_category_name')) == "error" and request.values.get('edit_category') != '':
+        if get_category_id(conn, request.values.get('edit_category_name')) == "error" and request.values.get('edit_category_name') != '':
             category_name = request.values.get('edit_category_name')
             update_category(conn, category_id, category_name)
         checked_value = False
@@ -46,14 +47,16 @@ def admin_profile():
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
+    df_line = get_line(conn)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
         admin_panel_button=admin_panel_button,
-        category=df_category,
+        category_list=df_category,
         checked_value=checked_value,
         formula_list=df_formula,
         measure_list=df_measure,
+        line_list=df_line,
         len=len
     )
 
