@@ -11,6 +11,12 @@ def admin_profile():
     checked_value = ['False', '']
     # отвечает за то, какая вкладка на панели администратора открыта
     admin_panel_button = None
+    session.modified = True
+
+    if 'detail' not in session:
+        session['detail'] = []
+    if 'detail_lines' not in session:
+        session['detail_lines'] = []
 
     if request.values.get('panel'):
         admin_panel_button = request.values.get('panel').title()
@@ -44,6 +50,27 @@ def admin_profile():
             add_formula(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value'))
         admin_panel_button = "Формулы"
 
+    elif admin_panel_button == "Добавить Линии":
+        session['detail'] = []
+        session['detail'].append(request.values.get('new_detail_name'))
+        session['detail'].append(request.values.getlist('new_detail_measure'))
+        detail_dict = []
+        for i in request.values.getlist('new_detail_formula'):
+            detail_dict.append(get_formula(conn).loc[get_formula(conn)['formula_name'] == i].values[0][1])
+        session['detail'].append(dict(zip(request.values.getlist('new_detail_formula'), detail_dict)))
+        session['detail'][2] = dict(sorted(session['detail'][2].items()))
+
+    elif admin_panel_button == "Добавить Линию":
+        session['detail_lines'].append([len(session['detail_lines'])+1,request.values.get('first_coord_x'), request.values.get('first_coord_y'),
+                   request.values.get('second_coord_x'), request.values.get('second_coord_y'),
+                   request.values.get('line_type'), request.values.get('x_deviation'),
+                   request.values.get('y_deviation'), request.values.get('line_design')])
+
+    elif admin_panel_button == "Просмотреть Схему":
+        add_detail(conn, session['detail'][0])
+        print(get_detail_id(conn, session['detail'][0]))
+
+
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
@@ -57,6 +84,8 @@ def admin_profile():
         formula_list=df_formula,
         measure_list=df_measure,
         line_list=df_line,
+        new_detail_list=session['detail'],
+        new_detail_line_list=session['detail_lines'],
         len=len
     )
 

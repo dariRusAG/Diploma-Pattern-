@@ -89,3 +89,49 @@ def update_category(conn, category_id, category_name):
     ''', {"category_id": category_id, "category_name": category_name})
     return conn.commit()
 
+
+
+
+
+
+
+
+
+
+def add_detail(conn, detail_name):
+    cur = conn.cursor()
+    cur.execute('''
+    INSERT INTO detail(detail_name) 
+    VALUES (:detail_name)
+     ''', {"detail_name": detail_name})
+    conn.commit()
+    return cur.lastrowid
+
+def get_detail_id(conn, detail_name):
+    try:
+        return pd.read_sql('''SELECT detail_id
+        FROM detail
+        WHERE detail_name = :detail_name
+        ''', conn, params={"detail_name": detail_name}).values[0][0]
+    except IndexError:
+        return "error"
+
+def add_detail_formula(conn, detail_id, formula_id):
+    cur = conn.cursor()
+    cur.execute('''
+    INSERT INTO detail_formula(detail_id, formula_id) 
+    VALUES (:detail_id, :formula_id)
+     ''', {"detail_id": detail_id, "formula_id": formula_id})
+    conn.commit()
+    return cur.lastrowid
+
+# def add_detail_line(conn, detail_id, line):
+#     cur = conn.cursor()
+#     cur.execute('''
+#     INSERT INTO detail(detail_name)
+#     VALUES (:detail_name)
+#      ''', {"detail_id": detail_id, "x_first_coord": line[1], "y_first_coord": line[2], "x_second_coord": line[3],
+#            "y_second_coord": line[4], "line_type": line[5], "x_deviation": line[6], "y_deviation": line[7],
+#            "line_design": line[8]})
+#     conn.commit()
+#     return cur.lastrowid

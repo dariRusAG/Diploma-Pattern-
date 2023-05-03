@@ -96,11 +96,12 @@
 {% endmacro %}
 
 <!--Макрос для вывода деталей на панели администратора-->
-{% macro admin_panel_details(formula_list, measure_list, len) %}
+{% macro admin_panel_details(formula_list, measure_list, new_detail_list, len) %}
     Добавление новой детали:
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
-            <input type="text" name="" placeholder="Введите название детали" style="width:100%">
+            <input type="text" name="new_detail_name" placeholder="Введите название детали"
+                   value="{{ new_detail_list[0] }}" style="width:100%">
         </div>
         <br>
         <div class="admin_panel_right_data_two_table">
@@ -108,18 +109,34 @@
             <div class="admin_panel_right_data_list_vertical_middle">
                 {% for i in range(len(measure_list)) %}
                     <div class="admin_panel_right_data_text">
-                        <input type="checkbox" name="new_detail_measure"> {{ measure_list['measure_name'].values[i] }}
+                        {% if measure_list['measure_name'].values[i] in new_detail_list[1] %}
+                            <input type="checkbox" name="new_detail_measure"
+                                   value="{{ measure_list['measure_name'].values[i] }}" checked>
+                        {% else %}
+                            <input type="checkbox" name="new_detail_measure"
+                                   value="{{ measure_list['measure_name'].values[i] }}">
+                        {% endif %}
+                        {{ measure_list['measure_name'].values[i] }}
                         &emsp;:&emsp; {{ measure_list['measure_full_name'].values[i] }}
                     </div>
                 {% endfor %}
             </div>
-
             Список формул и их обозначений:
             <div class="admin_panel_right_data_list_vertical_middle">
                 {% for i in range(len(formula_list)) %}
                     <div class="admin_panel_right_data_text">
-                        <input type="checkbox" name="new_detail_formula"> {{ formula_list['formula_name'].values[i] }}
+
+                        <input type="checkbox" name="new_detail_formula"
+                               value="{{ formula_list['formula_name'].values[i] }}"
+                                {% if formula_list["formula_name"].values[i] in new_detail_list[2] %}
+                               checked>
+                                {% else %}
+                                    >
+                                {% endif %}
+                        {{ formula_list['formula_name'].values[i] }}
                         &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
+
+
                     </div>
                 {% endfor %}
             </div>
@@ -134,7 +151,7 @@
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
             <input type="text" name="" placeholder="Введите название выкройки" style="width:50%">
-             <input type="text" name="" placeholder="Выберите файл" style="width:50%; margin-left:1%;">
+            <input type="text" name="" placeholder="Выберите файл" style="width:50%; margin-left:1%;">
             <input type="submit" name="" value="+">
         </div>
 
@@ -192,40 +209,45 @@
 {% endmacro %}
 
 <!--Макрос для добавления линий деталей на панели администратора-->
-{% macro admin_panel_new_line(formula_list, len) %}
-    Список формул и их обозначений:
+{% macro admin_panel_new_line(new_detail_list, len) %}
+    Список выбранных формул и их обозначений:
     <div class="admin_panel_right_data_list_small">
-        {% for i in range(len(formula_list)) %}
+        {% for key in new_detail_list[2] %}
             <div class="admin_panel_right_data_text">
-                {{ formula_list['formula_name'].values[i] }}
-                &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
+                {{ key }}
+                &emsp;:&emsp; {{ new_detail_list[2][key] }}
             </div>
         {% endfor %}
     </div>
     <br>
     Добавление линий:
     <div class="admin_panel_right_data_list_small">
-        <br>
-        Координаты для первой точки:
-        <input type="text" name="first_coord_x" placeholder="X">
-        <input type="text" name="first_coord_y" placeholder="Y">
-        <br><br>
-        Координаты для второй точки:
-        <input type="text" name="second_coord_x" placeholder="X">
-        <input type="text" name="second_coord_y" placeholder="Y">
-        <br><br>
-        Тип линии:
-        <input type="radio" name="line_type"> Прямая
-        <input type="radio" name="line_type"> Кривая
-        <br><br>
-        Отклонение:
-        <input type="text" name="x_deviation" placeholder="По X">
-        <input type="text" name="y_deviation" placeholder="По Y">
-        <br><br>
-        Дизайн линии:
-        <input type="radio" name="line_design"> Обычная
-        <input type="radio" name="line_design"> Пунктирная
+        <form action="{{ url_for('admin_profile') }}" method="get">
+            <br>
+            Координаты для первой точки:
+            <input type="text" name="first_coord_x" placeholder="X">
+            <input type="text" name="first_coord_y" placeholder="Y">
+            <br><br>
+            Координаты для второй точки:
+            <input type="text" name="second_coord_x" placeholder="X">
+            <input type="text" name="second_coord_y" placeholder="Y">
+            <br><br>
+            Тип линии:
+            <input type="radio" name="line_type" value="Прямая"> Прямая
+            <input type="radio" name="line_type" value="Кривая"> Кривая
+            <br><br>
+            Отклонение:
+            <input type="text" name="x_deviation" placeholder="По X">
+            <input type="text" name="y_deviation" placeholder="По Y">
+            <br><br>
+            Дизайн линии:
+            <input type="radio" name="line_design" value="Обычная"> Обычная
+            <input type="radio" name="line_design" value="Пунктирная"> Пунктирная
+            <br>
+            <input type="submit" name="panel" value="Добавить Линию">
+        </form>
     </div>
+
     <form action="{{ url_for('admin_profile') }}" method="get">
         <input type="submit" name="panel" value="Выбрать мерки и формулы" class="admin_panel_button_small">
     </form>
@@ -235,13 +257,26 @@
 {% endmacro %}
 
 <!--Макрос для вывода списка добавленных линий на панели администратора-->
-{% macro admin_panel_all_new_lines(line_list, len) %}
+{% macro admin_panel_all_new_lines(new_detail_line_list, len) %}
     Добавленные линии для детали:
     <div class="admin_panel_right_data_list">
-        {{ admin_panel_line_list(line_list, len) }}
+    {% for i in new_detail_line_list %}
+        <div class="admin_panel_right_data_text">
+        {{ i[0] }}:
+            ({{ i[1] }}, {{ i[2] }});
+            ({{ i[3] }}, {{ i[4] }});
+            {{ i[5] }};
+            {% if i[5] == 'Кривая' %}
+                ({{ i[6] }},
+                {{ i[7] }});
+            {% endif %}
+            {{ i[8] }}
+            <br>
+        </div>
+    {% endfor %}
     </div>
     <form action="{{ url_for('admin_profile') }}" method="get">
-        <input type="submit" name="panel" value="Добавить линии" class="admin_panel_button_small">
+        <input type="submit" name="panel" value="Линии" class="admin_panel_button_small">
     </form>
     <form action="{{ url_for('admin_profile') }}" method="get">
         <input type="submit" name="panel" value="Просмотреть схему" class="admin_panel_button_small">
@@ -253,5 +288,13 @@
     Все линии для деталей:
     <div class="admin_panel_right_data_list">
         {{ admin_panel_line_list(line_list, len) }}
+    </div>
+{% endmacro %}
+
+<!--Макрос для вывода схемы детали на панели администратора-->
+{% macro admin_panel_scheme(len) %}
+    Схема
+    <div class="admin_panel_right_data_list">
+        kek
     </div>
 {% endmacro %}
