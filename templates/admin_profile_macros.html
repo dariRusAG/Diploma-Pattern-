@@ -8,7 +8,7 @@
             ({{ line_list.loc[i, "x_first_coord"] }}, {{ line_list.loc[i, "y_first_coord"] }});
             ({{ line_list.loc[i, "x_second_coord"] }}, {{ line_list.loc[i, "y_second_coord"] }});
             {{ line_list.loc[i, "line_type"] }};
-            {% if line_list.loc[i, "line_type"] == "curve" %}
+            {% if line_list.loc[i, "line_type"] == "Кривая" %}
                 ({{ line_list.loc[i, "x_deviation"] }},
                 {{ line_list.loc[i, "y_deviation"] }});
             {% endif %}
@@ -260,20 +260,24 @@
 {% macro admin_panel_all_new_lines(new_detail_line_list, len) %}
     Добавленные линии для детали:
     <div class="admin_panel_right_data_list">
-    {% for i in new_detail_line_list %}
-        <div class="admin_panel_right_data_text">
-        {{ i[0] }}:
-            ({{ i[1] }}, {{ i[2] }});
-            ({{ i[3] }}, {{ i[4] }});
-            {{ i[5] }};
-            {% if i[5] == 'Кривая' %}
-                ({{ i[6] }},
-                {{ i[7] }});
-            {% endif %}
-            {{ i[8] }}
-            <br>
-        </div>
-    {% endfor %}
+        {% for i in new_detail_line_list %}
+            <div class="admin_panel_right_data_text">
+                {{ i[0] }}:
+                ({{ i[1] }}, {{ i[2] }});
+                ({{ i[3] }}, {{ i[4] }});
+                {{ i[5] }};
+                {% if i[5] == 'Кривая' %}
+                    ({{ i[6] }},
+                    {{ i[7] }});
+                {% endif %}
+                {{ i[8] }}
+                <form action="{{ url_for('admin_profile') }}" method="get">
+                    <input type="submit" value="Удалить" style="margin-left:10px;">
+                    <input type="hidden" name="delete_detail_new_line" value={{ i[0] }}>
+                </form>
+                <br>
+            </div>
+        {% endfor %}
     </div>
     <form action="{{ url_for('admin_profile') }}" method="get">
         <input type="submit" name="panel" value="Линии" class="admin_panel_button_small">
@@ -297,4 +301,7 @@
     <div class="admin_panel_right_data_list">
         kek
     </div>
+    <form action="{{ url_for('admin_profile') }}" method="get">
+        <input type="submit" name="panel" value="Список новых линий" class="admin_panel_button_small">
+    </form>
 {% endmacro %}

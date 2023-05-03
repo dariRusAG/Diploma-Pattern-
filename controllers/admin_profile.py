@@ -68,8 +68,21 @@ def admin_profile():
 
     elif admin_panel_button == "Просмотреть Схему":
         add_detail(conn, session['detail'][0])
-        print(get_detail_id(conn, session['detail'][0]))
+        detail_id = int(get_detail_id(conn, session["detail"][0]))
+        for formula in session['detail'][2]:
+            add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
+        for measure in session['detail'][1]:
+            add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
+        for line in session['detail_lines']:
+            add_detail_line(conn, detail_id, line)
 
+    elif admin_panel_button == "Список Новых Линий":
+        delete_new_detail(conn, int(get_detail_id(conn, session["detail"][0])))
+
+    elif request.values.get('delete_detail_new_line'):
+        line_id = int(request.values.get('delete_detail_new_line'))
+        admin_panel_button = "Просмотреть Список Линий"
+        session['detail_lines'].pop(line_id-1)
 
     df_category = get_category(conn)
     df_formula = get_formula(conn)

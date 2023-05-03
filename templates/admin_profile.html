@@ -58,7 +58,7 @@
             <div class="admin_panel_right_data">
                 {{ macros.admin_panel_new_line(new_detail_list, len) }}
             </div>
-        {% elif admin_panel_button == "Просмотреть Список Линий" %}
+        {% elif admin_panel_button == "Просмотреть Список Линий" or admin_panel_button == "Список Новых Линий" %}
             <div class="admin_panel_right_data">
                 {{ macros.admin_panel_all_new_lines(new_detail_line_list, len) }}
             </div>

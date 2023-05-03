@@ -52,7 +52,7 @@ def create_user_scheme(conn, user_param):
 
         x2 = eval(f"{row['x_second_coord']}", measurements, df_formula)
         y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
-        if f"{row['line_type']}" != "curve":
+        if f"{row['line_type']}" != "Кривая":
             line_design = f"{row['line_design']}"
             x_coord_line.append(x1)
             y_coord_line.append(y1)
@@ -75,7 +75,7 @@ def create_user_scheme(conn, user_param):
 
     # построение линий в зависимости от их типа
     for x in range(0, len(x_coord_line) - 1, 2):
-        if design_for_line[int(x / 2)] == "normal":
+        if design_for_line[int(x / 2)] == "Обычная":
             plt.plot([x_coord_line[x], x_coord_line[x + 1]], [y_coord_line[x], y_coord_line[x + 1]],
                      c='black', lw=2.8)
         else:
