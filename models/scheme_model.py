@@ -16,13 +16,25 @@ def get_scheme_pattern(conn, index):
 
 
 # Вывод всех мерок выкройки
-def get_measure_pattern(conn, index):
+def get_measure_detail(conn, index):
     return pd.read_sql(f'''
+    WITH get_all_measure(detail_id, measure_name, measure_full_name)
+    AS (
+        SELECT 
+            detail_id, 
+            group_concat(measure_name, ', ') AS measure_name,
+            group_concat(measure_full_name, ', ') AS measure_full_name
+        FROM detail_measure 
+        JOIN measure USING (measure_id)
+        GROUP BY detail_id
+    )
     SELECT 
-    measure_name AS Обозначение, 
-    measure_full_name AS Полное_название
-    FROM measure 
-    JOIN pattern_measure USING (measure_id)
+        detail_name AS Название_детали,
+        measure_name AS Обозначение,
+        measure_full_name AS Полное_название
+    FROM pattern_detail 
+    JOIN get_all_measure USING (detail_id) 
+    JOIN detail USING (detail_id) 
     WHERE pattern_id == {index}
     ''', conn)
 

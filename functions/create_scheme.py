@@ -4,8 +4,10 @@ from models.admin_profile_model import *
 from functions.bezie import Bezier
 from PIL import Image
 
+
 def cm_to_inch(value):
-  return value/2.54
+    return value/2.54
+
 
 def create_user_scheme(conn, user_param):
     # список всех формул
@@ -20,8 +22,7 @@ def create_user_scheme(conn, user_param):
     ВБ = eval(user_param[user_param["Обозначение"] == 'ВБ']["Значение"].values[0])
     ОТ = eval(user_param[user_param["Обозначение"] == 'ОТ']["Значение"].values[0])
 
-    measurements = {'ДИ': ДИ, 'ОБ': ОБ, 'ВБ': ВБ,
-                    'ОТ': ОТ}
+    measurements = {'ДИ': ДИ, 'ОБ': ОБ, 'ВБ': ВБ, 'ОТ': ОТ}
 
     # расчёт всех формул в зависимости от значений мерок
     for formula in df_formula:
