@@ -24,17 +24,19 @@
         <label>
             <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
         </label>
-        {{ macros.render_measure_pattern(measure, param, len) }}
+        {% for i in range(len(measure)) %}
+            {{ macros.render_measure_pattern(measure.iloc[i], param, len) }}
+        {% endfor %}
     </form>
 </div>
 
-{% if empty != 1 %}
-    <div class="scheme_view">
-        {{ macros.render_pattern_scheme(pattern, checked_value) }}
-    </div>
-{% else %}
-    Введите недостающие параметры!
-{% endif %}
+<!--{% if empty != 1 %}-->
+<!--    <div class="scheme_view">-->
+<!--        {{ macros.render_pattern_scheme(pattern, checked_value) }}-->
+<!--    </div>-->
+<!--{% else %}-->
+<!--    Введите недостающие параметры!-->
+<!--{% endif %}-->
 
 </body>
 </html>

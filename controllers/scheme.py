@@ -15,7 +15,7 @@ def scheme():
     index_pattern = request.values.get('pattern')
     df_pattern = get_scheme_pattern(conn, int(index_pattern))
 
-    df_measure = get_measure_pattern(conn, int(index_pattern))
+    df_measure = get_measure_detail(conn, int(index_pattern))
     df_param = get_param_user(conn, session['user_id'])
 
     param_value = []
