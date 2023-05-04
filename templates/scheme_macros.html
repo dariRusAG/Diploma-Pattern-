@@ -29,19 +29,59 @@
 {% endmacro %}
 
 <!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
-{% macro render_measure_pattern(measure, param, len) %}
-<p><b>Детали "{{ measure["Название_детали"] }}":</b></p>
-<table>
-    <tr>
-        <td>
-            {{ measure.loc["Полное_название"] }} ({{ measure.loc["Обозначение"] }}):
-            <label>
-                <input hidden type="text" name="param_designation" value="{{ measure.loc['Обозначение']}}">
-            </label>
-        </td>
-    </tr>
-</table>
+{% macro render_measure_pattern(measure, param, len, zip) %}
+{% for i in range(len(measure)) %}
+    <div class="block_detail">
+        {% set measure = measure.iloc[i] %}
 
-<input type="submit" name="build_scheme" value="Построить">
-<input type="submit" value="Отменить изменения" onclick="window.location.reload()">
+        <div class="title title-2">
+            <p>Детали "{{ measure["Название_детали"] }}":</p>
+        </div>
+
+        {% set full_title = measure["Полное_название"].split(",") %}
+        {% set designation = measure["Обозначение"].split(",") %}
+
+        <table style="display: flex; justify-content: center;">
+            {% for full_title, designation in zip(full_title, designation) %}
+            <tr>
+                <td>
+                    {{ full_title }} ({{ designation }}):
+                    <label>
+                        <input hidden type="text" name="param_designation" value="{{designation}}">
+                    </label>
+                </td>
+
+                <td>
+                    {% if designation not in param["Обозначение"].unique() %}
+                    <label>
+                        <input type="text" name="param_value" class="write_personal" value=""
+                               placeholder="необходимо заполнить">
+                    </label>
+                    {% endif %}
+
+                    {% for j in range(len(param)) %}
+                        {% if param.loc[j, "Обозначение"] == designation %}
+                        <label>
+                            {% if param.loc[j, "Значение"] != '' %}
+                            <input type="text" name="param_value" class="write_personal"
+                                   value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
+                            {% else %}
+                            <input type="text" name="param_value" class="write_personal" value=""
+                                   placeholder="необходимо заполнить">
+                            {% endif %}
+                        </label>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+<div class="container_button">
+    <input type="submit" name="build_scheme" value="Построить" class="button button_build">
+    <input type="submit" value="Отменить изменения" onclick="window.location.reload()" class="button button_build">
+</div>
+
+{% endfor %}
 {% endmacro %}

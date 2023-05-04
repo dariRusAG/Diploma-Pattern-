@@ -46,6 +46,38 @@ html {
     color: #ffd1d9;
 }
 
+/*--------*/
+/* КНОПКИ */
+/*--------*/
+
+/* Основа */
+.button {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 12px;
+    margin: 6px 0;
+}
+
+.container_button {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+/*Кнопки под фильтром*/
+.button_search {
+    width: 100%;
+}
+
+/*Кнопки под деталями*/
+.button_build {
+    font-size: 12px;
+    width: 40%;
+    margin-right: 25px;
+    margin-left: 25px;
+}
+
 /* Авторизация */
 .authorization_registration {
     background: #fddde6;
@@ -90,15 +122,6 @@ html {
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
 }
 
-/*Кнопки под фильтром*/
-.key_button_search {
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 2px 12px;
-    width: 100%;
-    margin: 6px 0;
-}
-
 /*Блок вывода выкроек*/
 .pattern_view {
     margin-left: 20%;
@@ -136,6 +159,38 @@ html {
     margin: 15px 15px;
 }
 
+.block_measure {
+    display: block;
+    float: left;
+}
+
+.block_detail {
+    padding: 15px 20px;
+    background: #d16192;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    font-size: 14px;
+    margin: 15px 15px;
+}
+
+/*-----------*/
+/* ЗАГОЛОВКИ */
+/*-----------*/
+
+.title {
+    margin: 15px;
+    display: block;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
+}
+
+.title-2 {
+    font-size: 15px;
+}
 
 /*Содержимое поля каждой выкройки*/
 .data {
@@ -188,7 +243,7 @@ html {
 }
 
 .admin_panel_right {
-background:white;
+    background:white;
     display: flex;
     width:81%;
     height:auto;
@@ -276,9 +331,4 @@ background:white;
     flex-direction: column;
     flex-wrap: wrap;
     height: 73vh;
-}
-
-.block_measure {
-    display: block;
-    float: left;
 }

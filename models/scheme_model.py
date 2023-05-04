@@ -22,8 +22,8 @@ def get_measure_detail(conn, index):
     AS (
         SELECT 
             detail_id, 
-            group_concat(measure_name, ', ') AS measure_name,
-            group_concat(measure_full_name, ', ') AS measure_full_name
+            group_concat(measure_name, ',') AS measure_name,
+            group_concat(measure_full_name, ',') AS measure_full_name
         FROM detail_measure 
         JOIN measure USING (measure_id)
         GROUP BY detail_id

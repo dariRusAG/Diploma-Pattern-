@@ -60,5 +60,6 @@ def scheme():
         checked_value=checked_value,
 
         # Функции
-        len=len
+        len=len,
+        zip=zip
     )

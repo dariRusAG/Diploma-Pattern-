@@ -20,13 +20,15 @@
 
 <div class="block_measure">
     <form action="{{url_for('scheme')}}" method="post">
-        <p><b>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</b></p>
+        <div class="title">
+            <p>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</p>
+        </div>
+
         <label>
             <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
         </label>
-        {% for i in range(len(measure)) %}
-            {{ macros.render_measure_pattern(measure.iloc[i], param, len) }}
-        {% endfor %}
+
+        {{ macros.render_measure_pattern(measure, param, len, zip) }}
     </form>
 </div>
 
