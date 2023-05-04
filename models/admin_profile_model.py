@@ -60,6 +60,7 @@ def get_detail_id(conn, detail_name):
     except IndexError:
         return "error"
 
+
 def get_formula_id(conn, formula_name):
     try:
         return pd.read_sql('''SELECT formula_id
@@ -109,6 +110,7 @@ def add_detail(conn, detail_name):
     conn.commit()
     return cur.lastrowid
 
+
 def add_detail_formula(conn, detail_id, formula_id):
     cur = conn.cursor()
     cur.execute('''
@@ -150,11 +152,13 @@ def delete_category(conn, category_id):
     conn.commit()
     return cur.lastrowid
 
+
 def get_detail(conn):
     return pd.read_sql('''
     SELECT *
     FROM detail
     ''', conn)
+
 
 def get_detail_f(conn):
     return pd.read_sql('''
@@ -162,11 +166,13 @@ def get_detail_f(conn):
     FROM  detail_formula
     ''', conn)
 
+
 def get_detail_m(conn):
     return pd.read_sql('''
     SELECT *
     FROM  detail_measure
     ''', conn)
+
 
 def delete_new_detail(conn, detail_id):
     cur = conn.cursor()
