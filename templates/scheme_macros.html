@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-<!--Макрос для вывода данных схемы выкройки-->
-{% macro render_pattern_scheme(pattern, checked_value) %}
+<!--Макрос для вывода данных выкройки-->
+{% macro render_pattern_info(pattern) %}
     <div class="block_scheme">
         <div class="data">
             <p class="fig">
@@ -10,22 +10,30 @@
             <p class="fig">
                 <span class="product-caption">{{ pattern.loc[0, "Категория"] }}</span>
             </p>
-            {% if checked_value == True %}
-                <p class="fig">
-                    <img src="static/scheme.jpg" alt="" style="width: 450px; height: auto;">
-                </p>
-                <p class="fig">
-                    <a href="static/scheme.jpg" download>
-                        <input type="button" value="Скачать изображение" class="button button_search">
-                    </a>
-                </p>
-            {% else %}
-                <p class="fig">
-                    <img src="{{ pattern.loc[0,'Изображение']}}" alt="">
-                </p>
-            {% endif %}
+
+            <p class="fig">
+                <img src="{{ pattern.loc[0,'Изображение']}}" alt="">
+            </p>
         </div>
     </div>
+{% endmacro %}
+
+<!--Макрос для вывода построенных схем выкройки-->
+{% macro render_pattern_scheme(name_scheme) %}
+{% for name in name_scheme %}
+<div class="block_scheme">
+    <div class="data">
+        <p class="fig">
+            <img src="{{name}}" alt="" style="width: 450px; height: auto;">
+        </p>
+        <p class="fig">
+            <a href="{{name}}" download>
+                <input type="button" value="Скачать изображение" class="button button_search">
+            </a>
+        </p>
+    </div>
+</div>
+{% endfor %}
 {% endmacro %}
 
 <!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
@@ -80,10 +88,10 @@
             {% endfor %}
         </table>
     </div>
-
-    <div class="container_button">
-        <input type="submit" name="build_scheme" value="Построить" class="button button_build">
-        <input type="submit" value="Отменить изменения" onclick="window.location.reload()" class="button button_build">
-    </div>
 {% endfor %}
+
+<div class="container_button">
+    <input type="submit" name="build_scheme" value="Построить" class="button button_build">
+    <input type="submit" value="Отменить изменения" onclick="window.location.reload()" class="button button_build">
+</div>
 {% endmacro %}

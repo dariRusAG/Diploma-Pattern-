@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from models.admin_profile_model import *
+from models.scheme_model import *
 from functions.bezie import Bezier
 from PIL import Image
 
@@ -9,10 +9,9 @@ def cm_to_inch(value):
     return value/2.54
 
 
-def create_user_scheme(conn, user_param):
-    # список всех формул и линий
-    df_formula = get_formula(conn)
-    df_line = get_line(conn)
+def create_user_scheme(conn, user_param, id_detail):
+    df_formula = get_formula_detail(conn, id_detail)
+    df_line = get_line_detail(conn, id_detail)
 
     # создание словаря формул
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
@@ -29,30 +28,30 @@ def create_user_scheme(conn, user_param):
     for formula in df_formula:
         df_formula[formula] = eval(eval(formula, measurements, df_formula)[0])
 
-    # список всех x координат прямых линий
+    # список всех x и y координат прямых линий
     x_coord_line = list()
-    # список всех y координат прямых линий
     y_coord_line = list()
-    # список всех x координат прямых линий
+
+    # список всех x и y координат кривых линий
     x_coord_curve = list()
-    # список всех y координат прямых линий
     y_coord_curve = list()
-    # список всех x отклонений для кривых
+
+    # список всех x и y отклонений для кривых
     x_deviation = list()
-    # список всех y отклонений для кривых
     y_deviation = list()
-    # список всех стилей прямых линий
+
+    # список всех стилей прямых и кривых линий
     design_for_line = list()
-    # список всех стилей кривых линий
     design_for_curve = list()
 
     # расчёт координат линий
-    for i, row in df_line.iterrows():
+    for index, row in df_line.iterrows():
         x1 = eval(f"{row['x_first_coord']}", measurements, df_formula)
         y1 = eval(f"{row['y_first_coord']}", measurements, df_formula)
 
         x2 = eval(f"{row['x_second_coord']}", measurements, df_formula)
         y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
+
         if f"{row['line_type']}" != "Кривая":
             line_design = f"{row['line_design']}"
             x_coord_line.append(x1)
@@ -87,9 +86,10 @@ def create_user_scheme(conn, user_param):
         t_points = np.arange(0, 1, 0.009)
         d_x = x_deviation[int(x / 2)]
         d_y = y_deviation[int(x / 2)]
-        k= ((x_coord_curve[x] + x_coord_curve[x+1])/2) * d_x
-        kk=((y_coord_curve[x] + y_coord_curve[x + 1])/2) * d_y
-        points1 = np.array([[x_coord_curve[x], y_coord_curve[x]], [k, kk], [x_coord_curve[x + 1], y_coord_curve[x + 1]]])
+        k = ((x_coord_curve[x] + x_coord_curve[x + 1]) / 2) * d_x
+        kk = ((y_coord_curve[x] + y_coord_curve[x + 1]) / 2) * d_y
+        points1 = np.array(
+            [[x_coord_curve[x], y_coord_curve[x]], [k, kk], [x_coord_curve[x + 1], y_coord_curve[x + 1]]])
         curve1 = Bezier.Curve(t_points, points1)
         plt.plot(
             curve1[:, 0],
@@ -101,6 +101,9 @@ def create_user_scheme(conn, user_param):
     # ax = plt.gca()
     # ax.get_xaxis().set_visible(False)
     # ax.get_yaxis().set_visible(False)
-    plt.savefig("static/scheme.jpg", bbox_inches='tight')
-    im = Image.open('static/scheme.jpg')
-    im.crop((0, 0, im.size[0] - im.size[0] * 0.50, im.size[1])).save('static/scheme.jpg')
+
+    name = 'static/' + str(id_detail) + '.jpg'
+
+    plt.savefig(name, bbox_inches='tight')
+    im = Image.open(name)
+    im.crop((0, 0, im.size[0] - im.size[0] * 0.50, im.size[1])).save(name)

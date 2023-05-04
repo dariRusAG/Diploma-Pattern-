@@ -142,10 +142,16 @@ html {
     justify-content: center;
 }
 
-.scheme_view {
+.pattern_info {
     display: flex;
     padding: 0 14px;
     justify-content: center;
+}
+
+.scheme_view {
+    padding: 0 14px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 /*Поле каждой выкройки блока выкроек*/

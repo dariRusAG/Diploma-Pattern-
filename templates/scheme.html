@@ -33,9 +33,15 @@
 </div>
 
 {% if empty != 1 %}
-    <div class="scheme_view">
-        {{ macros.render_pattern_scheme(pattern, checked_value) }}
-    </div>
+    {% if checked_value != True %}
+        <div class="pattern_info">
+            {{ macros.render_pattern_info(pattern) }}
+        </div>
+    {% else %}
+        <div class="scheme_view">
+            {{ macros.render_pattern_scheme(name_scheme) }}
+        </div>
+    {% endif %}
 {% else %}
     Введите недостающие параметры!
 {% endif %}

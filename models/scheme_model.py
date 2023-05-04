@@ -50,3 +50,28 @@ def get_param_user(conn, user_id):
     JOIN user_param USING (param_id)
     WHERE users_id = {user_id}
     ''', conn)
+
+
+# Вывод формул детали
+def get_formula_detail(conn, detail):
+    return pd.read_sql(f'''
+    SELECT 
+        formula_name, 
+        formula_value
+    FROM formula
+    JOIN detail_formula USING (formula_id)
+    WHERE detail_id = {detail}
+    ''', conn)
+
+
+# Вывод линий детали
+def get_line_detail(conn, detail):
+    return pd.read_sql(f'''
+    SELECT 
+        x_first_coord, y_first_coord, 
+        x_second_coord, y_second_coord, 
+        line_type, line_design,
+        x_deviation, y_deviation
+    FROM line
+    WHERE detail_id = {detail}
+    ''', conn)

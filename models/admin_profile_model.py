@@ -22,6 +22,7 @@ def get_line(conn):
     FROM line
     ''', conn)
 
+
 def get_measure(conn):
     return pd.read_sql('''
     SELECT measure_name, measure_full_name

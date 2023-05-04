@@ -21,6 +21,7 @@ def scheme():
     param_value = []
     empty = 0
     checked_value = False
+    name_scheme = []
 
     # Если нажата кнопка "Построить"
     if request.values.get('build_scheme'):
@@ -35,10 +36,14 @@ def scheme():
             if df_param.loc[index, 'Значение'] == '':
                 empty = 1
                 break
-        # else:
-        #     if empty == 0:
-        #         create_user_scheme(conn, df_param)
-        #         checked_value = True
+
+        if empty == 0:
+            checked_value = True
+            int_id_detail = list(set(int_id_detail))
+            for id_detail in int_id_detail:
+                df_param_detail = df_param.loc[(df_param['ID'] == id_detail)]
+                create_user_scheme(conn, df_param_detail, id_detail)
+                name_scheme.append('static/' + str(id_detail) + '.jpg')
 
     return render_template(
         'scheme.html',
@@ -58,6 +63,7 @@ def scheme():
         param=df_param,
         param_value=param_value,
         empty=empty,
+        name_scheme=name_scheme,
 
         # Счетчики
         checked_value=checked_value,
