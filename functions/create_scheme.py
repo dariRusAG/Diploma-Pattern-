@@ -10,12 +10,13 @@ def cm_to_inch(value):
 
 
 def create_user_scheme(conn, user_param):
-    # список всех формул
+    # список всех формул и линий
     df_formula = get_formula(conn)
-    # список всех линий
     df_line = get_line(conn)
+
     # создание словаря формул
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
+
     # мерки выкроек
     ДИ = eval(user_param[user_param["Обозначение"] == 'ДИ']["Значение"].values[0])
     ОБ = eval(user_param[user_param["Обозначение"] == 'ОБ']["Значение"].values[0])
@@ -95,7 +96,6 @@ def create_user_scheme(conn, user_param):
             curve1[:, 1], lw=2.8
         )
 
-
     plt.xlim([0, ДИ])
     plt.ylim([0, ДИ + 5])
     # ax = plt.gca()
@@ -103,4 +103,4 @@ def create_user_scheme(conn, user_param):
     # ax.get_yaxis().set_visible(False)
     plt.savefig("static/scheme.jpg", bbox_inches='tight')
     im = Image.open('static/scheme.jpg')
-    im.crop((0, 0, im.size[0]-im.size[0]*0.50, im.size[1])).save('static/scheme.jpg')
+    im.crop((0, 0, im.size[0] - im.size[0] * 0.50, im.size[1])).save('static/scheme.jpg')

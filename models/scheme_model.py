@@ -29,6 +29,7 @@ def get_measure_detail(conn, index):
         GROUP BY detail_id
     )
     SELECT 
+        detail_id AS ID,
         detail_name AS Название_детали,
         measure_name AS Обозначение,
         measure_full_name AS Полное_название

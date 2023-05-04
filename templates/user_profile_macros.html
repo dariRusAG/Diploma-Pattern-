@@ -6,16 +6,17 @@
         {% for i in range(len(data_user)) %}
             {% for name in data_user.dtypes.index %}
                 <tr>
-                <td>{{ name }}:</td>
-                <td>
-                <input type="text" name="data_user" class="write_personal"
-                       placeholder="{{ data_user.loc[i, name] }}" value="{{ data_user.loc[i, name] }}">
+                    <td>
+                        {{ name }}:
+                    </td>
 
+                    <td>
+                        <input type="text" name="data_user" class="write_personal"
+                               placeholder="{{ data_user.loc[i, name] }}" value="{{ data_user.loc[i, name] }}">
             {% endfor %}
-        </td>
-        </tr>
+                    </td>
+                </tr>
         {% endfor %}
-
     </table>
 {% endmacro %}
 

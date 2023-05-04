@@ -19,16 +19,17 @@
         {{ macros.render_param_user(param_user, error_param, len) }}
 
         <div>
-            <input type="submit" name="save" value="Сохранить изменения" class="key_button">
+            <input type="submit" name="save" value="Сохранить изменения" class="button">
             <br><br>
-            <input type="button" value="Отменить изменения" class="key_button"
+            <input type="button" value="Отменить изменения" class="button"
                    onclick="window.location='{{url_for('user_profile')}}'">
             <br><br>
         </div>
     </form>
 
     <form action="{{url_for('catalog_favorites')}}" method="get">
-        <input type="submit" name="remove_profile_button" value="Удалить аккаунт" disabled="disabled">
+        <input type="submit" name="remove_profile_button" value="Удалить аккаунт"
+               disabled="disabled" class="button">
     </form>
 </div>
 

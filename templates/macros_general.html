@@ -5,13 +5,13 @@
     <ul>
         <form action="{{url_for('catalog_favorites')}}" method="get">
             <input type="submit" name="catalog" value="Каталог"
-                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
         </form>
 
         {% if user_role == 'guest' %}
         <form action="" method="get">
             <input type="submit" name="authorization_button" value="Войти"
-                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
         </form>
         {% else %}
 
@@ -21,7 +21,7 @@
 
         <form action="{{url_for('catalog_favorites')}}" method="get">
             <input type="submit" name="favorites" value="Список избранного"
-                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none;">
+                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
         </form>
 
         <li class=active><a href={{url_for("user_profile")}}>Личный кабинет</a></li>
@@ -43,7 +43,7 @@
 <div class="gray_page">
 </div>
 <div class="authorization_registration">
-    <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%;">
+    <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%; cursor: pointer;">
     Войдите в аккаунт:
     <form action="" method="get">
         {{ render_field(auth_form.auth_login) }}
@@ -55,11 +55,11 @@
         {% endif %}
         <br>
         <input type="submit" value="Авторизоваться" name="authorization_user_button"
-               style="width:70%; height:20%; margin-top:20%;">
+               style="width:70%; height:20%; margin-top:20%;cursor: pointer;">
     </form>
     <form action="" method="get">
         <input type="submit" value="Создать аккаунт" name="registration_button"
-               style="width:70%; height:100%;margin-top:5%;">
+               style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
     </form>
 </div>
 {% endmacro %}
@@ -69,7 +69,8 @@
 <div class="gray_page">
 </div>
 <div class="authorization_registration">
-    <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%;">
+    <input type="submit" value="Выйти" onclick="location.href='/';"
+           style="width:12%; height:10%; cursor: pointer;">
     Создайте аккаунт:
     <form action="" method="get">
         {{ render_field(reg_form.reg_login) }}
@@ -83,11 +84,11 @@
         {% endif %}
         <br>
         <input type="submit" value="Зарегистрироваться" name="registration_user_button"
-               style="width:70%; height:20%; margin-top:20%;">
+               style="width:70%; height:20%; margin-top:20%; cursor: pointer;">
     </form>
     <form action="" method="get">
         <input type="submit" value="Уже есть аккаунт" name="authorization_button"
-               style="width:70%; height:100%;margin-top:5%;">
+               style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
     </form>
 </div>
 {% endmacro %}
@@ -96,6 +97,6 @@
 {% macro exit() %}
 <form action={{url_for('catalog_favorites')}} method="get">
     <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';"
-           style="background:#fc6c85; color: #fff0f5; height:10%; border: none;">
+           style="background:#fc6c85; color: #fff0f5; height:10%; border: none; cursor: pointer;">
 </form>
 {% endmacro %}

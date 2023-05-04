@@ -24,18 +24,21 @@ def scheme():
 
     # Если нажата кнопка "Построить"
     if request.values.get('build_scheme'):
+        id_detail = request.form.getlist('detail')
+        int_id_detail = [int(x) for x in id_detail]
         param_value = request.form.getlist('param_value')
         param_designation = request.form.getlist('param_designation')
-        df_param = pd.DataFrame(list(zip(param_designation, param_value)), columns=['Обозначение', 'Значение'])
+        df_param = pd.DataFrame(list(zip(int_id_detail, param_designation, param_value)),
+                                columns=['ID', 'Обозначение', 'Значение'])
 
         for index, row in df_param.iterrows():
             if df_param.loc[index, 'Значение'] == '':
                 empty = 1
                 break
-        else:
-            if empty == 0:
-                create_user_scheme(conn, df_param)
-                checked_value = True
+        # else:
+        #     if empty == 0:
+        #         create_user_scheme(conn, df_param)
+        #         checked_value = True
 
     return render_template(
         'scheme.html',

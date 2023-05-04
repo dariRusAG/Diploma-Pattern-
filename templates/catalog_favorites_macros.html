@@ -10,9 +10,9 @@
             <p>
                 {% set value=category.loc[i, "category_name"] %}
                 {% if value in choice_category %}
-                <input type="checkbox" name="category" value="{{ value }}" checked>
+                <input type="checkbox" name="category" value="{{ value }}" class="cursor" checked>
                 {% else %}
-                <input type="checkbox" name="category" value="{{ value }}">
+                <input type="checkbox" name="category" value="{{ value }}" class="cursor">
                 {% endif %}
                 {{ value }}
             </p>
@@ -21,7 +21,7 @@
             <p><b>Сложность:</b></p>
             {% for i in range(5) %}
             <p>
-                <input type="checkbox" name="complexity" value="{{ i + 1 }}"
+                <input type="checkbox" name="complexity" value="{{ i + 1 }}" class="cursor"
                        {% if str(i + 1) in choice_complexity %} checked {% endif %}>
                 {% for j in range(i + 1) %}
                 <img src="/static/image/icons/shaded_star_icon.png" alt="" width="18px" height="18px">
@@ -33,9 +33,9 @@
             </p>
             {% endfor %}
 
-            <div class=key_search>
-                <input type="submit" name="search" value="Показать" class="key_button_search">
-                <input type="submit" name="clear" value="Очистить" class="key_button_search">
+            <div>
+                <input type="submit" name="search" value="Показать" class="button button_search">
+                <input type="submit" name="clear" value="Очистить" class="button button_search">
             </div>
         </form>
     </div>
@@ -95,7 +95,7 @@
         {% endif %}
        </p>
         <form action={{url_for('scheme')}} method="get">
-            <button type="submit" name="scheme" class="key_button_search"> Построить
+            <button type="submit" name="scheme" class="button button_pattern"> Построить
                 <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
             </button>
         </form>

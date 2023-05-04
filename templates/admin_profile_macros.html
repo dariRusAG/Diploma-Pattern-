@@ -24,7 +24,7 @@
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_category" placeholder="Введите название категории" style="width:100%">
-            <input type="submit" name="add_category" value="+">
+            <input type="submit" name="add_category" value="+" style="cursor: pointer;">
         </div>
     </form>
     <br>
@@ -37,11 +37,13 @@
                 {% if checked_value[1] == '' or checked_value[1] != i %}
                     <form action="{{ url_for('admin_profile') }}" method="get">
                         {{ category.loc[i, "category_name"] }}
-                        <input type="submit" name="is_edit_category" value="Изменить" style="margin-left:10px;">
-                        <input type="hidden" name="is_edit_category_id" value= {{ i }}>
+                        <input type="submit" name="is_edit_category" value="Изменить"
+                               style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="is_edit_category_id" value={{ i }}>
                     </form>
                     <form action="{{ url_for('admin_profile') }}" method="get">
-                        <input type="submit" value="Удалить" style="margin-left:10px;">
+                        <input type="submit" value="Удалить"
+                               style="margin-left:10px; cursor: pointer;">
                         <input type="hidden" name="delete_category" value={{ category['category_id'].values[i] }}>
                     </form>
                 {% else %}
@@ -49,7 +51,8 @@
                         <form action="{{ url_for('admin_profile') }}" method="get">
                             <input type="text" name="edit_category_name"
                                    value='{{ category.loc[i, "category_name"] }}' style="width:40%">
-                            <input type="submit" value="Сохранить изменения" style="margin-left:10px;">
+                            <input type="submit" value="Сохранить изменения"
+                                   style="margin-left:10px; cursor: pointer;">
                             <input type="hidden" name="edit_category" value={{ category['category_id'].values[i] }}>
                         </form>
                     {% endif %}
@@ -69,7 +72,7 @@
             <input type="text" name="new_formula_name" placeholder="Введите название формулы" style="width:50%">
             <input type="text" name="new_formula_value" placeholder="Введите формулу"
                    style="width:50%; margin-left:1%;">
-            <input type="submit" name="add_formula" value="+">
+            <input type="submit" name="add_formula" value="+" style="cursor: pointer;">
         </div>
     </form>
     <br>
@@ -111,10 +114,10 @@
                     <div class="admin_panel_right_data_text">
                         {% if measure_list['measure_name'].values[i] in new_detail_list[1] %}
                             <input type="checkbox" name="new_detail_measure"
-                                   value="{{ measure_list['measure_name'].values[i] }}" checked>
+                                   value="{{ measure_list['measure_name'].values[i] }}" style="cursor: pointer;" checked>
                         {% else %}
                             <input type="checkbox" name="new_detail_measure"
-                                   value="{{ measure_list['measure_name'].values[i] }}">
+                                   value="{{ measure_list['measure_name'].values[i] }}" style="cursor: pointer;">
                         {% endif %}
                         {{ measure_list['measure_name'].values[i] }}
                         &emsp;:&emsp; {{ measure_list['measure_full_name'].values[i] }}
@@ -127,7 +130,7 @@
                     <div class="admin_panel_right_data_text">
 
                         <input type="checkbox" name="new_detail_formula"
-                               value="{{ formula_list['formula_name'].values[i] }}"
+                               value="{{ formula_list['formula_name'].values[i] }}" style="cursor: pointer;"
                                 {% if formula_list["formula_name"].values[i] in new_detail_list[2] %}
                                checked>
                                 {% else %}
@@ -152,7 +155,7 @@
         <div class="admin_panel_right_data_text">
             <input type="text" name="" placeholder="Введите название выкройки" style="width:50%">
             <input type="text" name="" placeholder="Выберите файл" style="width:50%; margin-left:1%;">
-            <input type="submit" name="" value="+">
+            <input type="submit" name="" value="+" style="cursor: pointer;">
         </div>
 
         <div class="admin_panel_right_data_three_table">
@@ -169,7 +172,7 @@
             <div class="admin_panel_right_data_list_vertical_small">
                 {% for i in range(len(category_list)) %}
                     <div class="admin_panel_right_data_text">
-                        <input type="radio" name="new_pattern_category"> {{ category_list['category_name'].values[i] }}
+                        <input type="radio" name="new_pattern_category" style="cursor: pointer;"> {{ category_list['category_name'].values[i] }}
                     </div>
                 {% endfor %}
             </div>
@@ -193,7 +196,7 @@
         <div class="admin_panel_right_data_text">
             <input type="text" name="" placeholder="Введите название 3D-модели" style="width:50%">
             <input type="text" name="" placeholder="Выберите файл" style="width:50%; margin-left:1%;">
-            <input type="submit" name="" value="+">
+            <input type="submit" name="" value="+" style="cursor: pointer;">
         </div>
     </form>
     <br>
@@ -233,18 +236,18 @@
             <input type="text" name="second_coord_y" placeholder="Y">
             <br><br>
             Тип линии:
-            <input type="radio" name="line_type" value="Прямая"> Прямая
-            <input type="radio" name="line_type" value="Кривая"> Кривая
+            <input type="radio" name="line_type" value="Прямая" style="cursor: pointer;"> Прямая
+            <input type="radio" name="line_type" value="Кривая" style="cursor: pointer;"> Кривая
             <br><br>
             Отклонение:
             <input type="text" name="x_deviation" placeholder="По X">
             <input type="text" name="y_deviation" placeholder="По Y">
             <br><br>
             Дизайн линии:
-            <input type="radio" name="line_design" value="Обычная"> Обычная
-            <input type="radio" name="line_design" value="Пунктирная"> Пунктирная
+            <input type="radio" name="line_design" value="Обычная" style="cursor: pointer;"> Обычная
+            <input type="radio" name="line_design" value="Пунктирная" style="cursor: pointer;"> Пунктирная
             <br>
-            <input type="submit" name="panel" value="Добавить Линию">
+            <input type="submit" name="panel" value="Добавить Линию" style="cursor: pointer;">
         </form>
     </div>
 
@@ -272,7 +275,7 @@
                 {% endif %}
                 {{ i[8] }}
                 <form action="{{ url_for('admin_profile') }}" method="get">
-                    <input type="submit" value="Удалить" style="margin-left:10px;">
+                    <input type="submit" value="Удалить" style="margin-left:10px; cursor: pointer;">
                     <input type="hidden" name="delete_detail_new_line" value={{ i[0] }}>
                 </form>
                 <br>

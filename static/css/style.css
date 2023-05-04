@@ -15,6 +15,7 @@ html {
     display: inline-block;
     vertical-align: top;
     padding: 12px;
+    cursor: pointer;
 }
 
 .menu a {
@@ -23,7 +24,6 @@ html {
 
 .menu li:hover {
     background-color: #fc6c85;
-    cursor: pointer;
     color: #ffd1d9;
 }
 
@@ -46,6 +46,10 @@ html {
     color: #ffd1d9;
 }
 
+.cursor {
+    cursor: pointer;
+}
+
 /*--------*/
 /* КНОПКИ */
 /*--------*/
@@ -56,6 +60,7 @@ html {
     letter-spacing: 1px;
     padding: 2px 12px;
     margin: 6px 0;
+    cursor: pointer;
 }
 
 .container_button {
@@ -67,6 +72,12 @@ html {
 
 /*Кнопки под фильтром*/
 .button_search {
+    width: 100%;
+    font-size: 12px;
+}
+
+/*Кнопки под выкройкой*/
+.button_pattern {
     width: 100%;
 }
 
@@ -224,6 +235,7 @@ html {
     background: transparent;
     border: transparent;
     margin: auto;
+    cursor: pointer;
 }
 
 /*Панель администратора*/
@@ -276,6 +288,7 @@ html {
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
     margin-top:2%;
     margin-bottom:3%;
+    cursor: pointer;
 }
 
 .admin_panel_button_small{
@@ -284,6 +297,7 @@ html {
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
     margin-top:1%;
     margin-left: 95%;
+    cursor: pointer;
 }
 
 .admin_panel_right_data_list{

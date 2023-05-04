@@ -16,7 +16,7 @@
                 </p>
                 <p class="fig">
                     <a href="static/scheme.jpg" download>
-                        <input type="button" value="Скачать изображение" class="key_button_search">
+                        <input type="button" value="Скачать изображение" class="button button_search">
                     </a>
                 </p>
             {% else %}
@@ -48,6 +48,7 @@
                     {{ full_title }} ({{ designation }}):
                     <label>
                         <input hidden type="text" name="param_designation" value="{{designation}}">
+                        <input hidden type="text" name="detail" value="{{ measure['ID'] }}">
                     </label>
                 </td>
 
@@ -61,15 +62,17 @@
 
                     {% for j in range(len(param)) %}
                         {% if param.loc[j, "Обозначение"] == designation %}
-                        <label>
-                            {% if param.loc[j, "Значение"] != '' %}
-                            <input type="text" name="param_value" class="write_personal"
-                                   value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
-                            {% else %}
-                            <input type="text" name="param_value" class="write_personal" value=""
-                                   placeholder="необходимо заполнить">
+                            {% if ('ID' in param.columns and param.loc[j, 'ID'] == measure['ID']) or 'ID' not in param.columns %}
+                                <label>
+                                    {% if param.loc[j, "Значение"] != '' %}
+                                    <input type="text" name="param_value" class="write_personal"
+                                           value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
+                                    {% else %}
+                                    <input type="text" name="param_value" class="write_personal" value=""
+                                           placeholder="необходимо заполнить">
+                                    {% endif %}
+                                </label>
                             {% endif %}
-                        </label>
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -78,10 +81,9 @@
         </table>
     </div>
 
-<div class="container_button">
-    <input type="submit" name="build_scheme" value="Построить" class="button button_build">
-    <input type="submit" value="Отменить изменения" onclick="window.location.reload()" class="button button_build">
-</div>
-
+    <div class="container_button">
+        <input type="submit" name="build_scheme" value="Построить" class="button button_build">
+        <input type="submit" value="Отменить изменения" onclick="window.location.reload()" class="button button_build">
+    </div>
 {% endfor %}
 {% endmacro %}
