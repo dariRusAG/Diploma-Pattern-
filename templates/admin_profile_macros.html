@@ -4,16 +4,16 @@
 {% macro admin_panel_line_list(line_list, len) %}
     {% for i in range(len(line_list)) %}
         <div class="admin_panel_right_data_text">
-            {{ i+1 }}:
-            ({{ line_list.loc[i, "x_first_coord"] }}, {{ line_list.loc[i, "y_first_coord"] }});
-            ({{ line_list.loc[i, "x_second_coord"] }}, {{ line_list.loc[i, "y_second_coord"] }});
-            {{ line_list.loc[i, "line_type"] }};
-            {% if line_list.loc[i, "line_type"] == "Кривая" %}
-                ({{ line_list.loc[i, "x_deviation"] }},
-                {{ line_list.loc[i, "y_deviation"] }});
-            {% endif %}
-            {{ line_list.loc[i, "line_design"] }}
-            <br>
+            <p3>{{ i+1 }}:
+                ({{ line_list.loc[i, "x_first_coord"] }}, {{ line_list.loc[i, "y_first_coord"] }});
+                ({{ line_list.loc[i, "x_second_coord"] }}, {{ line_list.loc[i, "y_second_coord"] }});
+                {{ line_list.loc[i, "line_type"] }};
+                {% if line_list.loc[i, "line_type"] == "Кривая" %}
+                    ({{ line_list.loc[i, "x_deviation"] }},
+                    {{ line_list.loc[i, "y_deviation"] }});
+                {% endif %}
+                {{ line_list.loc[i, "line_design"] }}
+            </p3>
         </div>
     {% endfor %}
 {% endmacro %}
@@ -27,9 +27,7 @@
             <input type="submit" name="add_category" value="+" style="cursor: pointer;">
         </div>
     </form>
-    <br>
-    Список категорий:
-    <br>
+    <p2> Список категорий:</p2>
     <div class="admin_panel_right_data_list">
         {% for i in range(len(category)) %}
             <div class="admin_panel_right_data_text">
@@ -56,7 +54,6 @@
                         </form>
                     {% endif %}
                 {% endif %}
-                <br>
             </div>
         {% endfor %}
     </div>
@@ -73,9 +70,7 @@
             <input type="submit" name="add_formula" value="+" style="cursor: pointer;">
         </div>
     </form>
-    <br>
-    Список формул:
-    <br>
+    <p2> Список формул:</p2>
     <div class="admin_panel_right_data_list_small">
         {% for i in range(len(formula_list)) %}
             <div class="admin_panel_right_data_text">
@@ -83,9 +78,7 @@
             </div>
         {% endfor %}
     </div>
-    <br>
-    Список мерок и их обозначений:
-    <br>
+    <p2> Список мерок и их обозначений:</p2>
     <div class="admin_panel_right_data_list_small">
         {% for i in range(len(measure_list)) %}
             <div class="admin_panel_right_data_text">
@@ -160,8 +153,7 @@
         </div>
 
         <div class="admin_panel_right_data_three_table">
-            <br>
-            Список деталей:
+            <p2> Список деталей:</p2>
             <div class="admin_panel_right_data_list_vertical_small">
                 {% for i in range(len(detail_list)) %}
                     <div class="admin_panel_right_data_text">
@@ -170,8 +162,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <br>
-            Список категорий:
+            <p2> Список категорий:</p2>
             <div class="admin_panel_right_data_list_vertical_small">
                 {% for i in range(len(category_list)) %}
                     <div class="admin_panel_right_data_text">
@@ -181,8 +172,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <br>
-            Список 3D-моделей:
+            <p2> Список 3D-моделей:</p2>
             <div class="admin_panel_right_data_list_vertical_small">
                 {% for i in range(40) %}
                     info
@@ -203,9 +193,7 @@
             <input type="submit" name="" value="+" style="cursor: pointer;">
         </div>
     </form>
-    <br>
-    Список 3D-моделей:
-    <br>
+    <p2> Список 3D-моделей:</p2>
     <div class="admin_panel_right_data_list">
         {% for i in range(20) %}
             <div class="admin_panel_right_data_text">
@@ -226,32 +214,28 @@
             </div>
         {% endfor %}
     </div>
-    <br>
-    Добавление линий:
+    <p2> Добавление линий:</p2>
     <div class="admin_panel_right_data_list_small">
         <form action="{{ url_for('admin_profile') }}" method="get">
-            <br>
-            Координаты для первой точки:
-            <input type="text" name="first_coord_x" placeholder="X">
-            <input type="text" name="first_coord_y" placeholder="Y">
-            <br><br>
-            Координаты для второй точки:
-            <input type="text" name="second_coord_x" placeholder="X">
-            <input type="text" name="second_coord_y" placeholder="Y">
-            <br><br>
-            Тип линии:
-            <input type="radio" name="line_type" value="Прямая" style="cursor: pointer;"> Прямая
-            <input type="radio" name="line_type" value="Кривая" style="cursor: pointer;"> Кривая
-            <br><br>
-            Отклонение:
-            <input type="text" name="x_deviation" placeholder="По X">
-            <input type="text" name="y_deviation" placeholder="По Y">
-            <br><br>
-            Дизайн линии:
-            <input type="radio" name="line_design" value="Обычная" style="cursor: pointer;"> Обычная
-            <input type="radio" name="line_design" value="Пунктирная" style="cursor: pointer;"> Пунктирная
-            <br>
-            <input type="submit" name="add_detail_line" value="Добавить линию" style="cursor: pointer;">
+            <p>Координаты для первой точки:
+                <input type="text" name="first_coord_x" placeholder="X">
+                <input type="text" name="first_coord_y" placeholder="Y"></p>
+            <p>Координаты для второй точки:
+                <input type="text" name="second_coord_x" placeholder="X">
+                <input type="text" name="second_coord_y" placeholder="Y">
+                <p2>
+                    <p>Тип линии:
+                        <input type="radio" name="line_type" value="Прямая" style="cursor: pointer;"> Прямая
+                        <input type="radio" name="line_type" value="Кривая" style="cursor: pointer;"> Кривая</p>
+                    <p>Отклонение:
+                        <input type="text" name="x_deviation" placeholder="По X">
+                        <input type="text" name="y_deviation" placeholder="По Y"></p>
+                    <p>Дизайн линии:
+                        <input type="radio" name="line_design" value="Обычная" style="cursor: pointer;"> Обычная
+                        <input type="radio" name="line_design" value="Пунктирная" style="cursor: pointer;"> Пунктирная
+                    </p>
+
+                    <p><input type="submit" name="add_detail_line" value="Добавить линию" style="cursor: pointer;"></p>
         </form>
     </div>
     <form action="{{ url_for('admin_profile') }}" method="get">
@@ -269,21 +253,22 @@
         {% for i in range(len(new_detail_line_list)) %}
             <div class="admin_panel_right_data_text">
                 <form action="{{ url_for('admin_profile') }}" method="get">
-                    {% set k = i+1 %}
-                    {{ k }}:
-                    ({{ new_detail_line_list[i][0] }}, {{ new_detail_line_list[i][1] }});
-                    ({{ new_detail_line_list[i][2] }}, {{ new_detail_line_list[i][3] }});
-                    {{ new_detail_line_list[i][4] }};
-                    {% if new_detail_line_list[i][4] == 'Кривая' %}
-                        ({{ new_detail_line_list[i][5] }},
-                        {{ new_detail_line_list[i][6] }});
-                    {% endif %}
-                    {{ new_detail_line_list[i][7] }}
+                    <p2>
+                        {% set k = i+1 %}
+                        {{ k }}:
+                        ({{ new_detail_line_list[i][0] }}, {{ new_detail_line_list[i][1] }});
+                        ({{ new_detail_line_list[i][2] }}, {{ new_detail_line_list[i][3] }});
+                        {{ new_detail_line_list[i][4] }};
+                        {% if new_detail_line_list[i][4] == 'Кривая' %}
+                            ({{ new_detail_line_list[i][5] }},
+                            {{ new_detail_line_list[i][6] }});
+                        {% endif %}
+                        {{ new_detail_line_list[i][7] }}
 
-                    <input type="submit" value="Удалить" style="margin-left:10px; cursor: pointer;">
-                    <input type="hidden" name="delete_detail_new_line" value={{ i }}>
+                        <input type="submit" value="Удалить" style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="delete_detail_new_line" value={{ i }}>
+                    </p2>
                 </form>
-                <br>
             </div>
         {% endfor %}
     </div>
@@ -321,6 +306,45 @@
 {% endmacro %}
 
 <!--Макрос для вывода всех выкроек на панели администратора-->
-{% macro admin_panel_all_patterns(pattern_list, len) %}
+{% macro admin_panel_all_patterns(pattern_list, pattern_info, len) %}
     Выкройки:
+    <div class="admin_panel_right_data_list_two_table">
+        <div class="admin_panel_right_data_list_two_table_left">
+            {% for i in range(len(pattern_list)) %}
+                <form action="{{ url_for('admin_profile') }}" method="get">
+                    <p>{{ pattern_list['pattern_name'].values[i] }}
+                        <input type="submit" value="Подробнее"
+                               style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="one_pattern_info" value={{ pattern_list['pattern_id'].values[i] }}>
+                    </p>
+                </form>
+            {% endfor %}
+        </div>
+        <div class="admin_panel_right_data_list_two_table_right">
+{% if pattern_info[0] != '' %}
+            <p> Сложность:
+                {{ pattern_list['complexity'].values[pattern_info[1]] }}</p>
+            <p> Изображение:
+                {{ pattern_list['picture'].values[pattern_info[0]] }}</p>
+            <p class="fig">
+                <img src="{{ pattern_list['picture'].values[pattern_info[0]] }}" alt="" width="auto" height="250px">
+            </p>
+            <p> Название:
+                {{ pattern_list['pattern_name'].values[pattern_info[0]] }}</p>
+            <p> Категория:
+                {{ pattern_list['category_name'].values[pattern_info[0]] }}</p>
+
+            <p> Детали:
+                {% if pattern_info[1][0] != "error" %}
+                    {% for detail in pattern_info[1] %}
+                        <p>&bull; {{ detail }}</p>
+                    {% endfor %}
+                {% else %}
+                    Детали отсутствуют
+                {% endif %}
+
+            </p>
+           {% endif %}
+        </div>
+    </div>
 {% endmacro %}

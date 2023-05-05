@@ -6,7 +6,7 @@ from PIL import Image
 
 
 def cm_to_inch(value):
-    return value/2.54
+    return value / 2.54
 
 
 def create_user_scheme(conn, user_param, id_detail):
@@ -63,6 +63,11 @@ def create_user_scheme(conn, user_param, id_detail):
             curve_design = f"{row['line_design']}"
             x_deviation_ = eval(f"{row['x_deviation']}", {}, df_formula)
             y_deviation_ = eval(f"{row['y_deviation']}", {}, df_formula)
+
+            # вот тут вставить это, но с названием, как в бд и с новыми переменными
+            # x_deviation_ = eval(f"{row['x_deviation']}", {}, df_formula)
+            # y_deviation_ = eval(f"{row['y_deviation']}", {}, df_formula)
+
             x_coord_curve.append(x1)
             y_coord_curve.append(y1)
             x_coord_curve.append(x2)
@@ -71,25 +76,54 @@ def create_user_scheme(conn, user_param, id_detail):
             x_deviation.append(x_deviation_)
             y_deviation.append(y_deviation_)
 
+            # тут поменять только вторые названия на новые, как выше.
+            # Сделать условие, что если они равны '', то не добавлять
+            # x_deviation.append(x_deviation_)
+            # y_deviation.append(y_deviation_)
+
+
     plt.figure(figsize=(cm_to_inch(ДИ), cm_to_inch(ДИ + 5)))
 
     # построение линий в зависимости от их типа
-    for x in range(0, len(x_coord_line) - 1, 2):
-        if design_for_line[int(x / 2)] == "Обычная":
-            plt.plot([x_coord_line[x], x_coord_line[x + 1]], [y_coord_line[x], y_coord_line[x + 1]],
+    for i in range(0, len(x_coord_line) - 1, 2):
+        if design_for_line[int(i / 2)] == "Обычная":
+            plt.plot([x_coord_line[i], x_coord_line[i + 1]], [y_coord_line[i], y_coord_line[i + 1]],
                      c='black', lw=2.8)
         else:
-            plt.plot([x_coord_line[x], x_coord_line[x + 1]], [y_coord_line[x], y_coord_line[x + 1]],
+            plt.plot([x_coord_line[i], x_coord_line[i + 1]], [y_coord_line[i], y_coord_line[i + 1]],
                      c='black', ls='-.', lw=2.8)
 
-    for x in range(0, len(x_coord_curve) - 1, 2):
+    for i in range(0, len(x_coord_curve) - 1, 2):
         t_points = np.arange(0, 1, 0.009)
-        d_x = x_deviation[int(x / 2)]
-        d_y = y_deviation[int(x / 2)]
-        k = ((x_coord_curve[x] + x_coord_curve[x + 1]) / 2) * d_x
-        kk = ((y_coord_curve[x] + y_coord_curve[x + 1]) / 2) * d_y
-        points1 = np.array(
-            [[x_coord_curve[x], y_coord_curve[x]], [k, kk], [x_coord_curve[x + 1], y_coord_curve[x + 1]]])
+
+        if len(x_coord_curve) == len(x_deviation):
+            d_x_first = x_deviation[int(i)]
+            d_y_first = y_deviation[int(i)]
+
+            deviation_first_X = ((x_coord_curve[i] + x_coord_curve[i + 1]) / 3) * d_x_first
+            deviation_first_Y = ((y_coord_curve[i] + y_coord_curve[i + 1]) / 3) * d_y_first
+
+            d_x_second = x_deviation[int(i + 1)]
+            d_y_second = y_deviation[int(i + 1)]
+
+            deviation_second_X = ((x_coord_curve[i] + x_coord_curve[i + 1]) / 1.5) * d_x_second
+            deviation_second_Y = ((y_coord_curve[i] + y_coord_curve[i + 1]) / 1.5) * d_y_second
+
+            points1 = np.array(
+                [[x_coord_curve[i], y_coord_curve[i]], [deviation_first_X, deviation_first_Y],
+                 [deviation_second_X, deviation_second_Y],
+                 [x_coord_curve[i + 1], y_coord_curve[i + 1]]])
+        else:
+            d_x = x_deviation[int(i / 2)]
+            d_y = y_deviation[int(i / 2)]
+
+            deviation_middle_X = ((x_coord_curve[i] + x_coord_curve[i + 1]) / 2) * d_x
+            deviation_middle_Y = ((y_coord_curve[i] + y_coord_curve[i + 1]) / 2) * d_y
+
+            points1 = np.array(
+                [[x_coord_curve[i], y_coord_curve[i]], [deviation_middle_X, deviation_middle_Y],
+                 [x_coord_curve[i + 1], y_coord_curve[i + 1]]])
+
         curve1 = Bezier.Curve(t_points, points1)
         plt.plot(
             curve1[:, 0],

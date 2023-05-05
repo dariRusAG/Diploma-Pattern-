@@ -98,6 +98,36 @@ def get_measure_id(conn, measure_name):
         return "error"
 
 
+def get_detail(conn):
+    return pd.read_sql('''
+    SELECT *
+    FROM detail
+    ''', conn)
+
+
+def get_pattern(conn):
+    return pd.read_sql('''
+    SELECT pattern_id, pattern_name, category_name, picture, complexity, GROUP_CONCAT(detail_name) as detail_name
+    FROM pattern
+    LEFT JOIN category USING (category_id)
+    LEFT JOIN pattern_detail USING (pattern_id)
+    LEFT JOIN detail USING (detail_id)
+    GROUP BY pattern_id
+    ''', conn)
+
+
+def get_detail_by_id(conn, pattern_id):
+    try:
+        return pd.read_sql('''SELECT GROUP_CONCAT(detail_name) as detail_name
+          FROM pattern_detail
+          JOIN detail USING (detail_id)
+          WHERE pattern_id = :pattern_id
+          GROUP BY pattern_id
+          ''', conn, params={"pattern_id": pattern_id}).values[0][0]
+    except IndexError:
+        return "error"
+
+
 def add_formula(conn, formula_name, formula_value):
     cur = conn.cursor()
     cur.execute('''
@@ -187,21 +217,6 @@ def delete_category(conn, category_id):
      ''', {"category_id": category_id})
     conn.commit()
     return cur.lastrowid
-
-
-def get_detail(conn):
-    return pd.read_sql('''
-    SELECT *
-    FROM detail
-    ''', conn)
-
-
-def get_pattern(conn):
-    return pd.read_sql('''
-    SELECT *
-    FROM pattern
-    ''', conn)
-
 
 def delete_new_detail(conn, detail_id):
     cur = conn.cursor()

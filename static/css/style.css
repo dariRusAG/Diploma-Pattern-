@@ -322,7 +322,7 @@ html {
 .admin_panel_right_data_list_small{
     overflow-y: auto;
     width:100%;
-    height:35%;
+    height:36%;
     border-radius: 5px;
     border: 2px solid #e3c3d4;
 }
@@ -343,6 +343,30 @@ html {
     border: 2px solid #e3c3d4;
 }
 
+.admin_panel_right_data_list_two_table{
+    display: flex;
+    height:100%;
+}
+
+.admin_panel_right_data_list_two_table_left{
+    overflow-y: auto;
+    width:60%;
+    height:92%;
+    margin-top:1%;
+    border-radius: 5px;
+    border: 2px solid #e3c3d4;
+}
+
+.admin_panel_right_data_list_two_table_right{
+    overflow-y: auto;
+    width:50%;
+    height:92%;
+    margin-top:1%;
+    margin-left:2%;
+    border-radius: 5px;
+    border: 2px solid #e3c3d4;
+}
+
 .admin_panel_right_data_two_table{
     display: flex;
     flex-direction: column;
@@ -356,3 +380,17 @@ html {
     flex-wrap: wrap;
     height: 73vh;
 }
+
+
+/*-----------*/
+/*  ОТСТУПЫ  */
+/*-----------*/
+
+p2{
+    margin-top: 1.5%;
+}
+
+p3{
+    margin-bottom: 1.5%;
+}
+

@@ -13,6 +13,7 @@ def admin_profile():
     admin_panel_button = None
     session.modified = True
     name_scheme = ''
+    pattern_info = ['','']
 
     if 'detail' not in session:
         session['detail'] = []
@@ -118,6 +119,12 @@ def admin_profile():
             add_pattern_detail(conn, int(get_pattern_id(conn, name)),detail)
         admin_panel_button = "Выкройки"
 
+    elif request.values.get('one_pattern_info'):
+        pattern_info = [int(request.values.get('one_pattern_info'))-1]
+        pattern_info.append(get_detail_by_id(conn, pattern_info[0]+1).split(","))
+        admin_panel_button = "Список Выкроек"
+
+
     df_detail = get_detail(conn)
     df_category = get_category(conn)
     df_formula = get_formula(conn)
@@ -138,6 +145,7 @@ def admin_profile():
         new_detail_list=session['detail'],
         new_detail_line_list=session['detail_lines'],
         name_scheme=name_scheme,
+        pattern_info=pattern_info,
         len=len
     )
 

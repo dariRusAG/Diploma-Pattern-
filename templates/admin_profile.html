@@ -27,7 +27,7 @@
                        style="margin-top:100%">
                 <input type="submit" name="panel" value="Список линий" class="admin_panel_button">
             {% endif %}
-            {% if admin_panel_button == 'Выкройки' %}
+            {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Список Выкроек" %}
                 <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button"
                        style="margin-top:100%">
             {% endif %}
@@ -72,7 +72,7 @@
             </div>
         {% elif admin_panel_button == "Список Выкроек" %}
             <div class="admin_panel_right_data">
-                {{ macros.admin_panel_all_patterns(pattern_list, len) }}
+                {{ macros.admin_panel_all_patterns(pattern_list, pattern_info, len) }}
             </div>
         {% endif %}
     </div>
