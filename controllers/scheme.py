@@ -2,7 +2,6 @@ from app import app
 from flask import render_template
 from functions.role import *
 from utils import get_db_connection
-from models.scheme_model import *
 from functions.create_scheme import *
 
 
