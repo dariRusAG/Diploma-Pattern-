@@ -2,7 +2,7 @@ from app import app
 from flask import render_template, request, session
 from models.admin_profile_model import *
 from utils import get_db_connection
-
+from functions.create_scheme import *
 
 @app.route('/admin_profile', methods=['GET', 'POST'])
 def admin_profile():
@@ -12,6 +12,7 @@ def admin_profile():
     # отвечает за то, какая вкладка на панели администратора открыта
     admin_panel_button = None
     session.modified = True
+    name_scheme = ''
 
     if 'detail' not in session:
         session['detail'] = []
@@ -60,11 +61,12 @@ def admin_profile():
         session['detail'].append(dict(zip(request.values.getlist('new_detail_formula'), detail_dict)))
         session['detail'][2] = dict(sorted(session['detail'][2].items()))
 
-    elif admin_panel_button == "Добавить Линию":
-        session['detail_lines'].append([len(session['detail_lines'])+1,request.values.get('first_coord_x'), request.values.get('first_coord_y'),
+    elif request.values.get('add_detail_line'):
+        session['detail_lines'].append([request.values.get('first_coord_x'), request.values.get('first_coord_y'),
                    request.values.get('second_coord_x'), request.values.get('second_coord_y'),
                    request.values.get('line_type'), request.values.get('x_deviation'),
                    request.values.get('y_deviation'), request.values.get('line_design')])
+        admin_panel_button = "Добавить Линии"
 
     elif admin_panel_button == "Просмотреть Схему":
         add_detail(conn, session['detail'][0])
@@ -76,18 +78,52 @@ def admin_profile():
         for line in session['detail_lines']:
             add_detail_line(conn, detail_id, line)
 
-    elif admin_panel_button == "Список Новых Линий":
+# ИСПРАВИТЬ!!!
+        data = {'Обозначение': ['ДИ', 'ОБ', 'ВБ', 'ОТ'], 'Значение': [str(80), str(94), str(48), str(68)]}
+        df_param_detail = pd.DataFrame(data)
+
+        name_scheme = 'static/' + str(detail_id) + '.jpg'
+        create_user_scheme(conn, df_param_detail, detail_id)
         delete_new_detail(conn, int(get_detail_id(conn, session["detail"][0])))
+
+    elif request.values.get('add_new_detail'):
+        add_detail(conn, session['detail'][0])
+        detail_id = int(get_detail_id(conn, session["detail"][0]))
+        for formula in session['detail'][2]:
+            add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
+        for measure in session['detail'][1]:
+            add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
+        for line in session['detail_lines']:
+            add_detail_line(conn, detail_id, line)
+        session['detail'] = []
+        session['detail_lines'] = []
+        admin_panel_button = "Детали"
+
+    elif request.values.get('add_detail_cancel'):
+        session['detail'] = []
+        session['detail_lines'] = []
+        admin_panel_button = "Детали"
 
     elif request.values.get('delete_detail_new_line'):
         line_id = int(request.values.get('delete_detail_new_line'))
         admin_panel_button = "Просмотреть Список Линий"
-        session['detail_lines'].pop(line_id-1)
+        session['detail_lines'].pop(line_id)
 
+    elif request.values.get('add_new_pattern'):
+        name = request.values.get('new_pattern_name')
+        picture = request.values.get('new_pattern_picture')
+        category = request.values.get('new_pattern_category')
+        add_pattern(conn, name, picture, category, 5)
+        for detail in request.values.getlist('new_pattern_detail'):
+            add_pattern_detail(conn, int(get_pattern_id(conn, name)),detail)
+        admin_panel_button = "Выкройки"
+
+    df_detail = get_detail(conn)
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
     df_line = get_line(conn)
+    df_patterns = get_pattern(conn)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
@@ -97,8 +133,11 @@ def admin_profile():
         formula_list=df_formula,
         measure_list=df_measure,
         line_list=df_line,
+        detail_list=df_detail,
+        pattern_list=df_patterns,
         new_detail_list=session['detail'],
         new_detail_line_list=session['detail_lines'],
+        name_scheme=name_scheme,
         len=len
     )
 

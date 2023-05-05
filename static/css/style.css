@@ -298,12 +298,16 @@ html {
 }
 
 .admin_panel_button_small{
-    width: 10%;
+    width: 15%;
     border-radius: 10px;
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
     margin-top:1%;
-    margin-left: 95%;
     cursor: pointer;
+}
+
+.admin_panel_right_data_two_buttons{
+    display: flex;
+    justify-content: space-between;
 }
 
 .admin_panel_right_data_list{

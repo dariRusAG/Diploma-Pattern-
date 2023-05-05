@@ -31,6 +31,14 @@ def get_measure(conn):
     ''', conn)
 
 
+def get_detail(conn):
+    return pd.read_sql('''
+    SELECT *
+    FROM detail
+    ORDER BY detail_name
+    ''', conn)
+
+
 def get_category_id(conn, category_name):
     try:
         return pd.read_sql('''SELECT category_id
@@ -70,6 +78,15 @@ def get_formula_id(conn, formula_name):
     except IndexError:
         return "error"
 
+
+def get_pattern_id(conn, pattern_name):
+    try:
+        return pd.read_sql('''SELECT pattern_id
+        FROM pattern
+        WHERE pattern_name = :pattern_name
+        ''', conn, params={"pattern_name": pattern_name}).values[0][0]
+    except IndexError:
+        return "error"
 
 def get_measure_id(conn, measure_name):
     try:
@@ -136,12 +153,31 @@ def add_detail_line(conn, detail_id, line):
     cur.execute('''
     INSERT INTO line(detail_id, x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design)
     VALUES (:detail_id, :x_first_coord, :y_first_coord, :x_second_coord, :y_second_coord, :line_type, :x_deviation, :y_deviation, :line_design)
-     ''', {"detail_id": detail_id, "x_first_coord": line[1], "y_first_coord": line[2], "x_second_coord": line[3],
-           "y_second_coord": line[4], "line_type": line[5], "x_deviation": line[6], "y_deviation": line[7],
-           "line_design": line[8]})
+     ''', {"detail_id": detail_id, "x_first_coord": line[0], "y_first_coord": line[1], "x_second_coord": line[2],
+           "y_second_coord": line[3], "line_type": line[4], "x_deviation": line[5], "y_deviation": line[6],
+           "line_design": line[7]})
     conn.commit()
     return cur.lastrowid
 
+
+def add_pattern(conn, pattern_name, picture, category, complexity):
+    cur = conn.cursor()
+    cur.execute('''
+    INSERT INTO pattern(pattern_name, category_id, picture, complexity) 
+    VALUES (:pattern_name, :category, :picture, :complexity)
+     ''', {"pattern_name": pattern_name, "picture": picture, "category": category, "complexity": complexity})
+    conn.commit()
+    return cur.lastrowid
+
+
+def add_pattern_detail(conn, pattern_id, detail_id):
+    cur = conn.cursor()
+    cur.execute('''
+    INSERT INTO pattern_detail(pattern_id, detail_id) 
+    VALUES (:pattern_id, :detail_id)
+     ''', {"pattern_id": pattern_id, "detail_id": detail_id})
+    conn.commit()
+    return cur.lastrowid
 
 def delete_category(conn, category_id):
     cur = conn.cursor()
@@ -160,17 +196,10 @@ def get_detail(conn):
     ''', conn)
 
 
-def get_detail_f(conn):
+def get_pattern(conn):
     return pd.read_sql('''
     SELECT *
-    FROM  detail_formula
-    ''', conn)
-
-
-def get_detail_m(conn):
-    return pd.read_sql('''
-    SELECT *
-    FROM  detail_measure
+    FROM pattern
     ''', conn)
 
 
