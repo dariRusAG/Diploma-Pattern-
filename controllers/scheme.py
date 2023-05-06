@@ -22,6 +22,8 @@ def scheme():
     checked_value = False
     name_scheme = []
 
+    x_deviation, y_deviation = [], []
+
     # Если нажата кнопка "Построить"
     if request.values.get('build_scheme'):
         id_detail = request.form.getlist('detail')
