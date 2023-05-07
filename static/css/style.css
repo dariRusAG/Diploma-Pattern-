@@ -345,7 +345,7 @@ html {
 
 .admin_panel_right_data_list_two_table{
     display: flex;
-    height:100%;
+    height:94%;
 }
 
 .admin_panel_right_data_list_two_table_left{
@@ -378,7 +378,7 @@ html {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 73vh;
+    height: 65vh;
 }
 
 

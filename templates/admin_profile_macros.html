@@ -91,13 +91,12 @@
 
 <!--Макрос для вывода деталей на панели администратора-->
 {% macro admin_panel_details(formula_list, measure_list, new_detail_list, len) %}
-    Добавление новой детали:
     <form action="{{ url_for('admin_profile') }}" method="get">
+        Добавление новой детали:
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_detail_name" placeholder="Введите название детали"
                    value="{{ new_detail_list[0] }}" style="width:100%">
         </div>
-        <br>
         <div class="admin_panel_right_data_two_table">
             Список мерок и их обозначений:
             <div class="admin_panel_right_data_list_vertical_middle">
@@ -137,48 +136,6 @@
         <div class="admin_panel_right_data_two_buttons">
             <input type="submit" name="add_detail_cancel" value="Отменить изменения" class="admin_panel_button_small">
             <input type="submit" name="panel" value="Добавить линии" class="admin_panel_button_small">
-        </div>
-    </form>
-{% endmacro %}
-
-<!--Макрос для вывода выкроек на панели администратора-->
-{% macro admin_panel_patterns(category_list, detail_list, len) %}
-    Добавление новой выкройки:
-    <form action="{{ url_for('admin_profile') }}" method="get">
-        <div class="admin_panel_right_data_text">
-            <input type="text" name="new_pattern_name" placeholder="Введите название выкройки" style="width:50%">
-            <input type="text" name="new_pattern_picture" placeholder="Выберите файл"
-                   style="width:50%; margin-left:1%;">
-            <input type="submit" name="add_new_pattern" value="+" style="cursor: pointer;">
-        </div>
-
-        <div class="admin_panel_right_data_three_table">
-            <p2> Список деталей:</p2>
-            <div class="admin_panel_right_data_list_vertical_small">
-                {% for i in range(len(detail_list)) %}
-                    <div class="admin_panel_right_data_text">
-                        <input type="checkbox" name="new_pattern_detail" style="cursor: pointer;"
-                               value={{ detail_list['detail_id'].values[i] }}> {{ detail_list['detail_name'].values[i] }}
-                    </div>
-                {% endfor %}
-            </div>
-            <p2> Список категорий:</p2>
-            <div class="admin_panel_right_data_list_vertical_small">
-                {% for i in range(len(category_list)) %}
-                    <div class="admin_panel_right_data_text">
-                        <input type="radio" name="new_pattern_category"
-                               style="cursor: pointer;"
-                               value={{ category_list['category_id'].values[i] }}> {{ category_list['category_name'].values[i] }}
-                    </div>
-                {% endfor %}
-            </div>
-            <p2> Список 3D-моделей:</p2>
-            <div class="admin_panel_right_data_list_vertical_small">
-                {% for i in range(40) %}
-                    info
-                    <br>
-                {% endfor %}
-            </div>
         </div>
     </form>
 {% endmacro %}
@@ -305,46 +262,131 @@
     </form>
 {% endmacro %}
 
+<!--Макрос для вывода выкроек на панели администратора-->
+{% macro admin_panel_patterns(pattern_list, category_list, detail_list, pattern_info, len) %}
+    {% if pattern_info == ['',''] %}
+        Добавление новой выкройки:
+    {% else %}
+        Редактирование выкройки:
+    {% endif %}
+        <form action="{{ url_for('admin_profile') }}" method="get">
+    {% if pattern_info == ['',''] %}
+        <div class="admin_panel_right_data_text">
+            <input type="text" name="new_pattern_name" placeholder="Введите название выкройки" style="width:50%">
+            <input type="text" name="new_pattern_picture" placeholder="Выберите файл"
+                   style="width:50%; margin-left:1%;">
+        </div>
+    {% else %}
+        <div class="admin_panel_right_data_text">
+            <input type="text" name="edit_pattern_name" placeholder="Введите название выкройки"
+                   value='{{ pattern_list['pattern_name'].values[pattern_info[0]] }}'
+                   style="width:50%">
+            <input type="text" name="edit_pattern_picture" placeholder="Выберите файл"
+                   value='{{ pattern_list['picture'].values[pattern_info[0]] }}'
+                   style="width:50%; margin-left:1%;">
+        </div>
+    {% endif %}
+    <div class="admin_panel_right_data_three_table">
+        <p2> Список деталей:</p2>
+        <div class="admin_panel_right_data_list_vertical_small">
+            {% for i in range(len(detail_list)) %}
+                <div class="admin_panel_right_data_text">
+                    <input type="checkbox" name="new_pattern_detail" style="cursor: pointer;"
+                           value={{ detail_list['detail_id'].values[i] }}
+                                   {% if pattern_info != ['',''] and detail_list['detail_name'].values[i] in pattern_info[1] %}
+                                       checked
+                                   {% endif %}
+                    >
+                    {{ detail_list['detail_name'].values[i] }}
+                </div>
+            {% endfor %}
+        </div>
+        <p2> Список категорий:</p2>
+        <div class="admin_panel_right_data_list_vertical_small">
+            {% for i in range(len(category_list)) %}
+                <div class="admin_panel_right_data_text">
+                    <input type="radio" name="new_pattern_category"
+                           style="cursor: pointer;"
+                           value={{ category_list['category_id'].values[i] }}
+                                   {% if pattern_info != ['',''] and
+                                       category_list['category_name'].values[i] == pattern_list['category_name'].values[pattern_info[0]] %}
+                                       checked
+                                   {% endif %}
+                    > {{ category_list['category_name'].values[i] }}
+                </div>
+            {% endfor %}
+        </div>
+        <p2> Список 3D-моделей:</p2>
+        <div class="admin_panel_right_data_list_vertical_small">
+            {% for i in range(40) %}
+                info
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+
+        <div class="admin_panel_right_data_two_buttons">
+            {% if pattern_info != ['',''] %}
+                <input type="submit" name="edit_pattern_cancel" value="Назад" class="admin_panel_button_small">
+                <input type="submit" name="edit_pattern" value="Изменить выкройку" class="admin_panel_button_small">
+                 <input type="hidden" name="edit_pattern_id" value={{ pattern_info[0] }}>
+            {% else %}
+                <input type="submit" name="add_pattern_cancel" value="Отменить" class="admin_panel_button_small">
+                <input type="submit" name="add_pattern" value="Добавить выкройку" class="admin_panel_button_small">
+            {% endif %}
+        </div>
+    </form>
+{% endmacro %}
+
 <!--Макрос для вывода всех выкроек на панели администратора-->
 {% macro admin_panel_all_patterns(pattern_list, pattern_info, len) %}
     Выкройки:
     <div class="admin_panel_right_data_list_two_table">
         <div class="admin_panel_right_data_list_two_table_left">
             {% for i in range(len(pattern_list)) %}
-                <form action="{{ url_for('admin_profile') }}" method="get">
-                    <p>{{ pattern_list['pattern_name'].values[i] }}
+                <p>
+                <div class="admin_panel_right_data_text">
+                    {{ pattern_list['pattern_name'].values[i] }}
+                    <form action="{{ url_for('admin_profile') }}" method="get">
+                        <input type="submit" value="Изменить"
+                               style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="one_pattern_edit" value={{ pattern_list['pattern_id'].values[i] }}>
+                    </form>
+
+                    <form action="{{ url_for('admin_profile') }}" method="get">
                         <input type="submit" value="Подробнее"
                                style="margin-left:10px; cursor: pointer;">
                         <input type="hidden" name="one_pattern_info" value={{ pattern_list['pattern_id'].values[i] }}>
-                    </p>
-                </form>
+                    </form>
+                </div>
+                </p>
             {% endfor %}
         </div>
         <div class="admin_panel_right_data_list_two_table_right">
-{% if pattern_info[0] != '' %}
-            <p> Сложность:
-                {{ pattern_list['complexity'].values[pattern_info[1]] }}</p>
-            <p> Изображение:
-                {{ pattern_list['picture'].values[pattern_info[0]] }}</p>
-            <p class="fig">
-                <img src="{{ pattern_list['picture'].values[pattern_info[0]] }}" alt="" width="auto" height="250px">
-            </p>
-            <p> Название:
-                {{ pattern_list['pattern_name'].values[pattern_info[0]] }}</p>
-            <p> Категория:
-                {{ pattern_list['category_name'].values[pattern_info[0]] }}</p>
+            {% if pattern_info[0] != '' %}
+                <p> Сложность:
+                    {{ pattern_list['complexity'].values[pattern_info[0]] }}</p>
+                <p> Изображение:
+                    {{ pattern_list['picture'].values[pattern_info[0]] }}</p>
+                <p class="fig">
+                    <img src="{{ pattern_list['picture'].values[pattern_info[0]] }}" alt="" width="auto" height="250px">
+                </p>
+                <p> Название:
+                    {{ pattern_list['pattern_name'].values[pattern_info[0]] }}</p>
+                <p> Категория:
+                    {{ pattern_list['category_name'].values[pattern_info[0]] }}</p>
 
-            <p> Детали:
-                {% if pattern_info[1][0] != "error" %}
-                    {% for detail in pattern_info[1] %}
-                        <p>&bull; {{ detail }}</p>
-                    {% endfor %}
-                {% else %}
-                    Детали отсутствуют
-                {% endif %}
+                <p> Детали:
+                    {% if pattern_info[1][0] != "error" %}
+                        {% for detail in pattern_info[1] %}
+                            <p>&bull; {{ detail }}</p>
+                        {% endfor %}
+                    {% else %}
+                        Детали отсутствуют
+                    {% endif %}
 
-            </p>
-           {% endif %}
+                </p>
+            {% endif %}
         </div>
     </div>
 {% endmacro %}

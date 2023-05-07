@@ -127,7 +127,6 @@ def get_detail_by_id(conn, pattern_id):
     except IndexError:
         return "error"
 
-
 def add_formula(conn, formula_name, formula_value):
     cur = conn.cursor()
     cur.execute('''
@@ -243,6 +242,16 @@ def delete_new_detail(conn, detail_id):
     return cur.lastrowid
 
 
+def delete_pattern_detail(conn, pattern_id):
+    cur = conn.cursor()
+    cur.execute(f'''
+    DELETE FROM pattern_detail
+    WHERE pattern_id=:pattern_id;
+     ''', {"pattern_id": pattern_id})
+    conn.commit()
+    return cur.lastrowid
+
+
 def update_category(conn, category_id, category_name):
     cur = conn.cursor()
     cur.execute('''
@@ -251,4 +260,16 @@ def update_category(conn, category_id, category_name):
         category_name= :category_name
     WHERE category_id = :category_id
     ''', {"category_id": category_id, "category_name": category_name})
+    return conn.commit()
+
+def update_pattern(conn, pattern_id, pattern_name, pattern_picture, category_id):
+    cur = conn.cursor()
+    cur.execute('''
+    UPDATE pattern
+    SET 
+        pattern_name= :pattern_name,
+        picture= :pattern_picture,
+        category_id= :category_id
+    WHERE pattern_id = :pattern_id
+    ''', {"pattern_id": pattern_id, "pattern_name": pattern_name, "pattern_picture": pattern_picture, "category_id": category_id})
     return conn.commit()

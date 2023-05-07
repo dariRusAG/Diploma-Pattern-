@@ -120,16 +120,38 @@ def admin_profile():
         admin_panel_button = "Выкройки"
 
     elif request.values.get('one_pattern_info'):
-        pattern_info = [int(request.values.get('one_pattern_info'))-1]
-        pattern_info.append(get_detail_by_id(conn, pattern_info[0]+1).split(","))
+        pattern_info = [int(request.values.get('one_pattern_info')) - 1]
+        pattern_info.append(get_detail_by_id(conn, pattern_info[0] + 1).split(","))
         admin_panel_button = "Список Выкроек"
 
+    elif request.values.get('one_pattern_edit'):
+        pattern_info = [int(request.values.get('one_pattern_edit')) - 1]
+        pattern_info.append(get_detail_by_id(conn, pattern_info[0] + 1).split(","))
+        admin_panel_button = "Редактирование Выкроек"
+
+    elif request.values.get('edit_pattern'):
+        name = request.values.get('edit_pattern_name')
+        picture = request.values.get('edit_pattern_picture')
+        category = request.values.get('new_pattern_category')
+        id = int(request.values.get('edit_pattern_id'))+1
+        update_pattern(conn, id, name, picture, category)
+        delete_pattern_detail(conn, id)
+        for detail in request.values.getlist('new_pattern_detail'):
+            add_pattern_detail(conn, id, detail)
+        admin_panel_button = "Список Выкроек"
+
+    elif request.values.get('add_pattern_cancel'):
+        admin_panel_button = "Выкройки"
+
+    elif request.values.get('edit_pattern_cancel'):
+        admin_panel_button = "Список Выкроек"
 
     df_detail = get_detail(conn)
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
-    df_line = get_line(conn)
+    # исправить!!!
+    df_line = get_measure(conn)
     df_patterns = get_pattern(conn)
     html = render_template(
         'admin_profile.html',
