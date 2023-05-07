@@ -50,7 +50,7 @@ def get_measurements(user_param):
 
 
 # Подсчет координат линий и их построение
-def build_line_curve(df_line_curve, difficult, measurements, df_formula):
+def build_line_curve(df_line_curve, measurements, df_formula):
     design_for_curve = list()
 
     # список всех x и y координат кривых линий
@@ -69,8 +69,19 @@ def build_line_curve(df_line_curve, difficult, measurements, df_formula):
         x2 = eval(f"{row['x_second_coord']}", measurements, df_formula)
         y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
 
-        x1_deviation = eval(f"{row['x_first_deviation']}", {}, df_formula)
-        y1_deviation = eval(f"{row['y_first_deviation']}", {}, df_formula)
+        # преобразует отклонение либо просто в число, либо в список (если их несколько)
+        if type(eval(f"{row['x_first_deviation']}")) == float or type(eval(f"{row['x_first_deviation']}")) == int:
+            x1_deviation = eval(f"{row['x_first_deviation']}", {}, df_formula)
+        else:
+            x1_deviation = f"{row['x_first_deviation']}".split(",")
+            for num in range(len(x1_deviation)):
+                x1_deviation[num] = float(x1_deviation[num])
+        if type(eval(f"{row['y_first_deviation']}")) == float or type(eval(f"{row['y_first_deviation']}")) == int:
+            y1_deviation = eval(f"{row['y_first_deviation']}", {}, df_formula)
+        else:
+            y1_deviation = f"{row['y_first_deviation']}".split(",")
+            for num in range(len(y1_deviation)):
+                y1_deviation[num] = float(y1_deviation[num])
 
         x_coord_curve.append(x1)
         y_coord_curve.append(y1)
@@ -80,12 +91,6 @@ def build_line_curve(df_line_curve, difficult, measurements, df_formula):
         x_deviation.append(x1_deviation)
         y_deviation.append(y1_deviation)
 
-        if difficult == 'complex':
-            x2_deviation = eval(f"{row['x_second_deviation']}", {}, df_formula)
-            y2_deviation = eval(f"{row['y_second_deviation']}", {}, df_formula)
-            x_deviation.append(x2_deviation)
-            y_deviation.append(y2_deviation)
-
         # список стилей кривых линий
         curve_design = f"{row['line_design']}"
         design_for_curve.append(curve_design)
@@ -94,45 +99,53 @@ def build_line_curve(df_line_curve, difficult, measurements, df_formula):
         for i in range(0, len(x_coord_curve) - 1, 2):
             t_points = np.arange(0, 1, 0.009)
 
-            if difficult == 'simple':
-                d_x = x_deviation[int(i / 2)]
-                d_y = y_deviation[int(i / 2)]
+            j = int(i/2)
+            list_new_x = []
+            list_new_y = []
 
-                deviation_middle_X = ((x_coord_curve[i] + x_coord_curve[i + 1]) / 2) * d_x
-                deviation_middle_Y = ((y_coord_curve[i] + y_coord_curve[i + 1]) / 2) * d_y
+            # если отклонение одно
+            if type(x_deviation[j]) == float or type(x_deviation[j]) == int:
+                d_x_first = x_deviation[j]
+                d_y_first = y_deviation[j]
+                print(765434567654)
+                list_new_x.append(((x_coord_curve[i] + x_coord_curve[i + 1]) / 2) * d_x_first)
+                list_new_y.append(((y_coord_curve[i] + y_coord_curve[i + 1]) / 2) * d_y_first)
+           # если отклонений несколько
+            else:
+                k = len(x_deviation[j])
+                for r in range(1, k + 1):
+                    d_x_first = x_deviation[j][r-1]
+                    d_y_first = y_deviation[j][r-1]
+                    # формула расчета координат в отношении
+                    alpha = r / (k + 1 - r)
+                    list_new_x.append(((x_coord_curve[i] + alpha * x_coord_curve[i + 1]) / (
+                                1 + alpha)) * d_x_first)
+                    list_new_y.append(((y_coord_curve[i] + alpha * y_coord_curve[i + 1]) / (
+                            1 + alpha)) * d_y_first)
+            # список всех отклонений прямой
+            all_deviations = []
+            for j in range(len(list_new_x)):
+                all_deviations.append([list_new_x[j], list_new_y[j]])
 
-                points1 = np.array(
-                    [
-                        [x_coord_curve[i], y_coord_curve[i]],
-                        [deviation_middle_X, deviation_middle_Y],
-                        [x_coord_curve[i + 1], y_coord_curve[i + 1]]
-                    ])
+            # список всех точек для построения
+            points_list = [[x_coord_curve[i], y_coord_curve[i]]]
+            points_list = points_list + all_deviations
+            points_list.append([x_coord_curve[i + 1], y_coord_curve[i + 1]])
+            points1 = np.asarray(points_list)
 
-            elif difficult == 'complex':
-                d_x_first = x_deviation[int(i)]
-                d_y_first = y_deviation[int(i)]
-
-                deviation_first_X = ((x_coord_curve[i] + x_coord_curve[i + 1]) / 3) * d_x_first
-                deviation_first_Y = ((y_coord_curve[i] + y_coord_curve[i + 1]) / 3) * d_y_first
-
-                d_x_second = x_deviation[int(i + 1)]
-                d_y_second = y_deviation[int(i + 1)]
-
-                deviation_second_X = ((x_coord_curve[i] + x_coord_curve[i + 1]) / 1.5) * d_x_second
-                deviation_second_Y = ((y_coord_curve[i] + y_coord_curve[i + 1]) / 1.5) * d_y_second
-
-                points1 = np.array(
-                    [
-                        [x_coord_curve[i], y_coord_curve[i]],
-                        [deviation_first_X, deviation_first_Y],
-                        [deviation_second_X, deviation_second_Y],
-                        [x_coord_curve[i + 1], y_coord_curve[i + 1]]
-                    ])
 
         curve1 = Bezier.Curve(t_points, points1)
         plt.plot(
             curve1[:, 0],
             curve1[:, 1], lw=2.8
+        )
+
+        # показывает точки для безье
+        plt.plot(
+            points1[:, 0],
+            points1[:, 1],
+            'ro:',
+            color='darkblue'
         )
 
 
@@ -200,11 +213,8 @@ def create_user_scheme(conn, user_param, id_detail):
                 c='black', ls='-.', lw=2.8
             )
 
-    df_line_curve_simple = df_line_curve.loc[(df_line_curve['x_second_deviation'] == '')]
-    df_line_curve_complex = df_line_curve.loc[(df_line_curve['x_second_deviation'] != '')]
 
-    build_line_curve(df_line_curve_simple, 'simple', measurements, df_formula)
-    build_line_curve(df_line_curve_complex, 'complex', measurements, df_formula)
+    build_line_curve(df_line_curve, measurements, df_formula)
 
     if id_detail == 4:
         plt.xlim([0, ДР])
@@ -224,4 +234,3 @@ def create_user_scheme(conn, user_param, id_detail):
     im.save(name)
 
     # im.crop((0, 0, im.size[0] - im.size[0] * 0.50, im.size[1])).save(name)
-
