@@ -25,3 +25,4 @@ def favorites_pattern(conn, category, complexity):
         favorite_list.append(df_favorite_pattern.loc[i, "ID"])
 
     return df_favorite_pattern, favorite_list
+
