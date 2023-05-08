@@ -83,7 +83,7 @@ def get_line_curve_detail(conn, detail):
         x_first_coord, y_first_coord, 
         x_second_coord, y_second_coord,
         line_design, 
-        x_first_deviation, y_first_deviation
+        x_deviation, y_deviation
     FROM line_curve
     WHERE detail_id = {detail}
     ''', conn)

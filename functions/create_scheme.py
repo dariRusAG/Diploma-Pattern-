@@ -70,16 +70,16 @@ def build_line_curve(df_line_curve, measurements, df_formula):
         y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
 
         # преобразует отклонение либо просто в число, либо в список (если их несколько)
-        if type(eval(f"{row['x_first_deviation']}")) == float or type(eval(f"{row['x_first_deviation']}")) == int:
-            x1_deviation = eval(f"{row['x_first_deviation']}", {}, df_formula)
+        if type(eval(f"{row['x_deviation']}")) == float or type(eval(f"{row['x_deviation']}")) == int:
+            x1_deviation = eval(f"{row['x_deviation']}", {}, df_formula)
         else:
-            x1_deviation = f"{row['x_first_deviation']}".split(",")
+            x1_deviation = f"{row['x_deviation']}".split(",")
             for num in range(len(x1_deviation)):
                 x1_deviation[num] = float(x1_deviation[num])
-        if type(eval(f"{row['y_first_deviation']}")) == float or type(eval(f"{row['y_first_deviation']}")) == int:
-            y1_deviation = eval(f"{row['y_first_deviation']}", {}, df_formula)
+        if type(eval(f"{row['y_deviation']}")) == float or type(eval(f"{row['y_deviation']}")) == int:
+            y1_deviation = eval(f"{row['y_deviation']}", {}, df_formula)
         else:
-            y1_deviation = f"{row['y_first_deviation']}".split(",")
+            y1_deviation = f"{row['y_deviation']}".split(",")
             for num in range(len(y1_deviation)):
                 y1_deviation[num] = float(y1_deviation[num])
 

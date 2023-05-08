@@ -186,8 +186,8 @@ CREATE TABLE IF NOT EXISTS line_curve (
  x_second_coord varchar(70),
  y_second_coord varchar(70),
  line_design varchar(15),
- x_first_deviation varchar(70),
- y_first_deviation varchar(70),
+ x_deviation varchar(70),
+ y_deviation varchar(70),
  FOREIGN KEY (detail_id) REFERENCES detail (detail_id) ON DELETE CASCADE
 );
 
@@ -196,7 +196,7 @@ INSERT INTO line_curve (
     x_first_coord, y_first_coord, 
     x_second_coord, y_second_coord,
     line_design, 
-    x_first_deviation, y_first_deviation)
+    x_deviation, y_deviation)
 VALUES
 (1, 'Ширина', 'Середина', 'Ширина - 0.5 * Боковая_вытачка', 'Подъем_талии', 'Обычная', '1.1', '1.1'),
 (1, '1', 'Длина', 'Ширина - 0.5 * Боковая_вытачка', 'Подъем_талии', 'Обычная', '1.3', '0.98'),
