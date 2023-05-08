@@ -4,6 +4,33 @@ from models.admin_profile_model import *
 from utils import get_db_connection
 from functions.create_scheme import *
 
+# Подсчет сложности выкройки
+def difficulty_calculation(category, number_details, number_measurements):
+    complexity = number_details * number_measurements
+
+    match category:
+        case 'Юбки':
+            complexity *= 1
+        case 'Футболки', 'Брюки':
+            complexity *= 2
+        case 'Рубашки':
+            complexity *= 3
+        case 'Платья':
+            complexity *= 4
+
+    match complexity:
+        case [2, 40]:
+            complexity = 1
+        case [41, 78]:
+            complexity = 2
+        case [79, 116]:
+            complexity = 3
+        case [117, 154]:
+            complexity = 4
+        case [155, 192]:
+            complexity = 5
+
+    return complexity
 @app.route('/admin_profile', methods=['GET', 'POST'])
 def admin_profile():
     conn = get_db_connection()
