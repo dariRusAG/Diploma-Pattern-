@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
+
+from models.model_general import get_detail_name
 from models.scheme_model import *
 from functions.bezie import Bezier
 from PIL import Image
@@ -183,7 +185,7 @@ def create_user_scheme(conn, user_param, id_detail):
         else:
             build_line_curve(row, x_coord_line, y_coord_line, df_formula)
 
-    name = 'static/' + str(id_detail) + '.jpg'
+    name = 'static/' + str(get_detail_name(conn, id_detail)) + '.jpg'
 
     plt.savefig(name, bbox_inches='tight')
     Image.open(name).save(name)

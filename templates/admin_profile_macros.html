@@ -161,7 +161,7 @@
 {% endmacro %}
 
 <!--Макрос для добавления линий деталей на панели администратора-->
-{% macro admin_panel_new_line(new_detail_list, len) %}
+{% macro admin_panel_new_line(new_detail_list, new_detail_line_list, len) %}
     Список выбранных формул и их обозначений:
     <div class="admin_panel_right_data_list_small">
         {% for key in new_detail_list[2] %}
@@ -171,8 +171,9 @@
             </div>
         {% endfor %}
     </div>
-    <p2> Добавление линий:</p2>
-    <div class="admin_panel_right_data_list_small">
+    {% if len(new_detail_line_list[len(new_detail_line_list)-1]) != 1 %}
+        <p2> Добавление линии:</p2>
+        <div class="admin_panel_right_data_list_small">
         <form action="{{ url_for('admin_profile') }}" method="get">
             <p>Координаты для первой точки:
                 <input type="text" name="first_coord_x" placeholder="X">
@@ -181,20 +182,57 @@
                 <input type="text" name="second_coord_x" placeholder="X">
                 <input type="text" name="second_coord_y" placeholder="Y">
                 <p2>
-                    <p>Тип линии:
-                        <input type="radio" name="line_type" value="Прямая" style="cursor: pointer;"> Прямая
-                        <input type="radio" name="line_type" value="Кривая" style="cursor: pointer;"> Кривая</p>
                     <p>Отклонение:
                         <input type="text" name="x_deviation" placeholder="По X">
                         <input type="text" name="y_deviation" placeholder="По Y"></p>
                     <p>Дизайн линии:
                         <input type="radio" name="line_design" value="Обычная" style="cursor: pointer;"> Обычная
-                        <input type="radio" name="line_design" value="Пунктирная" style="cursor: pointer;"> Пунктирная
+                        <input type="radio" name="line_design" value="Пунктирная" style="cursor: pointer;">
+                        Пунктирная
                     </p>
-
-                    <p><input type="submit" name="add_detail_line" value="Добавить линию" style="cursor: pointer;"></p>
+                    <p2><input type="submit" name="add_detail_line" value="Добавить линию" style="cursor: pointer;">
+                    </p2>
+                </p2>
         </form>
-    </div>
+    {% else %}
+        {% set value = new_detail_line_list[len(new_detail_line_list)-1][0] %}
+        <p2> Редактирование линии:</p2>
+        <div class="admin_panel_right_data_list_small">
+        <form action="{{ url_for('admin_profile') }}" method="get">
+            <p>Координаты для первой точки:
+                <input type="text" name="first_coord_x" placeholder="X" value="{{ new_detail_line_list[value][0] }}">
+                <input type="text" name="first_coord_y" placeholder="Y" value="{{ new_detail_line_list[value][1] }}">
+            </p>
+            <p>Координаты для второй точки:
+                <input type="text" name="second_coord_x" placeholder="X" value="{{ new_detail_line_list[value][2] }}">
+                <input type="text" name="second_coord_y" placeholder="Y" value="{{ new_detail_line_list[value][3] }}">
+                <p2>
+                    <p>Отклонение:
+                        <input type="text" name="x_deviation" placeholder="По X"
+                               value="{{ new_detail_line_list[value][4] }}">
+                        <input type="text" name="y_deviation" placeholder="По Y"
+                               value="{{ new_detail_line_list[value][5] }}">
+                    </p>
+                    <p>Дизайн линии:
+                        {% if new_detail_line_list[value][6] == "Обычная" %}
+                            <input type="radio" name="line_design" value="Обычная" style="cursor: pointer;" checked>
+                            Обычная
+                            <input type="radio" name="line_design" value="Пунктирная" style="cursor: pointer;">
+                            Пунктирная
+                        {% else %}
+                            <input type="radio" name="line_design" value="Обычная" style="cursor: pointer;"> Обычная
+                            <input type="radio" name="line_design" value="Пунктирная" style="cursor: pointer;" checked>
+                            Пунктирная
+                        {% endif %}
+                    </p>
+                    <p2><input type="submit" name="edit_detail_line" value="Редактировать линию"
+                               style="cursor: pointer;">
+                    </p2>
+                </p2>
+        </form>
+    {% endif %}
+</form>
+</div>
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_two_buttons">
             <input type="submit" name="panel" value="Выбрать мерки и формулы" class="admin_panel_button_small">
@@ -209,22 +247,24 @@
     <div class="admin_panel_right_data_list">
         {% for i in range(len(new_detail_line_list)) %}
             <div class="admin_panel_right_data_text">
-                <form action="{{ url_for('admin_profile') }}" method="get">
-                    <p2>
-                        {% set k = i+1 %}
-                        {{ k }}:
-                        ({{ new_detail_line_list[i][0] }}, {{ new_detail_line_list[i][1] }});
-                        ({{ new_detail_line_list[i][2] }}, {{ new_detail_line_list[i][3] }});
-                        {{ new_detail_line_list[i][4] }};
-                        {% if new_detail_line_list[i][4] == 'Кривая' %}
-                            ({{ new_detail_line_list[i][5] }},
-                            {{ new_detail_line_list[i][6] }});
-                        {% endif %}
-                        {{ new_detail_line_list[i][7] }}
-
+                <div class="admin_panel_right_data_text">
+                    {% set k = i+1 %}
+                    {{ k }}:
+                    ({{ new_detail_line_list[i][0] }}, {{ new_detail_line_list[i][1] }});
+                    ({{ new_detail_line_list[i][2] }}, {{ new_detail_line_list[i][3] }});
+                    {% if new_detail_line_list[i][4] != '' and new_detail_line_list[i][5] != '' %}
+                        ({{ new_detail_line_list[i][4] }};
+                        {{ new_detail_line_list[i][5] }});
+                    {% endif %}
+                    {{ new_detail_line_list[i][6] }}
+                    <form action="{{ url_for('admin_profile') }}" method="get">
+                        <input type="submit" value="Изменить" style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="edit_detail_new_line" value={{ i }}>
+                    </form>
+                    <form action="{{ url_for('admin_profile') }}" method="get">
                         <input type="submit" value="Удалить" style="margin-left:10px; cursor: pointer;">
                         <input type="hidden" name="delete_detail_new_line" value={{ i }}>
-                    </p2>
+                </div>
                 </form>
             </div>
         {% endfor %}
@@ -269,67 +309,67 @@
     {% else %}
         Редактирование выкройки:
     {% endif %}
-        <form action="{{ url_for('admin_profile') }}" method="get">
-    {% if pattern_info == ['',''] %}
-        <div class="admin_panel_right_data_text">
-            <input type="text" name="new_pattern_name" placeholder="Введите название выкройки" style="width:50%">
-            <input type="text" name="new_pattern_picture" placeholder="Выберите файл"
-                   style="width:50%; margin-left:1%;">
-        </div>
-    {% else %}
-        <div class="admin_panel_right_data_text">
-            <input type="text" name="edit_pattern_name" placeholder="Введите название выкройки"
-                   value='{{ pattern_list['pattern_name'].values[pattern_info[0]] }}'
-                   style="width:50%">
-            <input type="text" name="edit_pattern_picture" placeholder="Выберите файл"
-                   value='{{ pattern_list['picture'].values[pattern_info[0]] }}'
-                   style="width:50%; margin-left:1%;">
-        </div>
-    {% endif %}
-    <div class="admin_panel_right_data_three_table">
-        <p2> Список деталей:</p2>
-        <div class="admin_panel_right_data_list_vertical_small">
-            {% for i in range(len(detail_list)) %}
-                <div class="admin_panel_right_data_text">
-                    <input type="checkbox" name="new_pattern_detail" style="cursor: pointer;"
-                           value={{ detail_list['detail_id'].values[i] }}
-                                   {% if pattern_info != ['',''] and detail_list['detail_name'].values[i] in pattern_info[1] %}
-                                       checked
-                                   {% endif %}
-                    >
-                    {{ detail_list['detail_name'].values[i] }}
-                </div>
-            {% endfor %}
-        </div>
-        <p2> Список категорий:</p2>
-        <div class="admin_panel_right_data_list_vertical_small">
-            {% for i in range(len(category_list)) %}
-                <div class="admin_panel_right_data_text">
-                    <input type="radio" name="new_pattern_category"
-                           style="cursor: pointer;"
-                           value={{ category_list['category_id'].values[i] }}
-                                   {% if pattern_info != ['',''] and
+    <form action="{{ url_for('admin_profile') }}" method="get">
+        {% if pattern_info == ['',''] %}
+            <div class="admin_panel_right_data_text">
+                <input type="text" name="new_pattern_name" placeholder="Введите название выкройки" style="width:50%">
+                <input type="text" name="new_pattern_picture" placeholder="Выберите файл"
+                       style="width:50%; margin-left:1%;">
+            </div>
+        {% else %}
+            <div class="admin_panel_right_data_text">
+                <input type="text" name="edit_pattern_name" placeholder="Введите название выкройки"
+                       value='{{ pattern_list['pattern_name'].values[pattern_info[0]] }}'
+                       style="width:50%">
+                <input type="text" name="edit_pattern_picture" placeholder="Выберите файл"
+                       value='{{ pattern_list['picture'].values[pattern_info[0]] }}'
+                       style="width:50%; margin-left:1%;">
+            </div>
+        {% endif %}
+        <div class="admin_panel_right_data_three_table">
+            <p2> Список деталей:</p2>
+            <div class="admin_panel_right_data_list_vertical_small">
+                {% for i in range(len(detail_list)) %}
+                    <div class="admin_panel_right_data_text">
+                        <input type="checkbox" name="new_pattern_detail" style="cursor: pointer;"
+                               value={{ detail_list['detail_id'].values[i] }}
+                                       {% if pattern_info != ['',''] and detail_list['detail_name'].values[i] in pattern_info[1] %}
+                                           checked
+                                       {% endif %}
+                        >
+                        {{ detail_list['detail_name'].values[i] }}
+                    </div>
+                {% endfor %}
+            </div>
+            <p2> Список категорий:</p2>
+            <div class="admin_panel_right_data_list_vertical_small">
+                {% for i in range(len(category_list)) %}
+                    <div class="admin_panel_right_data_text">
+                        <input type="radio" name="new_pattern_category"
+                               style="cursor: pointer;"
+                               value={{ category_list['category_id'].values[i] }}
+                                       {% if pattern_info != ['',''] and
                                        category_list['category_name'].values[i] == pattern_list['category_name'].values[pattern_info[0]] %}
-                                       checked
-                                   {% endif %}
-                    > {{ category_list['category_name'].values[i] }}
-                </div>
-            {% endfor %}
+                                           checked
+                                       {% endif %}
+                        > {{ category_list['category_name'].values[i] }}
+                    </div>
+                {% endfor %}
+            </div>
+            <p2> Список 3D-моделей:</p2>
+            <div class="admin_panel_right_data_list_vertical_small">
+                {% for i in range(40) %}
+                    info
+                    <br>
+                {% endfor %}
+            </div>
         </div>
-        <p2> Список 3D-моделей:</p2>
-        <div class="admin_panel_right_data_list_vertical_small">
-            {% for i in range(40) %}
-                info
-                <br>
-            {% endfor %}
-        </div>
-    </div>
 
         <div class="admin_panel_right_data_two_buttons">
             {% if pattern_info != ['',''] %}
                 <input type="submit" name="edit_pattern_cancel" value="Назад" class="admin_panel_button_small">
                 <input type="submit" name="edit_pattern" value="Изменить выкройку" class="admin_panel_button_small">
-                 <input type="hidden" name="edit_pattern_id" value={{ pattern_info[0] }}>
+                <input type="hidden" name="edit_pattern_id" value={{ pattern_info[0] }}>
             {% else %}
                 <input type="submit" name="add_pattern_cancel" value="Отменить" class="admin_panel_button_small">
                 <input type="submit" name="add_pattern" value="Добавить выкройку" class="admin_panel_button_small">

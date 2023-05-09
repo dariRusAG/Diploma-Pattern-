@@ -42,7 +42,7 @@ def scheme():
             for id_detail in int_id_detail:
                 df_param_detail = df_param.loc[(df_param['ID'] == id_detail)]
                 create_user_scheme(conn, df_param_detail, id_detail)
-                name_scheme.append('static/' + str(id_detail) + '.jpg')
+                name_scheme.append('static/' + str(get_detail_name(conn, id_detail)) + '.jpg')
 
     return render_template(
         'scheme.html',

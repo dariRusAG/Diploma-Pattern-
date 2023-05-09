@@ -1,8 +1,11 @@
 from app import app
 from flask import render_template, request, session
 from models.admin_profile_model import *
+from models.model_general import get_detail_name
 from utils import get_db_connection
 from functions.create_scheme import *
+import os
+
 
 # Подсчет сложности выкройки
 def difficulty_calculation(category, number_details, number_measurements):
@@ -31,6 +34,8 @@ def difficulty_calculation(category, number_details, number_measurements):
             complexity = 5
 
     return complexity
+
+
 @app.route('/admin_profile', methods=['GET', 'POST'])
 def admin_profile():
     conn = get_db_connection()
@@ -40,7 +45,7 @@ def admin_profile():
     admin_panel_button = None
     session.modified = True
     name_scheme = ''
-    pattern_info = ['','']
+    pattern_info = ['', '']
 
     if 'detail' not in session:
         session['detail'] = []
@@ -51,7 +56,8 @@ def admin_profile():
         admin_panel_button = request.values.get('panel').title()
 
     if request.values.get('add_category'):
-        if get_category_id(conn, request.values.get('new_category')) == "error" and request.values.get('new_category') != '':
+        if get_category_id(conn, request.values.get('new_category')) == "error" and request.values.get(
+                'new_category') != '':
             add_category(conn, request.values.get('new_category'))
         admin_panel_button = "Категории"
 
@@ -67,15 +73,17 @@ def admin_profile():
 
     elif request.values.get('edit_category'):
         category_id = int(request.values.get('edit_category'))
-        if get_category_id(conn, request.values.get('edit_category_name')) == "error" and request.values.get('edit_category_name') != '':
+        if get_category_id(conn, request.values.get('edit_category_name')) == "error" and request.values.get(
+                'edit_category_name') != '':
             category_name = request.values.get('edit_category_name')
             update_category(conn, category_id, category_name)
         checked_value = False
         admin_panel_button = "Категории"
 
     elif request.values.get('add_formula'):
-        if get_formula_id(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value')) == "error" \
-            and request.values.get('new_formula_name') != '' and request.values.get('new_formula_value') != '':
+        if get_formula_id(conn, request.values.get('new_formula_name'),
+                          request.values.get('new_formula_value')) == "error" \
+                and request.values.get('new_formula_name') != '' and request.values.get('new_formula_value') != '':
             add_formula(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value'))
         admin_panel_button = "Формулы"
 
@@ -89,12 +97,29 @@ def admin_profile():
         session['detail'].append(dict(zip(request.values.getlist('new_detail_formula'), detail_dict)))
         session['detail'][2] = dict(sorted(session['detail'][2].items()))
 
-    elif request.values.get('add_detail_line'):
+    elif request.values.get('add_detail_line') or request.values.get('edit_detail_line'):
+        if request.values.get('edit_detail_line'):
+            session['detail_lines'].pop(session['detail_lines'][len(session['detail_lines']) - 1][0])
+            session['detail_lines'].pop(len(session['detail_lines']) - 1)
+            admin_panel_button = "Просмотреть Список Линий"
+        else:
+            admin_panel_button = "Добавить Линии"
         session['detail_lines'].append([request.values.get('first_coord_x'), request.values.get('first_coord_y'),
-                   request.values.get('second_coord_x'), request.values.get('second_coord_y'),
-                   request.values.get('line_type'), request.values.get('x_deviation'),
-                   request.values.get('y_deviation'), request.values.get('line_design')])
+                                        request.values.get('second_coord_x'), request.values.get('second_coord_y'),
+                                        request.values.get('x_deviation'), request.values.get('y_deviation'),
+                                        request.values.get('line_design')])
+
+
+    elif request.values.get('delete_detail_new_line'):
+        line_id = int(request.values.get('delete_detail_new_line'))
+        admin_panel_button = "Просмотреть Список Линий"
+        session['detail_lines'].pop(line_id)
+
+    elif request.values.get('edit_detail_new_line'):
+        line_id = int(request.values.get('edit_detail_new_line'))
         admin_panel_button = "Добавить Линии"
+        session['detail_lines'].append([line_id])
+
 
     elif admin_panel_button == "Просмотреть Схему":
         add_detail(conn, session['detail'][0])
@@ -106,13 +131,16 @@ def admin_profile():
         for line in session['detail_lines']:
             add_detail_line(conn, detail_id, line)
 
-# ИСПРАВИТЬ!!!
-        data = {'Обозначение': ['ДИ', 'ОБ', 'ВБ', 'ОТ'], 'Значение': [str(80), str(94), str(48), str(68)]}
+        # ИСПРАВИТЬ!!!
+        data = {'Обозначение': ['ОГ', 'ОТ', 'ОБ', 'ОШ', 'ОПл', 'ОЗ',
+                                'ВБ', 'ДИ', 'ДТС', 'ДПл', 'ДР'],
+                'Значение': [str(108), str(89), str(94), str(37), str(34), str(17), str(45),
+                             str(80), str(45), str(18), str(65)]}
         df_param_detail = pd.DataFrame(data)
-
-        name_scheme = 'static/' + str(detail_id) + '.jpg'
+        name_scheme = 'static/' + str(get_detail_name(conn, detail_id)) + '.jpg'
         create_user_scheme(conn, df_param_detail, detail_id)
         delete_new_detail(conn, int(get_detail_id(conn, session["detail"][0])))
+
 
     elif request.values.get('add_new_detail'):
         add_detail(conn, session['detail'][0])
@@ -125,6 +153,7 @@ def admin_profile():
             add_detail_line(conn, detail_id, line)
         session['detail'] = []
         session['detail_lines'] = []
+        os.remove('static/' + str(get_detail_name(conn, detail_id)) + '.jpg')
         admin_panel_button = "Детали"
 
     elif request.values.get('add_detail_cancel'):
@@ -132,18 +161,13 @@ def admin_profile():
         session['detail_lines'] = []
         admin_panel_button = "Детали"
 
-    elif request.values.get('delete_detail_new_line'):
-        line_id = int(request.values.get('delete_detail_new_line'))
-        admin_panel_button = "Просмотреть Список Линий"
-        session['detail_lines'].pop(line_id)
-
     elif request.values.get('add_new_pattern'):
         name = request.values.get('new_pattern_name')
         picture = request.values.get('new_pattern_picture')
         category = request.values.get('new_pattern_category')
         add_pattern(conn, name, picture, category, 5)
         for detail in request.values.getlist('new_pattern_detail'):
-            add_pattern_detail(conn, int(get_pattern_id(conn, name)),detail)
+            add_pattern_detail(conn, int(get_pattern_id(conn, name)), detail)
         admin_panel_button = "Выкройки"
 
     elif request.values.get('one_pattern_info'):
@@ -160,7 +184,7 @@ def admin_profile():
         name = request.values.get('edit_pattern_name')
         picture = request.values.get('edit_pattern_picture')
         category = request.values.get('new_pattern_category')
-        id = int(request.values.get('edit_pattern_id'))+1
+        id = int(request.values.get('edit_pattern_id')) + 1
         update_pattern(conn, id, name, picture, category)
         delete_pattern_detail(conn, id)
         for detail in request.values.getlist('new_pattern_detail'):
@@ -177,8 +201,7 @@ def admin_profile():
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
-    # исправить!!!
-    df_line = get_measure(conn)
+    df_line = get_line(conn)
     df_patterns = get_pattern(conn)
     html = render_template(
         'admin_profile.html',

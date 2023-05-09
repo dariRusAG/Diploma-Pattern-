@@ -22,7 +22,7 @@
             <input type="submit" name="panel" value="3D-модель" class="admin_panel_button">
             {% if admin_panel_button == 'Детали' or admin_panel_button == 'Добавить Линии'
             or admin_panel_button == 'Просмотреть Список Линий' or admin_panel_button == 'Выбрать Мерки И Формулы'
-                    or admin_panel_button == 'Добавить Линию' %}
+                    or admin_panel_button == 'Добавить Линию'or admin_panel_button == "Линии" %}
                 <input type="submit" name="panel" value="Список деталей" class="admin_panel_button"
                        style="margin-top:93%">
                 <input type="submit" name="panel" value="Список линий" class="admin_panel_button">
@@ -56,7 +56,7 @@
             </div>
         {% elif admin_panel_button == "Добавить Линии" or admin_panel_button == "Добавить Линию" or admin_panel_button == "Линии" %}
             <div class="admin_panel_right_data">
-                {{ macros.admin_panel_new_line(new_detail_list, len) }}
+                {{ macros.admin_panel_new_line(new_detail_list, new_detail_line_list, len) }}
             </div>
         {% elif admin_panel_button == "Просмотреть Список Линий" or admin_panel_button == "Список Новых Линий" %}
             <div class="admin_panel_right_data">

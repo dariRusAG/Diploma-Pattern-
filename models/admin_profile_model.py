@@ -18,7 +18,7 @@ def get_formula(conn):
 
 def get_line(conn):
     return pd.read_sql('''
-    SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design
+    SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, x_deviation, y_deviation, line_design
     FROM line
     ''', conn)
 
@@ -180,11 +180,11 @@ def add_detail_measure(conn, detail_id, measure_id):
 def add_detail_line(conn, detail_id, line):
     cur = conn.cursor()
     cur.execute('''
-    INSERT INTO line(detail_id, x_first_coord, y_first_coord, x_second_coord, y_second_coord, line_type, x_deviation, y_deviation, line_design)
-    VALUES (:detail_id, :x_first_coord, :y_first_coord, :x_second_coord, :y_second_coord, :line_type, :x_deviation, :y_deviation, :line_design)
+    INSERT INTO line(detail_id, x_first_coord, y_first_coord, x_second_coord, y_second_coord, x_deviation, y_deviation, line_design)
+    VALUES (:detail_id, :x_first_coord, :y_first_coord, :x_second_coord, :y_second_coord, :x_deviation, :y_deviation, :line_design)
      ''', {"detail_id": detail_id, "x_first_coord": line[0], "y_first_coord": line[1], "x_second_coord": line[2],
-           "y_second_coord": line[3], "line_type": line[4], "x_deviation": line[5], "y_deviation": line[6],
-           "line_design": line[7]})
+           "y_second_coord": line[3], "x_deviation": line[4], "y_deviation": line[5],
+           "line_design": line[6]})
     conn.commit()
     return cur.lastrowid
 
