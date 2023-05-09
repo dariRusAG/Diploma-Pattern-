@@ -319,10 +319,10 @@
         {% else %}
             <div class="admin_panel_right_data_text">
                 <input type="text" name="edit_pattern_name" placeholder="Введите название выкройки"
-                       value='{{ pattern_list['pattern_name'].values[pattern_info[0]] }}'
+                       value='{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['pattern_name'].values[0] }}'
                        style="width:50%">
                 <input type="text" name="edit_pattern_picture" placeholder="Выберите файл"
-                       value='{{ pattern_list['picture'].values[pattern_info[0]] }}'
+                       value='{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}'
                        style="width:50%; margin-left:1%;">
             </div>
         {% endif %}
@@ -349,7 +349,7 @@
                                style="cursor: pointer;"
                                value={{ category_list['category_id'].values[i] }}
                                        {% if pattern_info != ['',''] and
-                                       category_list['category_name'].values[i] == pattern_list['category_name'].values[pattern_info[0]] %}
+                                       category_list['category_name'].values[i] == pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['category_name'].values[0] %}
                                            checked
                                        {% endif %}
                         > {{ category_list['category_name'].values[i] }}
@@ -372,7 +372,7 @@
                 <input type="hidden" name="edit_pattern_id" value={{ pattern_info[0] }}>
             {% else %}
                 <input type="submit" name="add_pattern_cancel" value="Отменить" class="admin_panel_button_small">
-                <input type="submit" name="add_pattern" value="Добавить выкройку" class="admin_panel_button_small">
+                <input type="submit" name="add_new_pattern" value="Добавить выкройку" class="admin_panel_button_small">
             {% endif %}
         </div>
     </form>
@@ -392,7 +392,11 @@
                                style="margin-left:10px; cursor: pointer;">
                         <input type="hidden" name="one_pattern_edit" value={{ pattern_list['pattern_id'].values[i] }}>
                     </form>
-
+                    <form action="{{ url_for('admin_profile') }}" method="get">
+                        <input type="submit" value="Удалить"
+                               style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="one_pattern_delete" value={{ pattern_list['pattern_id'].values[i] }}>
+                    </form>
                     <form action="{{ url_for('admin_profile') }}" method="get">
                         <input type="submit" value="Подробнее"
                                style="margin-left:10px; cursor: pointer;">
@@ -405,16 +409,16 @@
         <div class="admin_panel_right_data_list_two_table_right">
             {% if pattern_info[0] != '' %}
                 <p> Сложность:
-                    {{ pattern_list['complexity'].values[pattern_info[0]] }}</p>
+                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['complexity'].values[0] }}</p>
                 <p> Изображение:
-                    {{ pattern_list['picture'].values[pattern_info[0]] }}</p>
+                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}</p>
                 <p class="fig">
-                    <img src="{{ pattern_list['picture'].values[pattern_info[0]] }}" alt="" width="auto" height="250px">
+                    <img src="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}" alt="" width="auto" height="250px">
                 </p>
                 <p> Название:
-                    {{ pattern_list['pattern_name'].values[pattern_info[0]] }}</p>
+                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['pattern_name'].values[0] }}</p>
                 <p> Категория:
-                    {{ pattern_list['category_name'].values[pattern_info[0]] }}</p>
+                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['category_name'].values[0] }}</p>
 
                 <p> Детали:
                     {% if pattern_info[1][0] != "error" %}

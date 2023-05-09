@@ -81,8 +81,7 @@ def admin_profile():
         admin_panel_button = "Категории"
 
     elif request.values.get('add_formula'):
-        if get_formula_id(conn, request.values.get('new_formula_name'),
-                          request.values.get('new_formula_value')) == "error" \
+        if get_formula_id_by_value(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value')) != "error" \
                 and request.values.get('new_formula_name') != '' and request.values.get('new_formula_value') != '':
             add_formula(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value'))
         admin_panel_button = "Формулы"
@@ -165,27 +164,46 @@ def admin_profile():
         name = request.values.get('new_pattern_name')
         picture = request.values.get('new_pattern_picture')
         category = request.values.get('new_pattern_category')
-        add_pattern(conn, name, picture, category, 5)
+        difficulty = 0
+        for detail in request.values.getlist('new_pattern_detail'):
+            difficulty = difficulty + get_measure_number(conn, detail)
+
+        add_pattern(conn, name,
+                    picture, category, int(difficulty_calculation(get_category_by_id(conn, category),
+                                                              len(request.values.getlist('new_pattern_detail')),
+                                                              difficulty)))
+
         for detail in request.values.getlist('new_pattern_detail'):
             add_pattern_detail(conn, int(get_pattern_id(conn, name)), detail)
         admin_panel_button = "Выкройки"
 
     elif request.values.get('one_pattern_info'):
-        pattern_info = [int(request.values.get('one_pattern_info')) - 1]
-        pattern_info.append(get_detail_by_id(conn, pattern_info[0] + 1).split(","))
+        pattern_info = [int(request.values.get('one_pattern_info'))]
+        pattern_info.append(get_detail_by_id(conn, pattern_info[0]).split(","))
         admin_panel_button = "Список Выкроек"
 
     elif request.values.get('one_pattern_edit'):
-        pattern_info = [int(request.values.get('one_pattern_edit')) - 1]
-        pattern_info.append(get_detail_by_id(conn, pattern_info[0] + 1).split(","))
+        pattern_info = [int(request.values.get('one_pattern_edit'))]
+        pattern_info.append(get_detail_by_id(conn, pattern_info[0]).split(","))
         admin_panel_button = "Редактирование Выкроек"
+
+    elif request.values.get('one_pattern_delete'):
+        delete_pattern(conn, int(request.values.get('one_pattern_delete')))
+        delete_pattern_detail(conn, int(request.values.get('one_pattern_delete')))
+        admin_panel_button = "Список Выкроек"
 
     elif request.values.get('edit_pattern'):
         name = request.values.get('edit_pattern_name')
         picture = request.values.get('edit_pattern_picture')
         category = request.values.get('new_pattern_category')
-        id = int(request.values.get('edit_pattern_id')) + 1
-        update_pattern(conn, id, name, picture, category)
+        id = int(request.values.get('edit_pattern_id'))
+        difficulty = 0
+        for detail in request.values.getlist('new_pattern_detail'):
+            difficulty = difficulty + get_measure_number(conn, detail)
+
+        update_pattern(conn, id, name, picture, category, int(difficulty_calculation(get_category_by_id(conn, category),
+                                                              len(request.values.getlist('new_pattern_detail')),
+                                                              difficulty)))
         delete_pattern_detail(conn, id)
         for detail in request.values.getlist('new_pattern_detail'):
             add_pattern_detail(conn, id, detail)
@@ -203,6 +221,7 @@ def admin_profile():
     df_measure = get_measure(conn)
     df_line = get_line(conn)
     df_patterns = get_pattern(conn)
+    print(df_patterns)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],

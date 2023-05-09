@@ -49,7 +49,7 @@ def get_category_id(conn, category_name):
         return "error"
 
 
-def get_formula_id(conn, formula_name, formula_value):
+def get_formula_id_by_value(conn, formula_name, formula_value):
     try:
         return pd.read_sql('''SELECT formula_id
         FROM formula
@@ -116,6 +116,15 @@ def get_pattern(conn):
     ''', conn)
 
 
+def get_measure_number(conn, detail_id):
+    return pd.read_sql('''
+    SELECT COUNT(measure_id)
+    FROM detail_measure
+    WHERE detail_id = :detail_id
+    GROUP BY detail_id
+    ''', conn, params={"detail_id": detail_id}).values[0][0]
+
+
 def get_detail_by_id(conn, pattern_id):
     try:
         return pd.read_sql('''SELECT GROUP_CONCAT(detail_name) as detail_name
@@ -126,6 +135,17 @@ def get_detail_by_id(conn, pattern_id):
           ''', conn, params={"pattern_id": pattern_id}).values[0][0]
     except IndexError:
         return "error"
+
+
+def get_category_by_id(conn, category_id):
+    try:
+        return pd.read_sql('''SELECT category_name
+          FROM category
+          WHERE category_id = :category_id
+          ''', conn, params={"category_id": category_id}).values[0][0]
+    except IndexError:
+        return "error"
+
 
 def add_formula(conn, formula_name, formula_value):
     cur = conn.cursor()
@@ -252,6 +272,16 @@ def delete_pattern_detail(conn, pattern_id):
     return cur.lastrowid
 
 
+def delete_pattern(conn, pattern_id):
+    cur = conn.cursor()
+    cur.execute(f'''
+    DELETE FROM pattern
+    WHERE pattern_id=:pattern_id;
+     ''', {"pattern_id": pattern_id})
+    conn.commit()
+    return cur.lastrowid
+
+
 def update_category(conn, category_id, category_name):
     cur = conn.cursor()
     cur.execute('''
@@ -262,14 +292,15 @@ def update_category(conn, category_id, category_name):
     ''', {"category_id": category_id, "category_name": category_name})
     return conn.commit()
 
-def update_pattern(conn, pattern_id, pattern_name, pattern_picture, category_id):
+def update_pattern(conn, pattern_id, pattern_name, pattern_picture, category_id, complexity):
     cur = conn.cursor()
     cur.execute('''
     UPDATE pattern
     SET 
         pattern_name= :pattern_name,
         picture= :pattern_picture,
-        category_id= :category_id
+        category_id= :category_id,
+        complexity= :complexity
     WHERE pattern_id = :pattern_id
-    ''', {"pattern_id": pattern_id, "pattern_name": pattern_name, "pattern_picture": pattern_picture, "category_id": category_id})
+    ''', {"pattern_id": pattern_id, "pattern_name": pattern_name, "pattern_picture": pattern_picture, "category_id": category_id, "complexity": complexity})
     return conn.commit()
