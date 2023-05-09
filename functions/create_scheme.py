@@ -13,43 +13,19 @@ def setting_plt(value):
 
 # Инициализация параметров пользователя
 def get_measurements(user_param):
-    ОГ = 0
-    ОТ = 0
-    ОБ = 0
-    ОШ = 0
-    ОПл = 0
-    ОЗ = 0
-    ВБ = 0
-    ДИ = 0
-    ДТС = 0
-    ДПл = 0
-    ДР = 0
+    measure = {
+        'ОГ': 0, 'ОТ': 0, 'ОБ': 0, 'ОШ': 0, 'ОПл': 0, 'ОЗ': 0,
+        'ВБ': 0, 'ДИ': 0, 'ДТС': 0, 'ДПл': 0, 'ДР': 0
+    }
 
-    if user_param['Обозначение'].eq('ОГ').any():
-        ОГ = eval(user_param[user_param["Обозначение"] == 'ОГ']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ОТ').any():
-        ОТ = eval(user_param[user_param["Обозначение"] == 'ОТ']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ОБ').any():
-        ОБ = eval(user_param[user_param["Обозначение"] == 'ОБ']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ОШ').any():
-        ОШ = eval(user_param[user_param["Обозначение"] == 'ОШ']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ОПл').any():
-        ОПл = eval(user_param[user_param["Обозначение"] == 'ОПл']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ОЗ').any():
-        ОЗ = eval(user_param[user_param["Обозначение"] == 'ОЗ']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ВБ').any():
-        ВБ = eval(user_param[user_param["Обозначение"] == 'ВБ']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ДИ').any():
-        ДИ = eval(user_param[user_param["Обозначение"] == 'ДИ']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ДТС').any():
-        ДТС = eval(user_param[user_param["Обозначение"] == 'ДТС']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ДПл').any():
-        ДПл = eval(user_param[user_param["Обозначение"] == 'ДПл']["Значение"].values[0])
-    if user_param['Обозначение'].eq('ДР').any():
-        ДР = eval(user_param[user_param["Обозначение"] == 'ДР']["Значение"].values[0])
+    for item in measure.keys():
+        if user_param['Обозначение'].eq(item).any():
+            measure[item] = eval(user_param[user_param["Обозначение"] == item]["Значение"].values[0])
+
+    ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР = measure['ОГ'], measure['ОТ'], measure['ОБ'], measure['ОШ'], \
+        measure['ОПл'], measure['ОЗ'], measure['ВБ'], measure['ДИ'], measure['ДТС'], measure['ДПл'], measure['ДР']
 
     return ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР
-
 
 # Построение прямых линий
 def build_line_straight(x_coord_line, y_coord_line, design_for_line):
@@ -165,12 +141,13 @@ def create_user_scheme(conn, user_param, id_detail):
     for formula in df_formula:
         df_formula[formula] = eval(eval(formula, measurements, df_formula)[0])
 
-    if ДИ != 0:
-        setting_plt(ДИ)
-    elif ДР != 0:
-        setting_plt(ДР)
+    if measurements['ДИ'] != 0:
+        setting_plt(measurements['ДИ'])
+    elif measurements['ДР'] != 0:
+        setting_plt(measurements['ДР'])
     else:
-        setting_plt(ОШ / 2)
+        setting_plt(measurements['ОШ'] / 2)
+
         # plt.figure(figsize=(20 / 2.54, 14 / 2.54))
         # plt.xlim([0, 20])
         # plt.ylim([0, 14])
