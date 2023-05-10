@@ -43,7 +43,7 @@ def admin_profile():
     admin_panel_button = None
     session.modified = True
     name_scheme = ''
-    pattern_info = ['', '']
+    info_about_some = ['', '']
 
     if 'detail' not in session:
         session['detail'] = []
@@ -136,7 +136,7 @@ def admin_profile():
         df_param_detail = pd.DataFrame(data)
         name_scheme = 'static/' + str(get_detail_name(conn, detail_id)) + '.jpg'
         create_user_scheme(conn, df_param_detail, detail_id)
-        delete_new_detail(conn, int(get_detail_id(conn, session["detail"][0])))
+        delete_detail(conn, int(get_detail_id(conn, session["detail"][0])))
 
 
     elif request.values.get('add_new_detail'):
@@ -176,13 +176,13 @@ def admin_profile():
         admin_panel_button = "Выкройки"
 
     elif request.values.get('one_pattern_info'):
-        pattern_info = [int(request.values.get('one_pattern_info'))]
-        pattern_info.append(get_detail_by_id(conn, pattern_info[0]).split(","))
+        info_about_some = [int(request.values.get('one_pattern_info'))]
+        info_about_some.append(get_detail_by_id(conn, info_about_some[0]).split(","))
         admin_panel_button = "Список Выкроек"
 
     elif request.values.get('one_pattern_edit'):
-        pattern_info = [int(request.values.get('one_pattern_edit'))]
-        pattern_info.append(get_detail_by_id(conn, pattern_info[0]).split(","))
+        info_about_some = [int(request.values.get('one_pattern_edit'))]
+        info_about_some.append(get_detail_by_id(conn, info_about_some[0]).split(","))
         admin_panel_button = "Редактирование Выкроек"
 
     elif request.values.get('one_pattern_delete'):
@@ -213,13 +213,26 @@ def admin_profile():
     elif request.values.get('edit_pattern_cancel'):
         admin_panel_button = "Список Выкроек"
 
+    elif request.values.get('one_detail_info'):
+        info_about_some = [int(request.values.get('one_detail_info'))]
+        info_about_some.append(get_detail_measure(conn,info_about_some[0]))
+        info_about_some.append(get_detail_formula(conn, info_about_some[0]))
+        info_about_some.append(get_detail_lines(conn, info_about_some[0]))
+        admin_panel_button = "Список Деталей"
+
+    elif request.values.get('one_detail_delete'):
+        delete_detail(conn, int(request.values.get('one_detail_delete')))
+        admin_panel_button = "Список Деталей"
+
+    elif request.values.get('one_detail_edit'):
+        admin_panel_button = "Детали"
+
     df_detail = get_detail(conn)
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
     df_line = get_line(conn)
     df_patterns = get_pattern(conn)
-    print(df_patterns)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
@@ -234,7 +247,7 @@ def admin_profile():
         new_detail_list=session['detail'],
         new_detail_line_list=session['detail_lines'],
         name_scheme=name_scheme,
-        pattern_info=pattern_info,
+        info_about_some=info_about_some,
         len=len
     )
 

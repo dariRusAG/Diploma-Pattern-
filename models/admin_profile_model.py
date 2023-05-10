@@ -125,6 +125,39 @@ def get_measure_number(conn, detail_id):
     ''', conn, params={"detail_id": detail_id}).values[0][0]
 
 
+def get_detail_measure(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT measure_id,  measure_name, measure_full_name
+          FROM detail_measure
+          INNER JOIN measure USING (measure_id)
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id})
+    except IndexError:
+        return "error"
+
+
+def get_detail_formula(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT formula_name, formula_value
+          FROM detail_formula
+          INNER JOIN formula USING (formula_id)
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id})
+    except IndexError:
+        return "error"
+
+
+def get_detail_lines(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, x_deviation, y_deviation, line_design
+          FROM line
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id})
+    except IndexError:
+        return "error"
+
+
+
 def get_detail_by_id(conn, pattern_id):
     try:
         return pd.read_sql('''SELECT GROUP_CONCAT(detail_name) as detail_name
@@ -237,7 +270,7 @@ def delete_category(conn, category_id):
     conn.commit()
     return cur.lastrowid
 
-def delete_new_detail(conn, detail_id):
+def delete_detail(conn, detail_id):
     cur = conn.cursor()
     cur.execute(f'''
     DELETE FROM detail
