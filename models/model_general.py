@@ -37,9 +37,9 @@ def new_user_params(conn, users_id):
     cur = conn.cursor()
     for param_id in range(1, 15):
         cur.execute('''
-        INSERT INTO user_param(users_id, param_id, param_value) 
-        VALUES (:users_id,:param_id,'')
-         ''', {"users_id": users_id, "param_id": param_id})
+        INSERT INTO user_param(users_id, param_id, user_param_value) 
+        VALUES (:users_id, :param_id, '')
+        ''', {"users_id": users_id, "param_id": param_id})
         conn.commit()
     return cur.lastrowid
 

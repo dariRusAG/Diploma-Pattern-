@@ -28,7 +28,27 @@
             <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
         </label>
 
-        {{ macros.render_measure_pattern(measure, param, len, zip) }}
+        {{ macros.render_measure_pattern(measure, param, standard_size, len, zip) }}
+
+        <div class="title title-2">
+            <p>Автозаполнение типовыми параметрами</p>
+        </div>
+
+        <label>
+            <input type="radio" name="gender_size" value="param_value_w"
+                   {% if gender_size == 'param_value_w' %} checked {% endif %}>Женский размер
+            <input type="radio" name="gender_size" value="param_value_m"
+                   {% if gender_size == 'param_value_m' %} checked {% endif %}>Мужской размер
+        </label>
+
+        <div class="container_button">
+            <input type="submit" name="fill_standard_param" value="XS" class="button button_build">
+            <input type="submit" name="fill_standard_param" value="S" class="button button_build">
+            <input type="submit" name="fill_standard_param" value="M" class="button button_build">
+            <input type="submit" name="fill_standard_param" value="L" class="button button_build">
+            <input type="submit" name="fill_standard_param" value="XL" class="button button_build">
+            <input type="submit" name="fill_standard_param" value="XXL" class="button button_build">
+        </div>
     </form>
 </div>
 

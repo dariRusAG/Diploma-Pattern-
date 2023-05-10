@@ -17,17 +17,18 @@ def setting_plt(value):
 def get_measurements(user_param):
     measure = {
         'ОГ': 0, 'ОТ': 0, 'ОБ': 0, 'ОШ': 0, 'ОПл': 0, 'ОЗ': 0,
-        'ВБ': 0, 'ДИ': 0, 'ДТС': 0, 'ДПл': 0, 'ДР': 0
+        'ВБ': 0, 'ДИ': 0, 'ДТС': 0, 'ДПл': 0, 'ДР': 0, 'ДЛ': 0
     }
 
     for item in measure.keys():
         if user_param['Обозначение'].eq(item).any():
             measure[item] = eval(user_param[user_param["Обозначение"] == item]["Значение"].values[0])
 
-    ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР = measure['ОГ'], measure['ОТ'], measure['ОБ'], measure['ОШ'], \
-        measure['ОПл'], measure['ОЗ'], measure['ВБ'], measure['ДИ'], measure['ДТС'], measure['ДПл'], measure['ДР']
+    ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР, ДЛ = measure['ОГ'], measure['ОТ'], measure['ОБ'], \
+        measure['ОШ'], measure['ОПл'], measure['ОЗ'], measure['ВБ'], measure['ДИ'], measure['ДТС'], \
+        measure['ДПл'], measure['ДР'], measure['ДЛ']
 
-    return ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР
+    return ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР, ДЛ
 
 # Построение прямых линий
 def build_line_straight(x_coord_line, y_coord_line, design_for_line):
@@ -132,11 +133,11 @@ def create_user_scheme(conn, user_param, id_detail):
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
 
     # получение мерок выкроек
-    ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР = get_measurements(user_param)
+    ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДР, ДЛ = get_measurements(user_param)
 
     measurements = {
         'ОГ': ОГ, 'ОТ': ОТ, 'ОБ': ОБ, 'ОШ': ОШ, 'ОПл': ОПл, 'ОЗ': ОЗ,
-        'ВБ': ВБ, 'ДИ': ДИ, 'ДТС': ДТС, 'ДПл': ДПл, 'ДР': ДР
+        'ВБ': ВБ, 'ДИ': ДИ, 'ДТС': ДТС, 'ДПл': ДПл, 'ДР': ДР, 'ДЛ': ДЛ
     }
 
     # расчёт всех формул в зависимости от значений мерок
@@ -147,6 +148,8 @@ def create_user_scheme(conn, user_param, id_detail):
         setting_plt(measurements['ДИ'])
     elif measurements['ДР'] != 0:
         setting_plt(measurements['ДР'])
+    elif measurements['ДЛ'] != 0:
+        setting_plt(measurements['ДЛ'])
     else:
         setting_plt(measurements['ОШ'] / 2)
 

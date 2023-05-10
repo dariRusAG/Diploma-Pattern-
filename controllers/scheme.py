@@ -22,6 +22,33 @@ def scheme():
     checked_value = False
     name_scheme = []
 
+    gender_size = 'param_value_w'
+    standard_size = 'base'
+
+    # Если нажата одна из кнопок для заполнения стандартными мерками
+    if request.values.get('fill_standard_param'):
+        gender_size = request.values.get('gender_size')
+        if gender_size == 'param_value_w':
+            df_param = get_param_standard_w(conn)
+        elif gender_size == 'param_value_m':
+            df_param = get_param_standard_m(conn)
+
+        standard_size = request.values.get('fill_standard_param')
+        for index, row in df_param.iterrows():
+            all_size_param = row['Значение'].split(",")
+            if standard_size == 'XS':
+                row['Значение'] = float(all_size_param[0])
+            if standard_size == 'S':
+                row['Значение'] = float(all_size_param[1])
+            if standard_size == 'M':
+                row['Значение'] = float(all_size_param[2])
+            if standard_size == 'L':
+                row['Значение'] = float(all_size_param[3])
+            if standard_size == 'XL':
+                row['Значение'] = float(all_size_param[4])
+            if standard_size == 'XXL':
+                row['Значение'] = float(all_size_param[5])
+
     # Если нажата кнопка "Построить"
     if request.values.get('build_scheme'):
         id_detail = request.form.getlist('detail')
@@ -44,6 +71,8 @@ def scheme():
                 create_user_scheme(conn, df_param_detail, id_detail)
                 name_scheme.append('static/' + str(get_detail_name(conn, id_detail)) + '.jpg')
 
+        standard_size = request.values.get('fill_standard_param')
+
     return render_template(
         'scheme.html',
 
@@ -63,6 +92,10 @@ def scheme():
         param_value=param_value,
         empty=empty,
         name_scheme=name_scheme,
+
+        # Размеры
+        gender_size=gender_size,
+        standard_size=standard_size,
 
         # Счетчики
         checked_value=checked_value,

@@ -45,12 +45,29 @@ def get_param_user(conn, user_id):
     return pd.read_sql(f'''
     SELECT 
         param_name AS Обозначение, 
-        user_param.[param_value] AS Значение
+        user_param.[user_param_value] AS Значение
     FROM param
     JOIN user_param USING (param_id)
     WHERE users_id = {user_id}
     ''', conn)
 
+# Вывод стандартных параметров женской фигуры
+def get_param_standard_w(conn):
+    return pd.read_sql('''
+        SELECT 
+            param_name AS Обозначение, 
+            param_value_w AS Значение
+        FROM param
+        ''', conn)
+
+# Вывод стандартных параметров мужской фигуры
+def get_param_standard_m(conn):
+    return pd.read_sql('''
+        SELECT 
+            param_name AS Обозначение, 
+            param_value_m AS Значение
+        FROM param
+        ''', conn)
 
 # Вывод формул детали
 def get_formula_detail(conn, detail):

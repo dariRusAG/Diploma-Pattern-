@@ -14,7 +14,7 @@ def get_data_user(conn, user_id):
 
 def get_param_user(conn, user_id):
     return pandas.read_sql(f'''
-    SELECT param_name, param_full_name, user_param.[param_value]
+    SELECT param_name, param_full_name, user_param.[user_param_value]
     FROM param 
     INNER JOIN user_param ON param.param_id = user_param.param_id
     WHERE users_id = {user_id}
@@ -40,7 +40,7 @@ def update_param_user(conn, user_id, elem, new_param_user):
 
     cur.execute('''
     UPDATE user_param
-    SET param_value = :param
+    SET user_param_value = :param
     WHERE (users_id = :user_id) AND (param_id = :i)
     ''', {"user_id": user_id, "param": new_param_user[elem], "i": elem + 1})
 
