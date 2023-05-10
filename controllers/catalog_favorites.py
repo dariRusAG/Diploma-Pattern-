@@ -5,7 +5,6 @@ from utils import get_db_connection
 from functions.overall import *
 from models.catalog_favorites_model import *
 
-
 @app.route('/', methods=['GET', 'POST'])
 def catalog_favorites():
     conn = get_db_connection()

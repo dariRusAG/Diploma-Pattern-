@@ -9,29 +9,27 @@ import os
 
 # Подсчет сложности выкройки
 def difficulty_calculation(category, number_details, number_measurements):
-    complexity = number_details * number_measurements
+    complexity = number_details * number_measurements * 0.5
 
-    match category:
-        case 'Юбки':
-            complexity *= 1
-        case 'Футболки', 'Брюки':
-            complexity *= 2
-        case 'Рубашки':
-            complexity *= 3
-        case 'Платья':
-            complexity *= 4
+    if category == 'Юбки':
+        complexity *= 1
+    elif category == 'Футболки' or category == 'Брюки':
+        complexity *= 2
+    elif category == 'Рубашки':
+        complexity *= 3
+    elif category == 'Платья':
+        complexity *= 4
 
-    match complexity:
-        case [2, 40]:
-            complexity = 1
-        case [41, 78]:
-            complexity = 2
-        case [79, 116]:
-            complexity = 3
-        case [117, 154]:
-            complexity = 4
-        case [155, 192]:
-            complexity = 5
+    if complexity in range(1, 20):
+        complexity = 1
+    elif complexity in range(21, 40):
+        complexity = 2
+    elif complexity in range(41, 60):
+        complexity = 3
+    elif complexity in range(61, 80):
+        complexity = 4
+    elif complexity in range(81, 100):
+        complexity = 5
 
     return complexity
 
