@@ -60,7 +60,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода формул на панели администратора-->
-{% macro admin_panel_formuls(formula_list, measure_list, len) %}
+{% macro admin_panel_formuls(formula_list, measure_list, checked_value, len) %}
     Добавление новой формулы:
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
@@ -70,20 +70,73 @@
             <input type="submit" name="add_formula" value="+" style="cursor: pointer;">
         </div>
     </form>
-    <p2> Список формул:</p2>
-    <div class="admin_panel_right_data_list_small">
+    <div class="admin_panel_right_data_two_buttons">
+        <p2>Список формул</p2>
+        <p2>Список мерок</p2>
+    </div>
+    <div class="admin_panel_right_data_list_two_table" style="height:84%;">
+    <div class="admin_panel_right_data_list_two_table_left" style="width: 72%">
         {% for i in range(len(formula_list)) %}
             <div class="admin_panel_right_data_text">
-                {{ formula_list['formula_name'].values[i] }} &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
+                {% if checked_value[1] == '' or checked_value[1] != i %}
+                    <form action="{{ url_for('admin_profile') }}" method="get">
+                        {{ formula_list['formula_name'].values[i] }} &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
+                        <input type="submit" name="is_edit_formula" value="Изменить"
+                               style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="is_edit_formula_id" value={{ i }}>
+                    </form>
+                    <form action="{{ url_for('admin_profile') }}" method="get">
+                        <input type="submit" value="Удалить"
+                               style="margin-left:10px; cursor: pointer;">
+                        <input type="hidden" name="delete_formula" value={{ formula_list['formula_id'].values[i] }}>
+                    </form>
+                {% else %}
+                    {% if checked_value[1] == i %}
+                        <form action="{{ url_for('admin_profile') }}" method="get">
+                           <div class="admin_panel_right_data_text">
+                               <input type="text" name="edit_formula_name"
+                                   value='{{ formula_list['formula_name'].values[i] }}' style="width:40%">
+                             <input type="text" name="edit_formula_value"
+                                   value='{{ formula_list['formula_value'].values[i] }}' style="width:40%">
+                            <input type="submit" value="Сохранить изменения"
+                                   style="margin-left:10px; cursor: pointer;">
+                            <input type="hidden" name="edit_formula" value={{ formula_list['formula_id'].values[i] }}>
+                           </div>
+                        </form>
+                    {% endif %}
+                {% endif %}
+
             </div>
         {% endfor %}
     </div>
-    <p2> Список мерок и их обозначений:</p2>
-    <div class="admin_panel_right_data_list_small">
+
+
+    <div class="admin_panel_right_data_list_two_table_right" style="width: 28%">
         {% for i in range(len(measure_list)) %}
             <div class="admin_panel_right_data_text">
                 {{ measure_list['measure_name'].values[i] }}
                 &emsp;:&emsp; {{ measure_list['measure_full_name'].values[i] }}
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+{% endmacro %}
+
+<!--Макрос для вывода 3D-моделей панели администратора-->
+{% macro admin_panel_3D() %}
+    Добавление новой 3D-модели:
+    <form action="{{ url_for('admin_profile') }}" method="get">
+        <div class="admin_panel_right_data_text">
+            <input type="text" name="" placeholder="Введите название 3D-модели" style="width:50%">
+            <input type="text" name="" placeholder="Выберите файл" style="width:50%; margin-left:1%;">
+            <input type="submit" name="" value="+" style="cursor: pointer;">
+        </div>
+    </form>
+    <p2> Список 3D-моделей:</p2>
+    <div class="admin_panel_right_data_list">
+        {% for i in range(20) %}
+            <div class="admin_panel_right_data_text">
+                info
             </div>
         {% endfor %}
     </div>
@@ -92,7 +145,11 @@
 <!--Макрос для вывода деталей на панели администратора-->
 {% macro admin_panel_details(formula_list, measure_list, new_detail_list, len) %}
     <form action="{{ url_for('admin_profile') }}" method="get">
-        Добавление новой детали:
+        {% if len(new_detail_list) == 0 or new_detail_list[3] == '' %}
+            Добавление новой детали:
+        {% else %}
+            Редактирование детали:
+        {% endif %}
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_detail_name" placeholder="Введите название детали"
                    value="{{ new_detail_list[0] }}" style="width:100%">
@@ -138,26 +195,6 @@
             <input type="submit" name="panel" value="Добавить линии" class="admin_panel_button_small">
         </div>
     </form>
-{% endmacro %}
-
-<!--Макрос для вывода 3D-моделей панели администратора-->
-{% macro admin_panel_3D() %}
-    Добавление новой 3D-модели:
-    <form action="{{ url_for('admin_profile') }}" method="get">
-        <div class="admin_panel_right_data_text">
-            <input type="text" name="" placeholder="Введите название 3D-модели" style="width:50%">
-            <input type="text" name="" placeholder="Выберите файл" style="width:50%; margin-left:1%;">
-            <input type="submit" name="" value="+" style="cursor: pointer;">
-        </div>
-    </form>
-    <p2> Список 3D-моделей:</p2>
-    <div class="admin_panel_right_data_list">
-        {% for i in range(20) %}
-            <div class="admin_panel_right_data_text">
-                info
-            </div>
-        {% endfor %}
-    </div>
 {% endmacro %}
 
 <!--Макрос для добавления линий деталей на панели администратора-->
@@ -287,7 +324,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода схемы детали на панели администратора-->
-{% macro admin_panel_scheme(name_scheme, len) %}
+{% macro admin_panel_scheme(name_scheme, new_detail_list, len) %}
     Схема
     <div class="admin_panel_right_data_list">
         <p class="fig">
@@ -297,7 +334,11 @@
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_two_buttons">
             <input type="submit" name="panel" value="Список новых линий" class="admin_panel_button_small">
-            <input type="submit" name="add_new_detail" value="Добавить деталь" class="admin_panel_button_small">
+            {% if len(new_detail_list) == 0 or new_detail_list[3] == '' %}
+                <input type="submit" name="add_new_detail" value="Добавить деталь" class="admin_panel_button_small">
+            {% else %}
+                <input type="submit" name="add_new_detail" value="Изменить деталь" class="admin_panel_button_small">
+            {% endif %}
         </div>
     </form>
 {% endmacro %}
@@ -438,7 +479,7 @@
 
 
 <!--Макрос для вывода всех деталей на панели администратора-->
-{% macro admin_panel_all_dtail(detail_list, detail_info, len) %}
+{% macro admin_panel_all_detail(detail_list, detail_info, len) %}
     Детали:
     <div class="admin_panel_right_data_list_two_table">
         <div class="admin_panel_right_data_list_two_table_left">
@@ -468,7 +509,7 @@
         <div class="admin_panel_right_data_list_two_table_right">
             {% if detail_info != ['',''] %}
                 <p> Название:
-                    {{ detail_list.loc[detail_list['detail_id'] == detail_info[0]]['detail_name'].values[0] }}
+                    {{ detail_info[0] }}
                 </p>
 
                 <p> Мерки:
