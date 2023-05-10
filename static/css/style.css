@@ -272,7 +272,7 @@ html {
 .admin_panel_right_data {
     display: flex;
     flex-direction: column;
-    width:90%;
+    width:96%;
     height:auto;
     margin-left:2%;
     margin-top:2%;

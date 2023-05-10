@@ -43,12 +43,14 @@ def admin_profile():
     admin_panel_button = None
     session.modified = True
     name_scheme = ''
-    pattern_info = ['', '']
+    info_about_some = ['', '']
 
     if 'detail' not in session:
         session['detail'] = []
     if 'detail_lines' not in session:
         session['detail_lines'] = []
+    if 'edit_detail_info' not in session:
+        session['edit_detail_info'] = ['']
 
     if request.values.get('panel'):
         admin_panel_button = request.values.get('panel').title()
@@ -84,15 +86,50 @@ def admin_profile():
             add_formula(conn, request.values.get('new_formula_name'), request.values.get('new_formula_value'))
         admin_panel_button = "Формулы"
 
-    elif admin_panel_button == "Добавить Линии":
+    elif request.values.get('delete_formula'):
+        formula_id = int(request.values.get('delete_formula'))
+        admin_panel_button = "Формулы"
+        delete_formula(conn, formula_id)
+
+    elif request.values.get('is_edit_formula'):
+        checked_value[0] = True
+        checked_value[1] = int(request.values.get('is_edit_formula_id'))
+        admin_panel_button = "Формулы"
+
+    elif request.values.get('edit_formula'):
+        formula_id = int(request.values.get('edit_formula'))
+        formula_name = request.values.get('edit_formula_name')
+        formula_value = request.values.get('edit_formula_value')
+        update_formula(conn, formula_id, formula_name, formula_value)
+        checked_value = False
+        admin_panel_button = "Формулы"
+
+    elif admin_panel_button == "Добавить Линии" or request.values.get('one_detail_edit'):
         session['detail'] = []
-        session['detail'].append(request.values.get('new_detail_name'))
-        session['detail'].append(request.values.getlist('new_detail_measure'))
         detail_dict = []
-        for i in request.values.getlist('new_detail_formula'):
+        if request.values.get('one_detail_edit'):
+            session['edit_detail_info'][0] = request.values.get('one_detail_edit')
+            session['detail'].append(get_detail_name(conn, session['edit_detail_info'][0]))
+            session['detail'].append(list(get_detail_measure(conn, session['edit_detail_info'][0]).loc[:, 'measure_name']))
+            formula_list = get_detail_formula(conn, session['edit_detail_info'][0])['formula_name'].tolist()
+            admin_panel_button = "Детали"
+            for i in range(len(get_detail_lines(conn, session['edit_detail_info'][0]))):
+                row = get_detail_lines(conn, session['edit_detail_info'][0]).iloc[i]
+                session['detail_lines'].append([row['x_first_coord'], row['y_first_coord'], row['x_second_coord'],
+                                               row['y_second_coord'], row['x_deviation'], row['y_deviation'], row['line_design']])
+            session['edit_detail_info'].append(session['detail'])
+            session['edit_detail_info'].append(session['detail_lines'])
+        else:
+            session['detail'].append(request.values.get('new_detail_name'))
+            session['detail'].append(request.values.getlist('new_detail_measure'))
+            formula_list = request.values.getlist('new_detail_formula')
+
+        for i in formula_list:
             detail_dict.append(get_formula(conn).loc[get_formula(conn)['formula_name'] == i].values[0][1])
-        session['detail'].append(dict(zip(request.values.getlist('new_detail_formula'), detail_dict)))
+        session['detail'].append(dict(zip(formula_list, detail_dict)))
         session['detail'][2] = dict(sorted(session['detail'][2].items()))
+        session['detail'].append(session['edit_detail_info'][0])
+
 
     elif request.values.get('add_detail_line') or request.values.get('edit_detail_line'):
         if request.values.get('edit_detail_line'):
@@ -119,7 +156,12 @@ def admin_profile():
 
 
     elif admin_panel_button == "Просмотреть Схему":
-        add_detail(conn, session['detail'][0])
+        if session['edit_detail_info'] != ['']:
+            update_detail_name(conn, session['edit_detail_info'][0], session['detail'][0])
+            delete_detail(conn, session['edit_detail_info'][0], 'Обновление')
+        else:
+            add_detail(conn, session['detail'][0])
+
         detail_id = int(get_detail_id(conn, session["detail"][0]))
         for formula in session['detail'][2]:
             add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
@@ -136,27 +178,49 @@ def admin_profile():
         df_param_detail = pd.DataFrame(data)
         name_scheme = 'static/' + str(get_detail_name(conn, detail_id)) + '.jpg'
         create_user_scheme(conn, df_param_detail, detail_id)
-        delete_new_detail(conn, int(get_detail_id(conn, session["detail"][0])))
+        if session['edit_detail_info'] == ['']:
+            delete_detail(conn, int(get_detail_id(conn, session["detail"][0])), 'Удаление')
 
 
     elif request.values.get('add_new_detail'):
-        add_detail(conn, session['detail'][0])
-        detail_id = int(get_detail_id(conn, session["detail"][0]))
-        for formula in session['detail'][2]:
-            add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
-        for measure in session['detail'][1]:
-            add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
-        for line in session['detail_lines']:
-            add_detail_line(conn, detail_id, line)
+        if session['edit_detail_info'] == ['']:
+            add_detail(conn, session['detail'][0])
+            detail_id = int(get_detail_id(conn, session["detail"][0]))
+            for formula in session['detail'][2]:
+                add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
+            for measure in session['detail'][1]:
+                add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
+            for line in session['detail_lines']:
+                add_detail_line(conn, detail_id, line)
+            os.remove('static/' + str(get_detail_name(conn, detail_id)) + '.jpg')
         session['detail'] = []
         session['detail_lines'] = []
-        os.remove('static/' + str(get_detail_name(conn, detail_id)) + '.jpg')
-        admin_panel_button = "Детали"
+        if session['edit_detail_info'] != ['']:
+            admin_panel_button = "Список Деталей"
+            os.remove('static/' + str(get_detail_name(conn, session['edit_detail_info'][0])) + '.jpg')
+            session['edit_detail_info'] = ['']
+        else:
+            admin_panel_button = "Детали"
 
     elif request.values.get('add_detail_cancel'):
+        if session['edit_detail_info'] != ['']:
+            detail_id = session['edit_detail_info'][0]
+            update_detail_name(conn, detail_id, session['edit_detail_info'][1][0])
+            delete_detail(conn, session['edit_detail_info'][0], 'Обновление')
+            for formula in session['edit_detail_info'][1][2]:
+                add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
+            for measure in session['edit_detail_info'][1][1]:
+                add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
+            for line in session['edit_detail_info'][2]:
+                add_detail_line(conn, detail_id, line)
+
+            admin_panel_button = "Список Деталей"
+        else:
+            admin_panel_button = "Детали"
+
+        session['edit_detail_info'] = ['']
         session['detail'] = []
         session['detail_lines'] = []
-        admin_panel_button = "Детали"
 
     elif request.values.get('add_new_pattern'):
         name = request.values.get('new_pattern_name')
@@ -176,13 +240,13 @@ def admin_profile():
         admin_panel_button = "Выкройки"
 
     elif request.values.get('one_pattern_info'):
-        pattern_info = [int(request.values.get('one_pattern_info'))]
-        pattern_info.append(get_detail_by_id(conn, pattern_info[0]).split(","))
+        info_about_some = [int(request.values.get('one_pattern_info'))]
+        info_about_some.append(get_detail_by_id(conn, info_about_some[0]).split(","))
         admin_panel_button = "Список Выкроек"
 
     elif request.values.get('one_pattern_edit'):
-        pattern_info = [int(request.values.get('one_pattern_edit'))]
-        pattern_info.append(get_detail_by_id(conn, pattern_info[0]).split(","))
+        info_about_some = [int(request.values.get('one_pattern_edit'))]
+        info_about_some.append(get_detail_by_id(conn, info_about_some[0]).split(","))
         admin_panel_button = "Редактирование Выкроек"
 
     elif request.values.get('one_pattern_delete'):
@@ -213,13 +277,24 @@ def admin_profile():
     elif request.values.get('edit_pattern_cancel'):
         admin_panel_button = "Список Выкроек"
 
+    elif request.values.get('one_detail_info'):
+        id = int(request.values.get('one_detail_info'))
+        info_about_some = [get_detail_name(conn, id)]
+        info_about_some.append(get_detail_measure(conn, id))
+        info_about_some.append(get_detail_formula(conn, id))
+        info_about_some.append(get_detail_lines(conn, id))
+        admin_panel_button = "Список Деталей"
+
+    elif request.values.get('one_detail_delete'):
+        delete_detail(conn, int(request.values.get('one_detail_delete')), 'Удаление')
+        admin_panel_button = "Список Деталей"
+
     df_detail = get_detail(conn)
     df_category = get_category(conn)
     df_formula = get_formula(conn)
     df_measure = get_measure(conn)
     df_line = get_line(conn)
     df_patterns = get_pattern(conn)
-    print(df_patterns)
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
@@ -234,7 +309,7 @@ def admin_profile():
         new_detail_list=session['detail'],
         new_detail_line_list=session['detail_lines'],
         name_scheme=name_scheme,
-        pattern_info=pattern_info,
+        info_about_some=info_about_some,
         len=len
     )
 

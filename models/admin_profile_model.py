@@ -11,8 +11,9 @@ def get_category(conn):
 
 def get_formula(conn):
     return pd.read_sql('''
-    SELECT formula_name, formula_value
+    SELECT *
     FROM formula
+    ORDER BY formula_name
     ''', conn)
 
 
@@ -36,6 +37,18 @@ def get_detail(conn):
     SELECT *
     FROM detail
     ORDER BY detail_name
+    ''', conn)
+
+
+def get_pattern(conn):
+    return pd.read_sql('''
+    SELECT pattern_id, pattern_name, category_name, picture, complexity, GROUP_CONCAT(detail_name) as detail_name
+    FROM pattern
+    LEFT JOIN category USING (category_id)
+    LEFT JOIN pattern_detail USING (pattern_id)
+    LEFT JOIN detail USING (detail_id)
+    GROUP BY pattern_id
+    ORDER BY pattern_name
     ''', conn)
 
 
@@ -98,24 +111,6 @@ def get_measure_id(conn, measure_name):
         return "error"
 
 
-def get_detail(conn):
-    return pd.read_sql('''
-    SELECT *
-    FROM detail
-    ''', conn)
-
-
-def get_pattern(conn):
-    return pd.read_sql('''
-    SELECT pattern_id, pattern_name, category_name, picture, complexity, GROUP_CONCAT(detail_name) as detail_name
-    FROM pattern
-    LEFT JOIN category USING (category_id)
-    LEFT JOIN pattern_detail USING (pattern_id)
-    LEFT JOIN detail USING (detail_id)
-    GROUP BY pattern_id
-    ''', conn)
-
-
 def get_measure_number(conn, detail_id):
     return pd.read_sql('''
     SELECT COUNT(measure_id)
@@ -123,6 +118,39 @@ def get_measure_number(conn, detail_id):
     WHERE detail_id = :detail_id
     GROUP BY detail_id
     ''', conn, params={"detail_id": detail_id}).values[0][0]
+
+
+def get_detail_measure(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT measure_id,  measure_name, measure_full_name
+          FROM detail_measure
+          INNER JOIN measure USING (measure_id)
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id})
+    except IndexError:
+        return "error"
+
+
+def get_detail_formula(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT formula_name, formula_value
+          FROM detail_formula
+          INNER JOIN formula USING (formula_id)
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id})
+    except IndexError:
+        return "error"
+
+
+def get_detail_lines(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT x_first_coord, y_first_coord, x_second_coord, y_second_coord, x_deviation, y_deviation, line_design
+          FROM line
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id})
+    except IndexError:
+        return "error"
+
 
 
 def get_detail_by_id(conn, pattern_id):
@@ -237,12 +265,24 @@ def delete_category(conn, category_id):
     conn.commit()
     return cur.lastrowid
 
-def delete_new_detail(conn, detail_id):
+
+def delete_formula(conn, formula_id):
     cur = conn.cursor()
     cur.execute(f'''
-    DELETE FROM detail
-    WHERE detail_id=:detail_id;
-     ''', {"detail_id": detail_id})
+    DELETE FROM formula
+    WHERE formula_id=:formula_id;
+     ''', {"formula_id": formula_id})
+    conn.commit()
+    return cur.lastrowid
+
+
+def delete_detail(conn, detail_id, function_name):
+    cur = conn.cursor()
+    if function_name == 'Удаление':
+        cur.execute(f'''
+        DELETE FROM detail
+        WHERE detail_id=:detail_id;
+         ''', {"detail_id": detail_id})
 
     cur.execute(f'''
     DELETE FROM detail_measure
@@ -282,6 +322,7 @@ def delete_pattern(conn, pattern_id):
     return cur.lastrowid
 
 
+
 def update_category(conn, category_id, category_name):
     cur = conn.cursor()
     cur.execute('''
@@ -291,6 +332,19 @@ def update_category(conn, category_id, category_name):
     WHERE category_id = :category_id
     ''', {"category_id": category_id, "category_name": category_name})
     return conn.commit()
+
+
+def update_formula(conn, formula_id, formula_name, formula_value):
+    cur = conn.cursor()
+    cur.execute('''
+    UPDATE formula
+    SET 
+        formula_name= :formula_name,
+        formula_value= :formula_value
+    WHERE formula_id = :formula_id
+    ''', {"formula_id": formula_id, "formula_name": formula_name, "formula_value": formula_value})
+    return conn.commit()
+
 
 def update_pattern(conn, pattern_id, pattern_name, pattern_picture, category_id, complexity):
     cur = conn.cursor()
@@ -303,4 +357,14 @@ def update_pattern(conn, pattern_id, pattern_name, pattern_picture, category_id,
         complexity= :complexity
     WHERE pattern_id = :pattern_id
     ''', {"pattern_id": pattern_id, "pattern_name": pattern_name, "pattern_picture": pattern_picture, "category_id": category_id, "complexity": complexity})
+    return conn.commit()
+
+def update_detail_name(conn, detail_id, detail_name):
+    cur = conn.cursor()
+    cur.execute('''
+    UPDATE detail
+    SET 
+        detail_name= :detail_name
+    WHERE detail_id = :detail_id
+    ''', {"detail_id": detail_id, "detail_name": detail_name})
     return conn.commit()
