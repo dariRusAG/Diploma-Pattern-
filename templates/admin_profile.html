@@ -25,8 +25,7 @@
                     or admin_panel_button == 'Добавить Линию'or admin_panel_button == "Линии" or
                     admin_panel_button == "Список Деталей" %}
                 <input type="submit" name="panel" value="Список деталей" class="admin_panel_button"
-                       style="margin-top:93%">
-                <input type="submit" name="panel" value="Список линий" class="admin_panel_button">
+                       style="margin-top:100%">
             {% endif %}
             {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Список Выкроек" %}
                 <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button"
@@ -62,10 +61,6 @@
         {% elif admin_panel_button == "Просмотреть Список Линий" or admin_panel_button == "Список Новых Линий" %}
             <div class="admin_panel_right_data">
                 {{ macros.admin_panel_all_new_lines(new_detail_line_list, len) }}
-            </div>
-        {% elif admin_panel_button == "Список Линий" %}
-            <div class="admin_panel_right_data">
-                {{ macros.admin_panel_all_lines(line_list, len) }}
             </div>
         {% elif admin_panel_button == "Просмотреть Схему" %}
             <div class="admin_panel_right_data">
