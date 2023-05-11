@@ -32,15 +32,15 @@
                 <td>
                     {% if error_param[i] != 'q' and error_param != [] %}
                         <input type="text" name="param_user" class="error_personal"
-                                {% if param_user.loc[i,"param_value"] == '' %} placeholder=''
+                                {% if param_user.loc[i,"user_param_value"] == '' %} placeholder=''
                                 {% else %}
-                                    placeholder={{ param_user.loc[i,"param_value"]}}
+                                    placeholder={{ param_user.loc[i,"user_param_value"]}}
                                 {% endif %} value={{ error_param[i] }}>
                     {% else %}
                         <input type="text" name="param_user" class="write_personal"
-                                {% if param_user.loc[i,"param_value"] != '' %}
-                               placeholder={{ param_user.loc[i,"param_value"]}} value=
-                                    {{ param_user.loc[i,"param_value"]}}
+                                {% if param_user.loc[i,"user_param_value"] != '' %}
+                               placeholder={{ param_user.loc[i,"user_param_value"]}} value=
+                                    {{ param_user.loc[i,"user_param_value"]}}
                                 {% else %}
                                placeholder='' value=''
                                 {% endif %}>

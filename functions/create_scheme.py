@@ -148,8 +148,8 @@ def create_user_scheme(conn, user_param, id_detail):
         setting_plt(measurements['ДИ'])
     elif measurements['ДР'] != 0:
         setting_plt(measurements['ДР'])
-    elif measurements['ДЛ'] != 0:
-        setting_plt(measurements['ДЛ'])
+    elif measurements['ОПл'] != 0:
+        setting_plt(measurements['ОПл'] + 5)
     else:
         setting_plt(measurements['ОШ'] / 2)
 
@@ -188,7 +188,7 @@ def create_user_scheme(conn, user_param, id_detail):
         else:
             build_line_curve(row, x_coord_line, y_coord_line, df_formula)
 
-    name = 'static/' + str(get_detail_name(conn, id_detail)) + '.jpg'
+    name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
 
     plt.savefig(name, bbox_inches='tight')
     Image.open(name).save(name)
