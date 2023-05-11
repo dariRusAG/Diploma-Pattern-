@@ -125,7 +125,7 @@ def admin_profile():
             formula_list = request.values.getlist('new_detail_formula')
 
         for i in formula_list:
-            detail_dict.append(get_formula(conn).loc[get_formula(conn)['formula_name'] == i].values[0][1])
+            detail_dict.append(get_formula(conn).loc[get_formula(conn)['formula_name'] == i].values[0][2])
         session['detail'].append(dict(zip(formula_list, detail_dict)))
         session['detail'][2] = dict(sorted(session['detail'][2].items()))
         session['detail'].append(session['edit_detail_info'][0])

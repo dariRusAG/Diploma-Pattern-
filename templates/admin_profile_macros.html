@@ -1,23 +1,5 @@
 <!DOCTYPE html>
 
-<!--Общий макрос для вывода линий на панели администратора-->
-{% macro admin_panel_line_list(line_list, len) %}
-    {% for i in range(len(line_list)) %}
-        <div class="admin_panel_right_data_text">
-            <p3>{{ i+1 }}:
-                ({{ line_list.loc[i, "x_first_coord"] }}, {{ line_list.loc[i, "y_first_coord"] }});
-                ({{ line_list.loc[i, "x_second_coord"] }}, {{ line_list.loc[i, "y_second_coord"] }});
-                {{ line_list.loc[i, "line_type"] }};
-                {% if line_list.loc[i, "line_type"] == "Кривая" %}
-                    ({{ line_list.loc[i, "x_deviation"] }},
-                    {{ line_list.loc[i, "y_deviation"] }});
-                {% endif %}
-                {{ line_list.loc[i, "line_design"] }}
-            </p3>
-        </div>
-    {% endfor %}
-{% endmacro %}
-
 <!--Макрос для вывода категорий на панели администратора-->
 {% macro admin_panel_category(category, len, checked_value) %}
     Добавление новой категории:
@@ -313,14 +295,6 @@
             <input type="submit" name="panel" value="Просмотреть схему" class="admin_panel_button_small">
         </div>
     </form>
-{% endmacro %}
-
-<!--Макрос для вывода списка всех линий на панели администратора-->
-{% macro admin_panel_all_lines(line_list, len) %}
-    Все линии для деталей:
-    <div class="admin_panel_right_data_list">
-        {{ admin_panel_line_list(line_list, len) }}
-    </div>
 {% endmacro %}
 
 <!--Макрос для вывода схемы детали на панели администратора-->
