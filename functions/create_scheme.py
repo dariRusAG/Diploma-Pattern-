@@ -1,3 +1,5 @@
+import math
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
@@ -160,6 +162,10 @@ def create_user_scheme(conn, user_param, id_detail):
     # получение всех линий
     df_line = get_line_detail(conn, id_detail)
 
+    # Список всех координат линий
+    x_list = []
+    y_list = []
+
     # Расчёт координат линий
     for index, row in df_line.iterrows():
         # список всех x и y координат прямых линий
@@ -188,24 +194,27 @@ def create_user_scheme(conn, user_param, id_detail):
         else:
             build_line_curve(row, x_coord_line, y_coord_line, df_formula)
 
+        x_list += x_coord_line
+        y_list += y_coord_line
+
     name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
 
     plt.savefig(name, bbox_inches='tight')
     Image.open(name).save(name)
 
-    # сохранение в формате А4
-    pdf = PdfPages(str(get_detail_name(conn, id_detail)) + '.pdf')
-
     # количество листов по иксу
-    pages_x = 2
+    pages_x = math.ceil((max(x_list) - min(x_list)) / 21)
     # количество листов по игреку
-    pages_y = 3
+    pages_y = math.ceil((max(y_list) - min(y_list)) / 29.7)
+
+    # сохранение в формате А4
+    pdf = PdfPages('static/pdf/' + str(get_detail_name(conn, id_detail)) + '.pdf')
 
     for i in range(pages_y):
         y = 1 + 29.7 * i
         for j in range(pages_x):
             x = 1 + 21 * j
-            add_to_pdf(pdf, x, x+21, y, y+29.7)
+            add_to_pdf(pdf, x, x + 21, y, y + 29.7)
 
     pdf.close()
 
