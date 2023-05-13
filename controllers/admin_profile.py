@@ -176,7 +176,7 @@ def admin_profile():
                 'Значение': [str(108), str(89), str(94), str(37), str(34), str(17), str(45),
                              str(80), str(45), str(18), str(65)]}
         df_param_detail = pd.DataFrame(data)
-        name_scheme = 'static/' + str(get_detail_name(conn, detail_id)) + '.jpg'
+        name_scheme = 'static/image/save_details/' + str(get_detail_name(conn, detail_id)) + '.jpg'
         create_user_scheme(conn, df_param_detail, detail_id)
         if session['edit_detail_info'] == ['']:
             delete_detail(conn, int(get_detail_id(conn, session["detail"][0])), 'Удаление')
