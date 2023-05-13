@@ -31,6 +31,7 @@ def get_measure_detail(conn, index):
     SELECT 
         detail_id AS ID,
         detail_name AS Название_детали,
+        detail_size AS Длина_детали,
         measure_name AS Обозначение,
         measure_full_name AS Полное_название
     FROM pattern_detail 
