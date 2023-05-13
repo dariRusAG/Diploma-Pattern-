@@ -192,12 +192,12 @@ def admin_profile():
                 add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
             for line in session['detail_lines']:
                 add_detail_line(conn, detail_id, line)
-            os.remove('static/' + str(get_detail_name(conn, detail_id)) + '.jpg')
+            os.remove('static/image/save_details/' + str(get_detail_name(conn, detail_id)) + '.jpg')
         session['detail'] = []
         session['detail_lines'] = []
         if session['edit_detail_info'] != ['']:
             admin_panel_button = "Список Деталей"
-            os.remove('static/' + str(get_detail_name(conn, session['edit_detail_info'][0])) + '.jpg')
+            os.remove('static/image/save_details/' + str(get_detail_name(conn, session['edit_detail_info'][0])) + '.jpg')
             session['edit_detail_info'] = ['']
         else:
             admin_panel_button = "Детали"

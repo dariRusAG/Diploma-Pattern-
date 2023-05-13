@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS pattern (
 
 CREATE TABLE IF NOT EXISTS detail (
  detail_id INTEGER PRIMARY KEY AUTOINCREMENT,
- detail_name VARCHAR(50)
+ detail_name VARCHAR(50),
+ detail_size VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS pattern_detail (
@@ -132,14 +133,16 @@ VALUES
 (2, 3), (2, 4),
 (1, 3), (1, 5), (1, 6);
 
-INSERT INTO detail (detail_name)
+INSERT INTO detail (detail_name, detail_size)
 VALUES
-('Передняя половина юбки-карандаш'),
-('Задняя половина юбки-карандаш'),
-('Основа верха'),
-('Длинный рукав'),
-('Короткий рукав'),
-('Воротник');
+('Передняя половина юбки-карандаш', 'ДН'),
+('Задняя половина юбки-карандаш', 'ДН'),
+('Основа верха', 'ДВ'),
+('Длинный рукав', 'ДР'),
+('Короткий рукав', ''),
+('Воротник', ''),
+('Карман', ''),
+('Передняя половина платья-футляр', 'ДТ');
 
 INSERT INTO measure (measure_name, measure_full_name)
 VALUES

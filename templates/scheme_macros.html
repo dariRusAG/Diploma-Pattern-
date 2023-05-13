@@ -63,36 +63,11 @@
                 <td>
                     {% if designation not in param["Обозначение"].unique() %}
                         {% if designation in ['ДИ', 'ДР'] and standard_size != 'base' %}
-                            {% if measure['ID'] in [1, 2] %}
-                                <label>
-                                    <input type="text" name="param_value" class="write_personal"
-                                           value="{{ param.loc[(param['Обозначение'] == 'ДН')]['Значение'].values[0] }}"
-                                           placeholder="{{ param.loc[(param['Обозначение'] == 'ДН')]['Значение'].values[0] }}">
-                                </label>
-                            {% elif measure['ID'] == 3 %}
-                                <label>
-                                    <input type="text" name="param_value" class="write_personal"
-                                           value="{{ param.loc[(param['Обозначение'] == 'ДВ')]['Значение'].values[0] }}"
-                                           placeholder="{{ param.loc[(param['Обозначение'] == 'ДВ')]['Значение'].values[0] }}">
-                                </label>
-                            {% elif measure['ID'] == 4 %}
-                                <label>
-                                    <input type="text" name="param_value" class="write_personal"
-                                           value="{{ param.loc[(param['Обозначение'] == 'ДР')]['Значение_'].values[0] }}"
-                                           placeholder="{{ param.loc[(param['Обозначение'] == 'ДР')]['Значение'].values[0] }}">
-                                </label>
-                            {% elif measure['ID'] == 5 %}
-                                <label>
-                                    <input type="text" name="param_value" class="write_personal"
-                                           value="{{ param.loc[(param['Обозначение'] == 'ДЛ')]['Значение'].values[0] }}"
-                                           placeholder="{{ param.loc[(param['Обозначение'] == 'ДЛ')]['Значение'].values[0] }}">
-                                </label>
-                            {% else %}
-                                <label>
-                                    <input type="text" name="param_value" class="write_personal" value=""
-                                           placeholder="необходимо заполнить">
-                                </label>
-                            {% endif %}
+                            <label>
+                                <input type="text" name="param_value" class="write_personal"
+                                       value="{{ param.loc[(param['Обозначение'] == measure['Длина_детали'])]['Значение'].values[0] }}"
+                                       placeholder="{{ param.loc[(param['Обозначение'] == measure['Длина_детали'])]['Значение'].values[0] }}">
+                            </label>
                         {% else %}
                             <label>
                                 <input type="text" name="param_value" class="write_personal" value=""
@@ -101,7 +76,6 @@
                         {% endif %}
 
                     {% else %}
-
 
                     {% for j in range(len(param)) %}
                         {% if param.loc[j, "Обозначение"] == designation %}
