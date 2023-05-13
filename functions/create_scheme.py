@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+from matplotlib.backends.backend_pdf import PdfPages
 from models.model_general import get_detail_name
 from models.scheme_model import *
 from functions.bezie import Bezier
@@ -188,9 +188,29 @@ def create_user_scheme(conn, user_param, id_detail):
         else:
             build_line_curve(row, x_coord_line, y_coord_line, df_formula)
 
-    name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
+    name = 'static/image/' + str(get_detail_name(conn, id_detail)) + '.jpg'
 
     plt.savefig(name, bbox_inches='tight')
     Image.open(name).save(name)
 
-    # im.crop((0, 0, im.size[0] - im.size[0] * 0.50, im.size[1])).save(name)
+    # сохранение в формате А4
+    pdf = PdfPages(str(get_detail_name(conn, id_detail)) + '.pdf')
+
+    # количество листов по иксу
+    pages_x = 2
+    # количество листов по игреку
+    pages_y = 3
+
+    for i in range(pages_y):
+        y = 1 + 29.7 * i
+        for j in range(pages_x):
+            x = 1 + 21 * j
+            add_to_pdf(pdf, x, x+21, y, y+29.7)
+
+    pdf.close()
+
+def add_to_pdf(pdf, ax_x, ax_x2, ax_y, ax_y2):
+    plt.axis('off')
+    plt.xlim([ax_x, ax_x2])
+    plt.ylim([ax_y, ax_y2])
+    pdf.savefig(bbox_inches='tight')
