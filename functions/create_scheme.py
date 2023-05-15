@@ -128,6 +128,8 @@ def build_line_curve(row, x_coord_line, y_coord_line, df_formula):
         color='darkblue'
     )
 
+    return curve1
+
 
 def create_user_scheme(conn, user_param, id_detail):
     # создание словаря формул
@@ -192,7 +194,10 @@ def create_user_scheme(conn, user_param, id_detail):
         if df_line.loc[index, 'x_deviation'] == '':
             build_line_straight(x_coord_line, y_coord_line, design_for_line)
         else:
-            build_line_curve(row, x_coord_line, y_coord_line, df_formula)
+            curve = build_line_curve(row, x_coord_line, y_coord_line, df_formula)
+            for coord in curve:
+                x_list.append(coord[0])
+                y_list.append(coord[1])
 
         x_list += x_coord_line
         y_list += y_coord_line
@@ -214,12 +219,16 @@ def create_user_scheme(conn, user_param, id_detail):
         y = 1 + 29.7 * i
         for j in range(pages_x):
             x = 1 + 21 * j
-            add_to_pdf(pdf, x, x + 21, y, y + 29.7)
+
+            for coord_x, coord_y in zip(x_list, y_list):
+                if (x <= coord_x < x + 21) and (y <= coord_y < y + 29.7):
+                    add_to_pdf(pdf, x, x + 21, y, y + 29.7)
+                    break
 
     pdf.close()
 
-def add_to_pdf(pdf, ax_x, ax_x2, ax_y, ax_y2):
+def add_to_pdf(pdf, x1, x2, y1, y2):
     plt.axis('off')
-    plt.xlim([ax_x, ax_x2])
-    plt.ylim([ax_y, ax_y2])
+    plt.xlim([x1, x2])
+    plt.ylim([y1, y2])
     pdf.savefig(bbox_inches='tight')
