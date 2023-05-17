@@ -114,11 +114,9 @@ def is_correct_edit_formula(conn, name, value):
         return 'True'
 
 
-def is_correct_new_detail(conn, name):
+def is_correct_new_detail(conn, name, size, measure, formula):
     if is_correct_overall(name) != 'True':
         return is_correct_overall(name)
-    elif get_detail_id(conn, name) != "error":
-        return "Ошибка! Деталь с таким именем уже существует"
     else:
         return 'True'
 

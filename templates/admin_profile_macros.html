@@ -142,13 +142,20 @@
 {% endmacro %}
 
 <!--Макрос для вывода деталей на панели администратора-->
-{% macro admin_panel_details(formula_list, measure_list, new_detail_list, len) %}
+{% macro admin_panel_details(formula_list, measure_list, new_detail_list, error_info, len) %}
     <form action="{{ url_for('admin_profile') }}" method="get">
-        {% if len(new_detail_list) == 0 or new_detail_list[4] == '' %}
-            Добавление новой детали:
-        {% else %}
-            Редактирование детали:
-        {% endif %}
+        <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+            {% if len(new_detail_list) == 0 or new_detail_list[4] == '' %}
+                Добавление новой детали:
+            {% else %}
+                Редактирование детали:
+            {% endif %}
+            {% if error_info != '' %}
+                <div class="admin_panel_error">
+                    {{ error_info }}
+                </div>
+            {% endif %}
+        </div>
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_detail_name" placeholder="Введите название детали"
                    value="{{ new_detail_list[0] }}" style="width:50%">
