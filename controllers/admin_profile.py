@@ -124,6 +124,7 @@ def admin_profile():
         if request.values.get('one_detail_edit'):
             session['edit_detail_info'][0] = request.values.get('one_detail_edit')
             session['detail'].append(get_detail_name(conn, session['edit_detail_info'][0]))
+            session['detail'].append(get_detail_size(conn, session['edit_detail_info'][0]))
             session['detail'].append(
                 list(get_detail_measure(conn, session['edit_detail_info'][0]).loc[:, 'measure_name']))
             formula_list = get_detail_formula(conn, session['edit_detail_info'][0])['formula_name'].tolist()
@@ -137,13 +138,14 @@ def admin_profile():
             session['edit_detail_info'].append(session['detail_lines'])
         else:
             session['detail'].append(request.values.get('new_detail_name'))
+            session['detail'].append(request.values.get('new_detail_size'))
             session['detail'].append(request.values.getlist('new_detail_measure'))
             formula_list = request.values.getlist('new_detail_formula')
 
         for i in formula_list:
             detail_dict.append(get_formula(conn).loc[get_formula(conn)['formula_name'] == i].values[0][2])
         session['detail'].append(dict(zip(formula_list, detail_dict)))
-        session['detail'][2] = dict(sorted(session['detail'][2].items()))
+        session['detail'][3] = dict(sorted(session['detail'][3].items()))
         session['detail'].append(session['edit_detail_info'][0])
 
 
@@ -173,15 +175,15 @@ def admin_profile():
 
     elif admin_panel_button == "Просмотреть Схему":
         if session['edit_detail_info'] != ['']:
-            update_detail_name(conn, session['edit_detail_info'][0], session['detail'][0])
+            update_detail(conn, session['edit_detail_info'][0], session['detail'][0], session['detail'][1])
             delete_detail(conn, session['edit_detail_info'][0], 'Обновление')
         else:
-            add_detail(conn, session['detail'][0])
+            add_detail(conn, session['detail'][0], session['detail'][1])
 
         detail_id = int(get_detail_id(conn, session["detail"][0]))
-        for formula in session['detail'][2]:
+        for formula in session['detail'][3]:
             add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
-        for measure in session['detail'][1]:
+        for measure in session['detail'][2]:
             add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
         for line in session['detail_lines']:
             add_detail_line(conn, detail_id, line)
@@ -190,21 +192,24 @@ def admin_profile():
         data = {'Обозначение': ['ОГ', 'ОТ', 'ОБ', 'ОШ', 'ОПл', 'ОЗ',
                                 'ВБ', 'ДИ', 'ДТС', 'ДПл', 'ДР'],
                 'Значение': [str(108), str(89), str(94), str(37), str(34), str(17), str(45),
-                             str(80), str(45), str(18), str(65)]}
+                             str(session['detail'][1]), str(45), str(18), str(65)]}
         df_param_detail = pd.DataFrame(data)
+
         name_scheme = 'static/image/save_details/' + str(get_detail_name(conn, detail_id)) + '.jpg'
-        create_user_scheme(conn, df_param_detail, detail_id)
+        pdf = PdfPages('static/pdf/admin.pdf')
+
+        create_user_scheme(conn, df_param_detail, detail_id, pdf)
         if session['edit_detail_info'] == ['']:
             delete_detail(conn, int(get_detail_id(conn, session["detail"][0])), 'Удаление')
 
 
     elif request.values.get('add_new_detail'):
         if session['edit_detail_info'] == ['']:
-            add_detail(conn, session['detail'][0])
+            add_detail(conn, session['detail'][0], session['detail'][1])
             detail_id = int(get_detail_id(conn, session["detail"][0]))
-            for formula in session['detail'][2]:
+            for formula in session['detail'][3]:
                 add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
-            for measure in session['detail'][1]:
+            for measure in session['detail'][2]:
                 add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
             for line in session['detail_lines']:
                 add_detail_line(conn, detail_id, line)
@@ -222,11 +227,11 @@ def admin_profile():
     elif request.values.get('add_detail_cancel'):
         if session['edit_detail_info'] != ['']:
             detail_id = session['edit_detail_info'][0]
-            update_detail_name(conn, detail_id, session['edit_detail_info'][1][0])
+            update_detail(conn, detail_id, session['edit_detail_info'][1][0], session['edit_detail_info'][1][1])
             delete_detail(conn, session['edit_detail_info'][0], 'Обновление')
-            for formula in session['edit_detail_info'][1][2]:
+            for formula in session['edit_detail_info'][1][3]:
                 add_detail_formula(conn, detail_id, int(get_formula_id(conn, formula)))
-            for measure in session['edit_detail_info'][1][1]:
+            for measure in session['edit_detail_info'][1][2]:
                 add_detail_measure(conn, detail_id, int(get_measure_id(conn, measure)))
             for line in session['edit_detail_info'][2]:
                 add_detail_line(conn, detail_id, line)
@@ -307,6 +312,7 @@ def admin_profile():
     elif request.values.get('one_detail_info'):
         id = int(request.values.get('one_detail_info'))
         info_about_some = [get_detail_name(conn, id)]
+        info_about_some.append(get_detail_size(conn, id))
         info_about_some.append(get_detail_measure(conn, id))
         info_about_some.append(get_detail_formula(conn, id))
         info_about_some.append(get_detail_lines(conn, id))

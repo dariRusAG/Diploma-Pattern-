@@ -1,5 +1,3 @@
-import re
-
 from flask import request, session
 from forms import *
 from models.admin_profile_model import *
