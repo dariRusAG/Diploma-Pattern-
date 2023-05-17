@@ -1,5 +1,6 @@
 from flask import request, session
 from forms import *
+from models.admin_profile_model import *
 from models.model_general import *
 
 
@@ -71,3 +72,78 @@ def role(conn):
         session['user_role'] = "guest"
 
     return is_authorization, is_registration, user_data_error, auth_form, reg_form
+
+
+def is_correct_overall(name):
+    if name == '':
+        return "Ошибка! Введено пустое поле"
+    elif not name.replace(" ", "").isalpha():
+        return "Ошибка! В названии не должно быть цифр или символов"
+    else:
+        return 'True'
+
+
+def is_correct_category(conn, name):
+    if is_correct_overall(name) != 'True':
+        return is_correct_overall(name)
+    elif get_category_id(conn, name) != "error":
+        return "Ошибка! Такая категория уже существует"
+    else:
+        return 'True'
+
+
+def is_correct_formula(conn, name, value):
+    if is_correct_overall(name.replace("_"," ")) != 'True':
+        return is_correct_overall(name)
+    elif get_formula_id(conn, name) != "error":
+        return "Ошибка! Такое название формулы уже существует"
+    elif value == '':
+        return "Ошибка! Введено пустое поле"
+    elif get_formula_id_by_value(conn, name, value) != "error":
+        return "Ошибка! Такая формула уже существует"
+    else:
+        return 'True'
+
+
+def is_correct_edit_formula(conn, name, value):
+    if is_correct_overall(name.replace("_"," ")) != 'True':
+        return is_correct_overall(name)
+    elif value == '':
+        return "Ошибка! Введено пустое поле"
+    else:
+        return 'True'
+
+
+def is_correct_new_detail(conn, name, size, measure, formula):
+    if is_correct_overall(name) != 'True':
+        return is_correct_overall(name)
+    else:
+        return 'True'
+
+
+def is_correct_pattern(conn, name, category, picture, detail_list):
+    if is_correct_overall(name.replace(" ", "")) != 'True':
+        return is_correct_overall(name)
+    elif get_pattern_id(conn, name) != "error":
+        return "Ошибка! Выкройка с таким именем уже существует"
+    elif picture == '':
+        return "Ошибка! Вместо картинки введено пустое поле"
+    elif not detail_list:
+        return "Ошибка! Отсутствуют детали"
+    elif category is None:
+        return "Ошибка! Отсутствует категория"
+    else:
+        return 'True'
+
+
+def is_correct_edit_pattern(conn, name, category, picture, detail_list):
+    if is_correct_overall(name.replace(" ", "")) != 'True':
+        return is_correct_overall(name)
+    elif picture == '':
+        return "Ошибка! Вместо картинки введено пустое поле"
+    elif not detail_list:
+        return "Ошибка! Отсутствуют детали"
+    elif category is None:
+        return "Ошибка! Отсутствует категория"
+    else:
+        return 'True'

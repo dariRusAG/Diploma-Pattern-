@@ -1,12 +1,10 @@
 import math
-
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_pdf import PdfPages
 from models.model_general import get_detail_name
 from models.scheme_model import *
 from functions.bezie import Bezier
-from PIL import Image
 
 
 def setting_plt(value):
@@ -14,23 +12,6 @@ def setting_plt(value):
     plt.xlim([0, value])
     plt.ylim([0, value])
 
-
-# Инициализация параметров пользователя
-def get_measurements(user_param):
-    measure = {
-        'ОГ': 0, 'ОТ': 0, 'ОБ': 0, 'ОШ': 0, 'ОПл': 0, 'ОЗ': 0,
-        'ВБ': 0, 'ДИ': 0, 'ДТС': 0, 'ДПл': 0, 'ДЛ': 0
-    }
-
-    for item in measure.keys():
-        if user_param['Обозначение'].eq(item).any():
-            measure[item] = eval(user_param[user_param["Обозначение"] == item]["Значение"].values[0])
-
-    ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДЛ = measure['ОГ'], measure['ОТ'], measure['ОБ'], \
-        measure['ОШ'], measure['ОПл'], measure['ОЗ'], measure['ВБ'], measure['ДИ'], measure['ДТС'], \
-        measure['ДПл'], measure['ДЛ']
-
-    return ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДЛ
 
 # Построение прямых линий
 def build_line_straight(x_coord_line, y_coord_line):
@@ -129,17 +110,14 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
     df_formula = get_formula_detail(conn, id_detail)
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
 
-    # получение мерок выкроек
-    ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДЛ = get_measurements(user_param)
 
-    measurements = {
-        'ОГ': ОГ, 'ОТ': ОТ, 'ОБ': ОБ, 'ОШ': ОШ, 'ОПл': ОПл, 'ОЗ': ОЗ,
-        'ВБ': ВБ, 'ДИ': ДИ, 'ДТС': ДТС, 'ДПл': ДПл, 'ДЛ': ДЛ
-    }
+    measurements = dict(zip(user_param["Обозначение"], user_param["Значение"]))
+    for key in measurements:
+        measurements[key] = float(measurements[key])
 
     # расчёт всех формул в зависимости от значений мерок
     for formula in df_formula:
-        df_formula[formula] = eval(eval(formula, measurements, df_formula)[0])
+        df_formula[formula] = eval(df_formula[formula][0], {}, measurements)
 
     # получение всех линий
     df_line = get_line_detail(conn, id_detail)
@@ -202,7 +180,6 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
     name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
 
     plt.savefig(name, bbox_inches='tight')
-    Image.open(name).save(name)
 
     # количество листов по иксу
     pages_x = math.ceil(length_x / 21)

@@ -120,6 +120,16 @@ def get_measure_number(conn, detail_id):
     ''', conn, params={"detail_id": detail_id}).values[0][0]
 
 
+def get_detail_size(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT detail_size
+          FROM detail
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id}).values[0][0]
+    except IndexError:
+        return "error"
+
+
 def get_detail_measure(conn, detail_id):
     try:
         return pd.read_sql('''SELECT measure_id,  measure_name, measure_full_name
@@ -195,12 +205,12 @@ def add_category(conn, category):
     return cur.lastrowid
 
 
-def add_detail(conn, detail_name):
+def add_detail(conn, detail_name, detail_size):
     cur = conn.cursor()
     cur.execute('''
-    INSERT INTO detail(detail_name) 
-    VALUES (:detail_name)
-     ''', {"detail_name": detail_name})
+    INSERT INTO detail(detail_name, detail_size) 
+    VALUES (:detail_name, :detail_size)
+     ''', {"detail_name": detail_name, "detail_size": detail_size})
     conn.commit()
     return cur.lastrowid
 
@@ -359,12 +369,13 @@ def update_pattern(conn, pattern_id, pattern_name, pattern_picture, category_id,
     ''', {"pattern_id": pattern_id, "pattern_name": pattern_name, "pattern_picture": pattern_picture, "category_id": category_id, "complexity": complexity})
     return conn.commit()
 
-def update_detail_name(conn, detail_id, detail_name):
+def update_detail(conn, detail_id, detail_name, detail_size):
     cur = conn.cursor()
     cur.execute('''
     UPDATE detail
     SET 
-        detail_name= :detail_name
+        detail_name= :detail_name,
+        detail_size= :detail_size
     WHERE detail_id = :detail_id
-    ''', {"detail_id": detail_id, "detail_name": detail_name})
+    ''', {"detail_id": detail_id, "detail_name": detail_name, "detail_size": detail_size})
     return conn.commit()
