@@ -62,11 +62,11 @@
 
                 <td>
                     {% if designation not in param["Обозначение"].unique() %}
-                        {% if designation in ['ДИ', 'ДР'] and standard_size != 'base' %}
+                        {% if designation == 'ДИ' and standard_size != 'base' %}
                             <label>
                                 <input type="text" name="param_value" class="write_personal"
-                                       value="{{ param.loc[(param['Обозначение'] == measure['Длина_детали'])]['Значение'].values[0] }}"
-                                       placeholder="{{ param.loc[(param['Обозначение'] == measure['Длина_детали'])]['Значение'].values[0] }}">
+                                       value="{{ measure['Длина_детали'] }}"
+                                       placeholder="{{ measure['Длина_детали'] }}">
                             </label>
                         {% else %}
                             <label>
