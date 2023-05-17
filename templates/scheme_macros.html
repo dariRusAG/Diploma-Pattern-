@@ -32,7 +32,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
-{% macro render_measure_pattern(measure, param, standard_size, len, zip) %}
+{% macro render_measure_pattern(measure, param, standard_size, info_param, len, zip) %}
 {% for i in range(len(measure)) %}
     <div class="block_detail">
         {% set measure = measure.iloc[i] %}
@@ -89,6 +89,24 @@
                     {% endfor %}
 
                     {% endif %}
+                </td>
+
+                <td>
+                    <div class="tooltip">?
+                        <span class="tooltiptext">
+                            <table style="display: flex; justify-content: center;">
+                                <tr>
+                                    <td>
+                                        {{ info_param.loc[(info_param['Обозначение'] == designation)]['Информация_о_параметрах'].values[0] }}
+                                    </td>
+                                    <td>
+                                        <img src="{{ info_param.loc[(info_param['Обозначение'] == designation)]['Изображение'].values[0] }}"
+                                             alt="" style="width: auto; height: 100px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </span>
+                    </div>
                 </td>
             </tr>
             {% endfor %}

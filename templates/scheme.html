@@ -28,7 +28,7 @@
             <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
         </label>
 
-        {{ macros.render_measure_pattern(measure, param, standard_size, len, zip) }}
+        {{ macros.render_measure_pattern(measure, param, standard_size, info_param, len, zip) }}
 
         <div class="title title-2">
             <p>Автозаполнение типовыми параметрами</p>

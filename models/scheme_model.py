@@ -40,6 +40,14 @@ def get_measure_detail(conn, index):
     WHERE pattern_id == {index}
     ''', conn)
 
+def get_info_param(conn):
+    return pd.read_sql(f'''
+        SELECT 
+            param_name AS Обозначение, 
+            info_param AS Информация_о_параметрах,
+            info_picture AS Изображение
+        FROM param
+        ''', conn)
 
 # Вывод параметров пользователя для построения
 def get_param_user(conn, user_id):
@@ -59,6 +67,7 @@ def get_param_standard_w(conn):
             param_name AS Обозначение, 
             param_value_w AS Значение
         FROM param
+        WHERE Обозначение != 'ДИ'
         ''', conn)
 
 # Вывод стандартных параметров мужской фигуры
@@ -68,6 +77,7 @@ def get_param_standard_m(conn):
             param_name AS Обозначение, 
             param_value_m AS Значение
         FROM param
+        WHERE Обозначение != 'ДИ'
         ''', conn)
 
 # Вывод формул детали

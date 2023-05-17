@@ -16,6 +16,7 @@ def scheme():
 
     df_measure = get_measure_detail(conn, int(index_pattern))
     df_param = get_param_user(conn, session['user_id'])
+    df_info_param = get_info_param(conn)
 
     param_value = []
     empty = 0
@@ -96,6 +97,7 @@ def scheme():
         measure=df_measure,
         param=df_param,
         param_value=param_value,
+        info_param=df_info_param,
         empty=empty,
 
         # Имена файлов
