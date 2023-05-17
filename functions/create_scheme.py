@@ -10,9 +10,9 @@ from PIL import Image
 
 
 def setting_plt(value):
-    plt.figure(figsize=(value / 2.54, (value + 5) / 2.54))
+    plt.figure(figsize=(value / 2.54, value / 2.54))
     plt.xlim([0, value])
-    plt.ylim([0, value + 5])
+    plt.ylim([0, value])
 
 
 # Инициализация параметров пользователя
@@ -33,25 +33,31 @@ def get_measurements(user_param):
     return ОГ, ОТ, ОБ, ОШ, ОПл, ОЗ, ВБ, ДИ, ДТС, ДПл, ДЛ
 
 # Построение прямых линий
-def build_line_straight(x_coord_line, y_coord_line, design_for_line):
+def build_line_straight(x_coord_line, y_coord_line):
     for i in range(0, len(x_coord_line) - 1, 2):
-        if design_for_line[int(i / 2)] == "Обычная":
-            plt.plot(
-                [x_coord_line[i], x_coord_line[i + 1]],
-                [y_coord_line[i], y_coord_line[i + 1]],
-                c='black', lw=2.8
-            )
-        elif design_for_line[int(i / 2)] == "Пунктир":
-            plt.plot(
-                [x_coord_line[i], x_coord_line[i + 1]],
-                [y_coord_line[i], y_coord_line[i + 1]],
-                c='black', ls='-.', lw=2.8
-            )
-
+        plt.plot(
+            [x_coord_line[i], x_coord_line[i + 1]],
+            [y_coord_line[i], y_coord_line[i + 1]],
+            c='black', lw=2.8
+        )
 
 # Построение кривых линий
-def build_line_curve(row, x_coord_line, y_coord_line, df_formula):
+def build_line_curve(curve, points):
+    plt.plot(
+        curve[:, 0],
+        curve[:, 1], lw=2.8
+    )
 
+    # Точки для безье
+    plt.plot(
+        points[:, 0],
+        points[:, 1],
+        'ro:',
+        color='darkblue'
+    )
+
+# Расчет координат кривых линий
+def calculate_line_curve(row, x_coord_line, y_coord_line, df_formula):
     # список всех x и y отклонений кривых линий
     x_deviation = list()
     y_deviation = list()
@@ -115,20 +121,7 @@ def build_line_curve(row, x_coord_line, y_coord_line, df_formula):
         points1 = np.asarray(points_list)
 
     curve1 = Bezier.Curve(t_points, points1)
-    plt.plot(
-        curve1[:, 0],
-        curve1[:, 1], lw=2.8
-    )
-
-    # Точки для безье
-    plt.plot(
-        points1[:, 0],
-        points1[:, 1],
-        'ro:',
-        color='darkblue'
-    )
-
-    return curve1
+    return curve1, points1
 
 
 def create_user_scheme(conn, user_param, id_detail):
@@ -148,19 +141,20 @@ def create_user_scheme(conn, user_param, id_detail):
     for formula in df_formula:
         df_formula[formula] = eval(eval(formula, measurements, df_formula)[0])
 
-    if measurements['ДИ'] != 0:
-        setting_plt(measurements['ДИ'])
-    elif measurements['ОПл'] != 0:
-        setting_plt(measurements['ОПл'] + 5)
-    else:
-        setting_plt(measurements['ОШ'] / 2)
-
-        # plt.figure(figsize=(20 / 2.54, 14 / 2.54))
-        # plt.xlim([0, 20])
-        # plt.ylim([0, 14])
+    # if measurements['ДИ'] != 0:
+    #     setting_plt(measurements['ДИ'])
+    # elif measurements['ОПл'] != 0:
+    #     setting_plt(measurements['ОПл'] + 5)
+    # else:
+    #     setting_plt(measurements['ОШ'] / 2)
 
     # получение всех линий
     df_line = get_line_detail(conn, id_detail)
+
+    x_coord_line_straight = []
+    y_coord_line_straight = []
+    line_curve = []
+    line_curve_points = []
 
     # Список всех координат линий
     x_list = []
@@ -172,17 +166,11 @@ def create_user_scheme(conn, user_param, id_detail):
         x_coord_line = list()
         y_coord_line = list()
 
-        # список стилей линий
-        design_for_line = list()
-
         x1 = eval(f"{row['x_first_coord']}", measurements, df_formula)
         y1 = eval(f"{row['y_first_coord']}", measurements, df_formula)
 
         x2 = eval(f"{row['x_second_coord']}", measurements, df_formula)
         y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
-
-        line_design = f"{row['line_design']}"
-        design_for_line.append(line_design)
 
         x_coord_line.append(x1)
         y_coord_line.append(y1)
@@ -190,9 +178,12 @@ def create_user_scheme(conn, user_param, id_detail):
         y_coord_line.append(y2)
 
         if df_line.loc[index, 'x_deviation'] == '':
-            build_line_straight(x_coord_line, y_coord_line, design_for_line)
+            x_coord_line_straight.append(x_coord_line)
+            y_coord_line_straight.append(y_coord_line)
         else:
-            curve = build_line_curve(row, x_coord_line, y_coord_line, df_formula)
+            curve, points_curve = calculate_line_curve(row, x_coord_line, y_coord_line, df_formula)
+            line_curve.append(curve)
+            line_curve_points.append(points_curve)
             for coord in curve:
                 x_list.append(coord[0])
                 y_list.append(coord[1])
@@ -200,15 +191,30 @@ def create_user_scheme(conn, user_param, id_detail):
         x_list += x_coord_line
         y_list += y_coord_line
 
+    length_x = max(x_list) - min(x_list)
+    length_y = max(y_list) - min(y_list)
+
+    # Определение масштаба схемы
+    if length_x >= length_y:
+        setting_plt(length_x + 2)
+    else:
+        setting_plt(length_y + 2)
+
+    # Построение всех линий
+    for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
+        build_line_straight(x_straight, y_straight)
+    for curves, curves_points in zip(line_curve, line_curve_points):
+        build_line_curve(curves, curves_points)
+
     name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
 
     plt.savefig(name, bbox_inches='tight')
     Image.open(name).save(name)
 
     # количество листов по иксу
-    pages_x = math.ceil((max(x_list) - min(x_list)) / 21)
+    pages_x = math.ceil(length_x / 21)
     # количество листов по игреку
-    pages_y = math.ceil((max(y_list) - min(y_list)) / 29.7)
+    pages_y = math.ceil(length_y / 29.7)
 
     # сохранение в формате А4
     pdf = PdfPages('static/pdf/' + str(get_detail_name(conn, id_detail)) + '.pdf')
