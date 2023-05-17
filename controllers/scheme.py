@@ -20,7 +20,9 @@ def scheme():
     param_value = []
     empty = 0
     checked_value = False
-    name_scheme = []
+
+    name_scheme_pattern = ''
+    name_scheme_detail = []
 
     gender_size = 'param_value_w'
     standard_size = 'base'
@@ -66,12 +68,16 @@ def scheme():
         if empty == 0:
             checked_value = True
             int_id_detail = list(set(int_id_detail))
+            name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
+            pdf = PdfPages(name_scheme_pattern)
             for id_detail in int_id_detail:
                 df_param_detail = df_param.loc[(df_param['ID'] == id_detail)]
-                create_user_scheme(conn, df_param_detail, id_detail)
-                name_scheme.append('static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
+                create_user_scheme(conn, df_param_detail, id_detail, pdf)
+                name_scheme_detail.append('static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
+            pdf.close()
 
         standard_size = request.values.get('fill_standard_param')
+
 
     return render_template(
         'scheme.html',
@@ -91,7 +97,10 @@ def scheme():
         param=df_param,
         param_value=param_value,
         empty=empty,
-        name_scheme=name_scheme,
+
+        # Имена файлов
+        name_scheme_pattern=name_scheme_pattern,
+        name_scheme_detail=name_scheme_detail,
 
         # Размеры
         gender_size=gender_size,

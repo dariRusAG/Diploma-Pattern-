@@ -54,7 +54,8 @@ def to_delete_user(conn, user_id):
     return cur.lastrowid
 
 def get_detail_name(conn, detail_id):
-        return pd.read_sql('''SELECT detail_name
+        return pd.read_sql('''
+        SELECT detail_name
         FROM detail
         WHERE detail_id = :detail_id
         ''', conn, params={"detail_id": detail_id}).values[0][0]

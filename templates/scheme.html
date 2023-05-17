@@ -50,6 +50,12 @@
             <input type="submit" name="fill_standard_param" value="XXL" class="button button_build">
         </div>
     </form>
+
+    {% if name_scheme_pattern != '' %}
+        <a href="{{ name_scheme_pattern }}" download>
+            <input type="button" value="Скачать схему выкройки" class="button button_search">
+        </a>
+    {% endif %}
 </div>
 
 {% if empty != 1 %}
@@ -59,7 +65,7 @@
         </div>
     {% else %}
         <div class="scheme_view">
-            {{ macros.render_pattern_scheme(name_scheme) }}
+            {{ macros.render_pattern_scheme(name_scheme_detail) }}
         </div>
     {% endif %}
 {% else %}
