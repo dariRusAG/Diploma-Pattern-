@@ -124,7 +124,7 @@ def calculate_line_curve(row, x_coord_line, y_coord_line, df_formula):
     return curve1, points1
 
 
-def create_user_scheme(conn, user_param, id_detail):
+def create_user_scheme(conn, user_param, id_detail, pdf):
     # создание словаря формул
     df_formula = get_formula_detail(conn, id_detail)
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
@@ -140,13 +140,6 @@ def create_user_scheme(conn, user_param, id_detail):
     # расчёт всех формул в зависимости от значений мерок
     for formula in df_formula:
         df_formula[formula] = eval(eval(formula, measurements, df_formula)[0])
-
-    # if measurements['ДИ'] != 0:
-    #     setting_plt(measurements['ДИ'])
-    # elif measurements['ОПл'] != 0:
-    #     setting_plt(measurements['ОПл'] + 5)
-    # else:
-    #     setting_plt(measurements['ОШ'] / 2)
 
     # получение всех линий
     df_line = get_line_detail(conn, id_detail)
@@ -216,9 +209,6 @@ def create_user_scheme(conn, user_param, id_detail):
     # количество листов по игреку
     pages_y = math.ceil(length_y / 29.7)
 
-    # сохранение в формате А4
-    pdf = PdfPages('static/pdf/' + str(get_detail_name(conn, id_detail)) + '.pdf')
-
     for i in range(pages_y):
         y = 1 + 29.7 * i
         for j in range(pages_x):
@@ -230,8 +220,6 @@ def create_user_scheme(conn, user_param, id_detail):
             #     if (x <= coord_x < x + 21) and (y <= coord_y < y + 29.7):
             #         add_to_pdf(pdf, x, x + 21, y, y + 29.7)
             #         break
-
-    pdf.close()
 
 
 def add_to_pdf(pdf, x1, x2, y1, y2):

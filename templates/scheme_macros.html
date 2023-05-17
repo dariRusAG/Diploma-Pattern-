@@ -19,17 +19,12 @@
 {% endmacro %}
 
 <!--Макрос для вывода построенных схем выкройки-->
-{% macro render_pattern_scheme(name_scheme) %}
-{% for name in name_scheme %}
+{% macro render_pattern_scheme(name_scheme_detail) %}
+{% for name in name_scheme_detail %}
 <div class="block_scheme">
     <div class="data">
         <p class="fig">
             <img src="{{name}}" alt="" style="width: 350px; height: auto;">
-        </p>
-        <p class="fig">
-            <a href="{{name}}" download>
-                <input type="button" value="Скачать изображение" class="button button_search">
-            </a>
         </p>
     </div>
 </div>
