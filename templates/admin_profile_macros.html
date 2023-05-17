@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 
 <!--Макрос для вывода категорий на панели администратора-->
-{% macro admin_panel_category(category, len, checked_value) %}
-    Добавление новой категории:
+{% macro admin_panel_category(category, len, checked_value, error_info) %}
+
+    <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+        Добавление новой категории:
+        {% if error_info != '' %}
+            <div class="admin_panel_error">
+                {{ error_info }}
+            </div>
+        {% endif %}
+    </div>
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_category" placeholder="Введите название категории" style="width:100%">
@@ -42,8 +50,15 @@
 {% endmacro %}
 
 <!--Макрос для вывода формул на панели администратора-->
-{% macro admin_panel_formuls(formula_list, measure_list, checked_value, len) %}
-    Добавление новой формулы:
+{% macro admin_panel_formuls(formula_list, measure_list, checked_value, error_info, len) %}
+    <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+        Добавление новой формулы:
+        {% if error_info != '' %}
+            <div class="admin_panel_error">
+                {{ error_info }}
+            </div>
+        {% endif %}
+    </div>
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_formula_name" placeholder="Введите название формулы" style="width:50%">
@@ -57,50 +72,52 @@
         <p2>Список мерок</p2>
     </div>
     <div class="admin_panel_right_data_list_two_table" style="height:84%;">
-    <div class="admin_panel_right_data_list_two_table_left" style="width: 72%">
-        {% for i in range(len(formula_list)) %}
-            <div class="admin_panel_right_data_text">
-                {% if checked_value[1] == '' or checked_value[1] != i %}
-                    <form action="{{ url_for('admin_profile') }}" method="get">
-                        {{ formula_list['formula_name'].values[i] }} &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
-                        <input type="submit" name="is_edit_formula" value="Изменить"
-                               style="margin-left:10px; cursor: pointer;">
-                        <input type="hidden" name="is_edit_formula_id" value={{ i }}>
-                    </form>
-                    <form action="{{ url_for('admin_profile') }}" method="get">
-                        <input type="submit" value="Удалить"
-                               style="margin-left:10px; cursor: pointer;">
-                        <input type="hidden" name="delete_formula" value={{ formula_list['formula_id'].values[i] }}>
-                    </form>
-                {% else %}
-                    {% if checked_value[1] == i %}
+        <div class="admin_panel_right_data_list_two_table_left" style="width: 72%">
+            {% for i in range(len(formula_list)) %}
+                <div class="admin_panel_right_data_text">
+                    {% if checked_value[1] == '' or checked_value[1] != i %}
                         <form action="{{ url_for('admin_profile') }}" method="get">
-                           <div class="admin_panel_right_data_text">
-                               <input type="text" name="edit_formula_name"
-                                   value='{{ formula_list['formula_name'].values[i] }}' style="width:40%">
-                             <input type="text" name="edit_formula_value"
-                                   value='{{ formula_list['formula_value'].values[i] }}' style="width:40%">
-                            <input type="submit" value="Сохранить изменения"
+                            {{ formula_list['formula_name'].values[i] }}
+                            &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
+                            <input type="submit" name="is_edit_formula" value="Изменить"
                                    style="margin-left:10px; cursor: pointer;">
-                            <input type="hidden" name="edit_formula" value={{ formula_list['formula_id'].values[i] }}>
-                           </div>
+                            <input type="hidden" name="is_edit_formula_id" value={{ i }}>
                         </form>
+                        <form action="{{ url_for('admin_profile') }}" method="get">
+                            <input type="submit" value="Удалить"
+                                   style="margin-left:10px; cursor: pointer;">
+                            <input type="hidden" name="delete_formula" value={{ formula_list['formula_id'].values[i] }}>
+                        </form>
+                    {% else %}
+                        {% if checked_value[1] == i %}
+                            <form action="{{ url_for('admin_profile') }}" method="get">
+                                <div class="admin_panel_right_data_text">
+                                    <input type="text" name="edit_formula_name"
+                                           value='{{ formula_list['formula_name'].values[i] }}' style="width:40%">
+                                    <input type="text" name="edit_formula_value"
+                                           value='{{ formula_list['formula_value'].values[i] }}' style="width:40%">
+                                    <input type="submit" value="Сохранить изменения"
+                                           style="margin-left:10px; cursor: pointer;">
+                                    <input type="hidden" name="edit_formula"
+                                           value={{ formula_list['formula_id'].values[i] }}>
+                                </div>
+                            </form>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
 
-            </div>
-        {% endfor %}
-    </div>
+                </div>
+            {% endfor %}
+        </div>
 
 
-    <div class="admin_panel_right_data_list_two_table_right" style="width: 28%">
-        {% for i in range(len(measure_list)) %}
-            <div class="admin_panel_right_data_text">
-                {{ measure_list['measure_name'].values[i] }}
-                &emsp;:&emsp; {{ measure_list['measure_full_name'].values[i] }}
-            </div>
-        {% endfor %}
-    </div>
+        <div class="admin_panel_right_data_list_two_table_right" style="width: 28%">
+            {% for i in range(len(measure_list)) %}
+                <div class="admin_panel_right_data_text">
+                    {{ measure_list['measure_name'].values[i] }}
+                    &emsp;:&emsp; {{ measure_list['measure_full_name'].values[i] }}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endmacro %}
 
@@ -318,12 +335,20 @@
 {% endmacro %}
 
 <!--Макрос для вывода выкроек на панели администратора-->
-{% macro admin_panel_patterns(pattern_list, category_list, detail_list, pattern_info, len) %}
-    {% if pattern_info == ['',''] %}
-        Добавление новой выкройки:
-    {% else %}
-        Редактирование выкройки:
+{% macro admin_panel_patterns(pattern_list, category_list, detail_list, pattern_info, error_info, len) %}
+    <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+        {% if pattern_info == ['',''] %}
+            Добавление новой выкройки:
+
+        {% else %}
+            Редактирование выкройки:
+        {% endif %}
+    {% if error_info != '' %}
+        <div class="admin_panel_error">
+            {{ error_info }}
+        </div>
     {% endif %}
+    </div>
     <form action="{{ url_for('admin_profile') }}" method="get">
         {% if pattern_info == ['',''] %}
             <div class="admin_panel_right_data_text">
@@ -373,10 +398,6 @@
             </div>
             <p2> Список 3D-моделей:</p2>
             <div class="admin_panel_right_data_list_vertical_small">
-                {% for i in range(40) %}
-                    info
-                    <br>
-                {% endfor %}
             </div>
         </div>
 

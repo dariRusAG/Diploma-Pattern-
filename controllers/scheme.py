@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template
-from functions.role import *
+from functions.data_check import *
 from utils import get_db_connection
 from functions.create_scheme import *
 
