@@ -98,7 +98,6 @@ def get_line_detail(conn, detail):
     SELECT 
         x_first_coord, y_first_coord, 
         x_second_coord, y_second_coord,
-        line_design, 
         x_deviation, y_deviation
     FROM line
     WHERE detail_id = {detail}
