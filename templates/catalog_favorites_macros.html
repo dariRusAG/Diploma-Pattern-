@@ -78,7 +78,7 @@
 
         {% endfor %}
         {% if user_role != "admin" %}
-        <form action={{url_for('catalog_favorites')}} method="get">
+        <form action="{{url_for('catalog_favorites')}}" method="get">
             {% if pattern.loc[i, 'ID'] in favorite_list %}
             <button type="submit" name="shaded" value=" " class="h">
                 <img width="20px" height="20px" alt="" src="/static/image/icons/shaded_heart_icon.png">
@@ -94,7 +94,7 @@
         </form>
         {% endif %}
        </p>
-        <form action={{url_for('scheme')}} method="get">
+        <form action="{{url_for('scheme')}}" method="get">
             <button type="submit" name="scheme" class="button button_pattern"> Построить
                 <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
             </button>

@@ -408,37 +408,119 @@ p3 {
 
 /* Контейнер подсказок */
 .tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black; /* Если вы хотите, чтобы точки под перемещаемым текстом */
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* Если вы хотите, чтобы точки под перемещаемым текстом */
 }
 
 /* Текст подсказки */
 .tooltip .tooltiptext {
-  visibility: hidden;
-  width: 300px;
-  background-color: rgba(85, 85, 85, 0.7);
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
+    visibility: hidden;
+    width: 380px;
+    background-color: rgba(85, 85, 85, 0.7);
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
     display: flex;
 
-  /* Расположите текст подсказки */
-  position: absolute;
-  z-index: 1;
-  bottom: 120%;
-  left: 0;
-  margin-left: -80px;
+    /* Расположите текст подсказки */
+    position: absolute;
+    z-index: 1;
+    bottom: 120%;
+    left: 0;
+    margin-left: -80px;
 
-  /* Исчезают в подсказке */
-  opacity: 0;
-  transition: opacity 0.3s;
+    /* Исчезают в подсказке */
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 /* Отображение текста подсказки при наведении курсора мыши на контейнер подсказки */
 .tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
+    visibility: visible;
+    opacity: 1;
+}
+
+/*-------------------------*/
+/* ПАНЕЛЬ ПОСТРОЕНИЯ СХЕМЫ */
+/*-------------------------*/
+.scheme_panel {
+    background: #f1f1f1;
+    display: flex;
+    width: 99.5%;
+    margin-left: 0.5%;
+    height: max-content;
+    border-radius: 5px;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs__links {
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+}
+
+.tabs__links > a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 10px;
+    background-color: #f1f1f1;
+    text-align: center;
+}
+
+.tabs__links > a:hover {
+    background-color: rgba(227, 242, 253, 0.3);
+}
+
+.tabs > #content-1:target ~ .tabs__links > a[href="#content-1"],
+.tabs > #content-2:target ~ .tabs__links > a[href="#content-2"]
+{
+    background-color: #fc6c85;
+    color: #ffd1d9;
+    cursor: default;
+}
+
+.tabs > div:not(.tabs__links) {
+    display: none;
+    order: 1;
+}
+
+@media (min-width: 576px) {
+    .tabs {
+        flex-direction: row;
+    }
+
+    .tabs__links {
+        flex-direction: column;
+
+        border: none;
+        box-shadow: none;
+    }
+
+    .tabs__links > a {
+        height: 20px;
+        border-radius: 5px;
+        box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
+        margin-bottom: 5%;
+        cursor: pointer;
+    }
+
+    .tabs > div:not(.tabs__links) {
+        padding-left: 10px;
+    }
+}
+
+.tabs > div:target {
+    display: block;
 }
 

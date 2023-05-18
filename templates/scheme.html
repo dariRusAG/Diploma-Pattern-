@@ -18,59 +18,123 @@
 {{ macros_general.registration(user_data_error, reg_form) }}
 {% endif %}
 
-<div class="block_measure">
-    <form action="{{url_for('scheme')}}" method="post">
-        <div class="title">
-            <p>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</p>
+<div class="tabs">
+    <div id="content-1">
+        <div class="scheme_panel">
+            <div class="block_measure">
+                <form action="{{url_for('scheme')}}#content-1" method="post">
+                    <div class="title">
+                        <p>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</p>
+                    </div>
+
+                    <label>
+                        <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
+                        <input hidden type="text" name="page" value="content-1">
+                    </label>
+
+                    {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, len, zip) }}
+
+                    <div class="title title-2">
+                        <p>Автозаполнение типовыми параметрами</p>
+                    </div>
+
+                    <label>
+                        <input type="radio" name="gender_size-1" value="param_value_w"
+                               {% if gender_size == 'param_value_w' %} checked {% endif %}>Женский размер
+                        <input type="radio" name="gender_size-1" value="param_value_m"
+                               {% if gender_size == 'param_value_m' %} checked {% endif %}>Мужской размер
+                    </label>
+
+                    <div class="container_button">
+                        <input type="submit" name="fill_standard_param" value="XS" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="S" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="M" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="L" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="XL" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="XXL" class="button button_build">
+                    </div>
+                </form>
+            </div>
+
+            {% if empty != 1 %}
+                {% if checked_value != True %}
+                <div class="pattern_info">
+                    {{ macros.render_pattern_info(pattern) }}
+                </div>
+                {% else %}
+                <div class="scheme_view">
+                    {{ macros.render_pattern_scheme(name_scheme_detail) }}
+                </div>
+                {% endif %}
+            {% else %}
+                Введите недостающие параметры!
+            {% endif %}
         </div>
+    </div>
 
-        <label>
-            <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
-        </label>
+    <div id="content-2">
+        <div class="scheme_panel">
+            <div class="block_measure">
+                <form action="{{url_for('scheme')}}#content-2" method="post">
+                    <div class="title">
+                        <p>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</p>
+                    </div>
 
-        {{ macros.render_measure_pattern(measure, param, standard_size, info_param, len, zip) }}
+                    <label>
+                        <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
+                        <input hidden type="text" name="page" value="content-2">
+                    </label>
 
-        <div class="title title-2">
-            <p>Автозаполнение типовыми параметрами</p>
+                    {{ macros.render_measure_detail(measure, param, standard_size, info_param, len, zip) }}
+
+                    <div class="title title-2">
+                        <p>Автозаполнение типовыми параметрами</p>
+                    </div>
+
+                    <label>
+                        <input type="radio" name="gender_size-2" value="param_value_w"
+                               {% if gender_size == 'param_value_w' %} checked {% endif %}>Женский размер
+                        <input type="radio" name="gender_size-2" value="param_value_m"
+                               {% if gender_size == 'param_value_m' %} checked {% endif %}>Мужской размер
+                    </label>
+
+                    <div class="container_button">
+                        <input type="submit" name="fill_standard_param" value="XS" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="S" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="M" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="L" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="XL" class="button button_build">
+                        <input type="submit" name="fill_standard_param" value="XXL" class="button button_build">
+                    </div>
+                </form>
+            </div>
+
+            {% if empty != 1 %}
+                {% if checked_value != True %}
+                <div class="pattern_info">
+                    {{ macros.render_pattern_info(pattern) }}
+                </div>
+                {% else %}
+                <div class="scheme_view">
+                    {{ macros.render_pattern_scheme(name_scheme_detail) }}
+                </div>
+                {% endif %}
+            {% else %}
+                Введите недостающие параметры!
+            {% endif %}
         </div>
+    </div>
 
-        <label>
-            <input type="radio" name="gender_size" value="param_value_w"
-                   {% if gender_size == 'param_value_w' %} checked {% endif %}>Женский размер
-            <input type="radio" name="gender_size" value="param_value_m"
-                   {% if gender_size == 'param_value_m' %} checked {% endif %}>Мужской размер
-        </label>
+    <div class="tabs__links">
+        <a href="#content-1">Ввести мерки для всей выкройки</a>
+        <a href="#content-2">Ввести мерки для каждой детали</a>
 
-        <div class="container_button">
-            <input type="submit" name="fill_standard_param" value="XS" class="button button_build">
-            <input type="submit" name="fill_standard_param" value="S" class="button button_build">
-            <input type="submit" name="fill_standard_param" value="M" class="button button_build">
-            <input type="submit" name="fill_standard_param" value="L" class="button button_build">
-            <input type="submit" name="fill_standard_param" value="XL" class="button button_build">
-            <input type="submit" name="fill_standard_param" value="XXL" class="button button_build">
-        </div>
-    </form>
+        {% if name_scheme_pattern != '' %}
+            <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>
+        {% endif %}
+    </div>
 
-    {% if name_scheme_pattern != '' %}
-        <a href="{{ name_scheme_pattern }}" download>
-            <input type="button" value="Скачать схему выкройки" class="button button_search">
-        </a>
-    {% endif %}
 </div>
-
-{% if empty != 1 %}
-    {% if checked_value != True %}
-        <div class="pattern_info">
-            {{ macros.render_pattern_info(pattern) }}
-        </div>
-    {% else %}
-        <div class="scheme_view">
-            {{ macros.render_pattern_scheme(name_scheme_detail) }}
-        </div>
-    {% endif %}
-{% else %}
-    Введите недостающие параметры!
-{% endif %}
 
 </body>
 </html>

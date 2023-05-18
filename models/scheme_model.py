@@ -40,6 +40,7 @@ def get_measure_detail(conn, index):
     WHERE pattern_id == {index}
     ''', conn)
 
+
 def get_info_param(conn):
     return pd.read_sql(f'''
         SELECT 

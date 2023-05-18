@@ -12,7 +12,7 @@
             </p>
 
             <p class="fig">
-                <img src="{{ pattern.loc[0,'Изображение']}}" alt="">
+                <img src="{{ pattern.loc[0,'Изображение']}}" alt="" style="max-width: 100%;">
             </p>
         </div>
     </div>
@@ -31,8 +31,8 @@
 {% endfor %}
 {% endmacro %}
 
-<!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
-{% macro render_measure_pattern(measure, param, standard_size, info_param, len, zip) %}
+<!--Макрос для вывода мерок схемы выкройки по деталям с параметрами пользователя-->
+{% macro render_measure_detail(measure, param, standard_size, info_param, len, zip) %}
 {% for i in range(len(measure)) %}
     <div class="block_detail">
         {% set measure = measure.iloc[i] %}
@@ -50,7 +50,7 @@
                 <td>
                     {{ full_title }} ({{ designation }}):
                     <label>
-                        <input hidden type="text" name="param_designation" value="{{designation}}">
+                        <input hidden type="text" name="param_designation-2" value="{{designation}}">
                         <input hidden type="text" name="detail" value="{{ measure['ID'] }}">
                     </label>
                 </td>
@@ -59,13 +59,13 @@
                     {% if designation not in param["Обозначение"].unique() %}
                         {% if designation == 'ДИ' and standard_size != 'base' %}
                             <label>
-                                <input type="text" name="param_value" class="write_personal"
+                                <input type="text" name="param_value-2" class="write_personal"
                                        value="{{ measure['Длина_детали'] }}"
                                        placeholder="{{ measure['Длина_детали'] }}">
                             </label>
                         {% else %}
                             <label>
-                                <input type="text" name="param_value" class="write_personal" value=""
+                                <input type="text" name="param_value-2" class="write_personal" value=""
                                        placeholder="необходимо заполнить">
                             </label>
                         {% endif %}
@@ -77,10 +77,10 @@
                             {% if ('ID' in param.columns and param.loc[j, 'ID'] == measure['ID']) or 'ID' not in param.columns %}
                                 <label>
                                     {% if param.loc[j, "Значение"] != '' %}
-                                    <input type="text" name="param_value" class="write_personal"
+                                    <input type="text" name="param_value-2" class="write_personal"
                                            value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
                                     {% else %}
-                                    <input type="text" name="param_value" class="write_personal" value=""
+                                    <input type="text" name="param_value-2" class="write_personal" value=""
                                            placeholder="необходимо заполнить">
                                     {% endif %}
                                 </label>
@@ -115,7 +115,84 @@
 {% endfor %}
 
 <div class="container_button">
-    <input type="submit" name="build_scheme" value="Построить" class="button button_build">
+    <input type="submit" name="build_scheme-2" value="Построить" class="button button_build">
+    <input type="submit" {% if standard_size == 'base' %} value="Отменить изменения"
+    {% else %} value="Вернуть свои параметры" {% endif %}
+    onclick="window.location.reload()" class="button button_build">
+</div>
+{% endmacro %}
+
+<!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
+{% macro render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, len, zip) %}
+    <div class="block_detail">
+        <table style="display: flex; justify-content: center;">
+            {% for designation, full_title, length in zip(measure_name, measure_full_name, details_lengths) %}
+            <tr>
+                <td>
+                    {{ full_title }} ({{ designation }}):
+                    <label>
+                        <input hidden type="text" name="param_designation-1" value="{{designation}}">
+                    </label>
+                </td>
+
+                <td>
+                    {% if designation not in param["Обозначение"].unique() %}
+                        {% if designation == 'ДИ' and standard_size != 'base' %}
+                            <label>
+                                <input type="text" name="param_value-1" class="write_personal"
+                                       value="{{ length }}"
+                                       placeholder="{{ length }}">
+                            </label>
+                        {% else %}
+                            <label>
+                                <input type="text" name="param_value-1" class="write_personal" value=""
+                                       placeholder="необходимо заполнить">
+                            </label>
+                        {% endif %}
+
+                    {% else %}
+
+                    {% for j in range(len(param)) %}
+                        {% if param.loc[j, "Обозначение"] == designation %}
+                                <label>
+                                    {% if param.loc[j, "Значение"] != '' %}
+                                    <input type="text" name="param_value-1" class="write_personal"
+                                           value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
+                                    {% else %}
+                                    <input type="text" name="param_value-1" class="write_personal" value=""
+                                           placeholder="необходимо заполнить">
+                                    {% endif %}
+                                </label>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% endif %}
+                </td>
+
+                <td>
+                    <div class="tooltip">?
+                        <span class="tooltiptext">
+                            <table style="display: flex; justify-content: center;">
+                                <tr>
+                                    <td>
+                                        {{ info_param.loc[(info_param['Обозначение'] == designation)]['Информация_о_параметрах'].values[0] }}
+                                    </td>
+                                    <td>
+                                        <img src="{{ info_param.loc[(info_param['Обозначение'] == designation)]['Изображение'].values[0] }}"
+                                             alt="" style="width: auto; height: 100px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+<div class="container_button">
+    <input type="submit" name="build_scheme-1" value="Построить" class="button button_build">
     <input type="submit" {% if standard_size == 'base' %} value="Отменить изменения"
     {% else %} value="Вернуть свои параметры" {% endif %}
     onclick="window.location.reload()" class="button button_build">

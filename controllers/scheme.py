@@ -4,6 +4,10 @@ from functions.data_check import *
 from utils import get_db_connection
 from functions.create_scheme import *
 
+def int_list(list_measures):
+    temp = []
+    [temp.append(x) for x in list_measures if (x not in temp) or (x in temp and x == 'ДИ')]
+    return temp
 
 @app.route('/scheme', methods=['GET', 'POST'])
 def scheme():
@@ -12,9 +16,27 @@ def scheme():
     is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
 
     index_pattern = request.values.get('pattern')
-    df_pattern = get_scheme_pattern(conn, int(index_pattern))
 
+    df_pattern = get_scheme_pattern(conn, int(index_pattern))
     df_measure = get_measure_detail(conn, int(index_pattern))
+
+    measure_name_pattern = []
+    measure_full_name_pattern = []
+    details_lengths = []
+
+    for index, row in df_measure.iterrows():
+        for measure_name, measure_full_name in zip(row['Обозначение'].split(","), row['Полное_название'].split(",")):
+            measure_name_pattern.append(measure_name)
+            if measure_name != 'ДИ':
+                measure_full_name_pattern.append(measure_full_name)
+                details_lengths.append(row['Длина_детали'])
+            if measure_name == 'ДИ':
+                measure_full_name_pattern.append(measure_full_name + ' "' + row['Название_детали'] + '"')
+                details_lengths.append(row['Длина_детали'])
+
+    measure_name_pattern = int_list(measure_name_pattern)
+    measure_full_name_pattern = int_list(measure_full_name_pattern)
+
     df_param = get_param_user(conn, session['user_id'])
     df_info_param = get_info_param(conn)
 
@@ -30,7 +52,11 @@ def scheme():
 
     # Если нажата одна из кнопок для заполнения стандартными мерками
     if request.values.get('fill_standard_param'):
-        gender_size = request.values.get('gender_size')
+        if request.values.get('page') == 'content-1':
+            gender_size = request.values.get('gender_size-1')
+        elif request.values.get('page') == 'content-2':
+            gender_size = request.values.get('gender_size-2')
+
         if gender_size == 'param_value_w':
             df_param = get_param_standard_w(conn)
         elif gender_size == 'param_value_m':
@@ -53,11 +79,11 @@ def scheme():
                 row['Значение'] = float(all_size_param[5])
 
     # Если нажата кнопка "Построить"
-    if request.values.get('build_scheme'):
+    if request.values.get('build_scheme-2'):
         id_detail = request.form.getlist('detail')
         int_id_detail = [int(x) for x in id_detail]
-        param_value = request.form.getlist('param_value')
-        param_designation = request.form.getlist('param_designation')
+        param_value = request.form.getlist('param_value-2')
+        param_designation = request.form.getlist('param_designation-2')
         df_param = pd.DataFrame(list(zip(int_id_detail, param_designation, param_value)),
                                 columns=['ID', 'Обозначение', 'Значение'])
 
@@ -99,6 +125,11 @@ def scheme():
         param_value=param_value,
         info_param=df_info_param,
         empty=empty,
+
+        # Данные при построении выкройки целиком
+        measure_name=measure_name_pattern,
+        measure_full_name=measure_full_name_pattern,
+        details_lengths=details_lengths,
 
         # Имена файлов
         name_scheme_pattern=name_scheme_pattern,
