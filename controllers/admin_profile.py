@@ -132,8 +132,7 @@ def admin_profile():
             for i in range(len(get_detail_lines(conn, session['edit_detail_info'][0]))):
                 row = get_detail_lines(conn, session['edit_detail_info'][0]).iloc[i]
                 session['detail_lines'].append([row['x_first_coord'], row['y_first_coord'], row['x_second_coord'],
-                                                row['y_second_coord'], row['x_deviation'], row['y_deviation'],
-                                                row['line_design']])
+                                                row['y_second_coord'], row['x_deviation'], row['y_deviation']])
             session['edit_detail_info'].append(session['detail'])
             session['edit_detail_info'].append(session['detail_lines'])
         else:
@@ -148,10 +147,10 @@ def admin_profile():
         session['detail'][3] = dict(sorted(session['detail'][3].items()))
         session['detail'].append(session['edit_detail_info'][0])
 
-        if is_correct_new_detail(conn, session['detail'][0], session['detail'][1], session['detail'][2],
+        if is_correct_detail(conn, session['detail'][0], session['detail'][1], session['detail'][2],
                                  session['detail'][3]) != "True":
             admin_panel_button = "Детали"
-            error_info = is_correct_new_detail(conn, session['detail'][0], session['detail'][1], session['detail'][2],
+            error_info = is_correct_detail(conn, session['detail'][0], session['detail'][1], session['detail'][2],
                                                session['detail'][3])
 
     elif request.values.get('add_detail_line') or request.values.get('edit_detail_line'):
@@ -163,8 +162,7 @@ def admin_profile():
             admin_panel_button = "Добавить Линии"
         session['detail_lines'].append([request.values.get('first_coord_x'), request.values.get('first_coord_y'),
                                         request.values.get('second_coord_x'), request.values.get('second_coord_y'),
-                                        request.values.get('x_deviation'), request.values.get('y_deviation'),
-                                        request.values.get('line_design')])
+                                        request.values.get('x_deviation'), request.values.get('y_deviation')])
 
 
     elif request.values.get('delete_detail_new_line'):
@@ -213,8 +211,12 @@ def admin_profile():
 
         name_scheme = 'static/image/save_details/' + str(get_detail_name(conn, detail_id)) + '.jpg'
         pdf = PdfPages('static/pdf/admin.pdf')
+        if is_correct_scheme(conn, df_param_detail, detail_id, pdf) == "True":
+            create_user_scheme(conn, df_param_detail, detail_id, pdf)
+        else:
+            admin_panel_button = "Детали"
+            error_info = is_correct_scheme(conn, df_param_detail, detail_id, pdf)
 
-        create_user_scheme(conn, df_param_detail, detail_id, pdf)
         pdf.close()
         if session['edit_detail_info'] == ['']:
             delete_detail(conn, int(get_detail_id(conn, session["detail"][0])), 'Удаление')

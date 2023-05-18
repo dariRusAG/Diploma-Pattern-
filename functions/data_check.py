@@ -1,5 +1,6 @@
 from flask import request, session
 from forms import *
+from functions.create_scheme import create_user_scheme
 from models.admin_profile_model import *
 from models.model_general import *
 
@@ -25,7 +26,6 @@ def role(conn):
     elif request.values.get('authorization_user_button'):
         login = request.values.get('auth_login')
         password = request.values.get('auth_password')
-        print(login)
 
         match is_correct_login_and_password(conn, login, password):
 
@@ -74,6 +74,14 @@ def role(conn):
     return is_authorization, is_registration, user_data_error, auth_form, reg_form
 
 
+def is_float(string):
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+
+
 def is_correct_overall(name):
     if name == '':
         return "Ошибка! Введено пустое поле"
@@ -114,9 +122,15 @@ def is_correct_edit_formula(conn, name, value):
         return 'True'
 
 
-def is_correct_new_detail(conn, name, size, measure, formula):
+def is_correct_detail(conn, name, size, measure, formula):
     if is_correct_overall(name) != 'True':
         return is_correct_overall(name)
+    elif is_float(size) != True and size != '':
+        return "Ошибка! Неверное значение эталонной длины"
+    elif len(measure) == 0:
+        return "Ошибка! Список мерок пуст"
+    elif len(formula) == 0:
+        return "Ошибка! Список формул пуст"
     else:
         return 'True'
 
@@ -145,5 +159,17 @@ def is_correct_edit_pattern(conn, name, category, picture, detail_list):
         return "Ошибка! Отсутствуют детали"
     elif category is None:
         return "Ошибка! Отсутствует категория"
+    else:
+        return 'True'
+
+
+def is_correct_scheme(conn, df_param_detail, detail_id, pdf):
+    scheme = create_user_scheme(conn, df_param_detail, detail_id, pdf)
+    if scheme == "error_mes":
+        return "Ошибка! Выбраны не все мерки для формул"
+    elif scheme == "error_form":
+        return "Ошибка! Выбраны не все формулы для линий"
+    elif scheme == "error_line":
+        return "Ошибка! Недопустимые значения линий"
     else:
         return 'True'

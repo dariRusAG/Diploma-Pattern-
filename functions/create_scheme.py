@@ -43,19 +43,22 @@ def calculate_line_curve(row, x_coord_line, y_coord_line, df_formula):
     x_deviation = list()
     y_deviation = list()
 
-    # Если отклонений несколько, то преобразование в список
-    if type(eval(f"{row['x_deviation']}")) == float or type(eval(f"{row['x_deviation']}")) == int:
-        x1_deviation = eval(f"{row['x_deviation']}", {}, df_formula)
-    else:
-        x1_deviation = f"{row['x_deviation']}".split(",")
-        for num in range(len(x1_deviation)):
-            x1_deviation[num] = float(x1_deviation[num])
-    if type(eval(f"{row['y_deviation']}")) == float or type(eval(f"{row['y_deviation']}")) == int:
-        y1_deviation = eval(f"{row['y_deviation']}", {}, df_formula)
-    else:
-        y1_deviation = f"{row['y_deviation']}".split(",")
-        for num in range(len(y1_deviation)):
-            y1_deviation[num] = float(y1_deviation[num])
+    try:
+        # Если отклонений несколько, то преобразование в список
+        if type(eval(f"{row['x_deviation']}")) == float or type(eval(f"{row['x_deviation']}")) == int:
+            x1_deviation = eval(f"{row['x_deviation']}", {}, df_formula)
+        else:
+            x1_deviation = f"{row['x_deviation']}".split(",")
+            for num in range(len(x1_deviation)):
+                x1_deviation[num] = float(x1_deviation[num])
+        if type(eval(f"{row['y_deviation']}")) == float or type(eval(f"{row['y_deviation']}")) == int:
+            y1_deviation = eval(f"{row['y_deviation']}", {}, df_formula)
+        else:
+            y1_deviation = f"{row['y_deviation']}".split(",")
+            for num in range(len(y1_deviation)):
+                y1_deviation[num] = float(y1_deviation[num])
+    except NameError:
+        return "error_line"
 
     x_deviation.append(x1_deviation)
     y_deviation.append(y1_deviation)
@@ -115,9 +118,12 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
     for key in measurements:
         measurements[key] = float(measurements[key])
 
-    # расчёт всех формул в зависимости от значений мерок
-    for formula in df_formula:
-        df_formula[formula] = eval(df_formula[formula][0], {}, measurements)
+    try:
+        # расчёт всех формул в зависимости от значений мерок
+        for formula in df_formula:
+            df_formula[formula] = eval(df_formula[formula][0], {}, measurements)
+    except NameError:
+        return "error_mes"
 
     # получение всех линий
     df_line = get_line_detail(conn, id_detail)
@@ -137,11 +143,14 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
         x_coord_line = list()
         y_coord_line = list()
 
-        x1 = eval(f"{row['x_first_coord']}", measurements, df_formula)
-        y1 = eval(f"{row['y_first_coord']}", measurements, df_formula)
+        try:
+            x1 = eval(f"{row['x_first_coord']}", measurements, df_formula)
+            y1 = eval(f"{row['y_first_coord']}", measurements, df_formula)
 
-        x2 = eval(f"{row['x_second_coord']}", measurements, df_formula)
-        y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
+            x2 = eval(f"{row['x_second_coord']}", measurements, df_formula)
+            y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
+        except NameError:
+            return "error_form"
 
         x_coord_line.append(x1)
         y_coord_line.append(y1)
@@ -152,7 +161,10 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
             x_coord_line_straight.append(x_coord_line)
             y_coord_line_straight.append(y_coord_line)
         else:
-            curve, points_curve = calculate_line_curve(row, x_coord_line, y_coord_line, df_formula)
+            try:
+                curve, points_curve = calculate_line_curve(row, x_coord_line, y_coord_line, df_formula)
+            except ValueError:
+                return "error_line"
             line_curve.append(curve)
             line_curve_points.append(points_curve)
             for coord in curve:
@@ -162,8 +174,11 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
         x_list += x_coord_line
         y_list += y_coord_line
 
-    length_x = max(x_list) - min(x_list)
-    length_y = max(y_list) - min(y_list)
+    try:
+        length_x = max(x_list) - min(x_list)
+        length_y = max(y_list) - min(y_list)
+    except ValueError:
+        return "error_line"
 
     # Определение масштаба схемы
     if length_x >= length_y:
@@ -190,6 +205,7 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
         y = 1 + 29.7 * i
         for j in range(pages_x):
             x = 1 + 21 * j
+            plt.title("Деталь: " + str(get_detail_name(conn, id_detail)) + ". Строка " + str(i+1) + "; столбец " + str(j+1), fontsize=29, weight='ultralight', alpha=0.5)
             add_to_pdf(pdf, x, x + 21, y, y + 29.7)
 
             # # Удаление пустых листов А4
