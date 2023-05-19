@@ -78,6 +78,14 @@ def scheme():
             if standard_size == 'XXL':
                 row['Значение'] = float(all_size_param[5])
 
+    # error_info = []
+    # for i in range(len(df_param)):
+    #     print(df_param.loc[i, "Значение"])
+    #     print(df_param.loc[i, "Обозначение"])
+    #     if is_correct_params(conn, df_param.loc[i, "Значение"], df_param.loc[i, "Обозначение"]) != "True":
+    #         error_info.append(is_correct_params(conn, df_param.loc[i, "Значение"], df_param.loc[i, "Обозначение"]))
+    # print(error_info)
+
     # Если нажата кнопка "Построить"
     if request.values.get('build_scheme-2'):
         id_detail = request.form.getlist('detail')

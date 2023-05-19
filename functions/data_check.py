@@ -173,3 +173,25 @@ def is_correct_scheme(conn, df_param_detail, detail_id, pdf):
         return "Ошибка! Недопустимые значения линий"
     else:
         return 'True'
+
+
+def is_correct_login_password(conn, login, password):
+    if login == '':
+        return "Ошибка! Логин не может быть пустым"
+    elif password == '':
+        return "Ошибка! Пароль не может быть пустым"
+    elif is_correct_login_and_password(conn, login, password) == "error":
+        return "Ошибка! Такой логин уже занят"
+    else:
+        return "True"
+
+
+def is_correct_params(conn, elem, name):
+    min = get_params_max_min(conn, name)[0]
+    max = get_params_max_min(conn, name)[1]
+    if not is_float(elem):
+        return "Ошибка! Значение параметра " + str(name) + " должно быть числом"
+    elif min > float(elem) or max < float(elem):
+        return "Ошибка! Значение параметра " + str(name) + " должно быть от " + str(min) + " до " + str(max)
+    else:
+        return "True"

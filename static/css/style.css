@@ -244,12 +244,16 @@ html {
     cursor: pointer;
 }
 
+.error_personal {
+    background-color: salmon;
+}
+
 /*Панель администратора*/
 .admin_panel {
     display: flex;
     flex-direction: row;
     height: 83vh;
-    overflow: auto
+    overflow: auto;
 }
 
 .admin_panel_left {
@@ -387,7 +391,7 @@ html {
     border: 1px solid #a33a3a;
     width: 40%;
     margin-right: 0;
-    margin-top:-1px;
+    margin-top: -1px;
     border-radius: 5px;
 }
 
@@ -484,8 +488,7 @@ p3 {
 }
 
 .tabs > #content-1:target ~ .tabs__links > a[href="#content-1"],
-.tabs > #content-2:target ~ .tabs__links > a[href="#content-2"]
-{
+.tabs > #content-2:target ~ .tabs__links > a[href="#content-2"] {
     background-color: #fc6c85;
     color: #ffd1d9;
     cursor: default;
@@ -525,3 +528,8 @@ p3 {
     display: block;
 }
 
+/*временный стиль, потом нужно удалить*/
+.user_info {
+    display: flex;
+    flex-direction: row;
+}
