@@ -1,102 +1,89 @@
 <!DOCTYPE html>
 
 {% macro render_menu(user_role) %}
-<div class=menu>
-    <ul>
-        <form action="{{url_for('catalog_favorites')}}" method="get">
-            <input type="submit" name="catalog" value="Каталог"
-                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
-        </form>
+    <div class=menu>
+        <ul>
+            {% if user_role != 'admin' %}
+                <form action="{{ url_for('catalog_favorites') }}" method="get">
+                    <input type="submit" name="catalog" value="Каталог"
+                           style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
+                </form>
+                {% else %}
+                    <input type="submit" style="visibility: hidden">
+            {% endif %}
+            {% if user_role == 'guest' %}
+                <form action="" method="get">
+                    <input type="submit" name="authorization_button" value="Войти"
+                           style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
+                </form>
+            {% else %}
 
-        {% if user_role == 'guest' %}
-        <form action="" method="get">
-            <input type="submit" name="authorization_button" value="Войти"
-                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
-        </form>
-        {% else %}
-
-        {% if user_role == 'admin' %}
-        <li class=active><a href={{url_for("admin_profile")}}>Личный кабинет</a></li>
-        {% else %}
-
-        <form action="{{url_for('catalog_favorites')}}" method="get">
-            <input type="submit" name="favorites" value="Список избранного"
-                   style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
-        </form>
-
-        <li class=active><a href={{url_for("user_profile")}}>Личный кабинет</a></li>
-        {% endif %}
-        {% endif %}
-    </ul>
-</div>
-{% endmacro %}
-
-<!--Авторизация пользователя-->
-<!--поле для заполнения (логин, пароль и т.д.)-->
-{% macro render_field(field) %}
-{{ field.label }}
-{{ field(**kwargs)|safe }}
+                {% if user_role == 'admin' %}
+                    <li class=active><a href={{ url_for("admin_profile") }}>Личный кабинет</a></li>
+                {% else %}
+                    <form action="{{ url_for('catalog_favorites') }}" method="get">
+                        <input type="submit" name="favorites" value="Список избранного"
+                               style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
+                    </form>
+                    <li class=active><a href={{ url_for("user_profile") }}>Личный кабинет</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
 {% endmacro %}
 
 <!--окно авторизации-->
 {% macro authorization(user_data_error,auth_form) %}
-<div class="gray_page">
-</div>
-<div class="authorization_registration">
-    <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%; cursor: pointer;">
-    Войдите в аккаунт:
-    <form action="" method="get">
-        {{ render_field(auth_form.auth_login) }}
-        <br>
-        {{ render_field(auth_form.auth_password) }}
-        <br>
-        {% if user_data_error != "" %}
-        {{user_data_error}}
-        {% endif %}
-        <br>
-        <input type="submit" value="Авторизоваться" name="authorization_user_button"
-               style="width:70%; height:20%; margin-top:20%;cursor: pointer;">
-    </form>
-    <form action="" method="get">
-        <input type="submit" value="Создать аккаунт" name="registration_button"
-               style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
-    </form>
-</div>
+    <div class="gray_page">
+    </div>
+    <div class="authorization_registration">
+        <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%; cursor: pointer;">
+        Войдите в аккаунт:
+        <form action="" method="get">
+            <p>Логин: <input type="text" name="auth_login" style="height:10%; "></p>
+            <p>Пароль: <input type="password" name="auth_password" style="height:10%; "></p>
+            {% if user_data_error != "" %}
+                {{ user_data_error }}
+            {% endif %}
+            <input type="submit" value="Авторизоваться" name="authorization_user_button"
+                   style="width:70%; height:20%; margin-top:20%;cursor: pointer;">
+        </form>
+        <form action="" method="get">
+            <input type="submit" value="Создать аккаунт" name="registration_button"
+                   style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
+        </form>
+    </div>
 {% endmacro %}
 
 <!--Регистрация пользователя-->
 {% macro registration(user_data_error, reg_form) %}
-<div class="gray_page">
-</div>
-<div class="authorization_registration">
-    <input type="submit" value="Выйти" onclick="location.href='/';"
-           style="width:12%; height:10%; cursor: pointer;">
-    Создайте аккаунт:
-    <form action="" method="get">
-        {{ render_field(reg_form.reg_login) }}
-        <br>
-        {{ render_field(reg_form.reg_password) }}
-        <br>
-        {{ render_field(reg_form.password_confirm) }}
-        <br>
-        {% if user_data_error != "" %}
-        {{user_data_error}}
-        {% endif %}
-        <br>
-        <input type="submit" value="Зарегистрироваться" name="registration_user_button"
-               style="width:70%; height:20%; margin-top:20%; cursor: pointer;">
-    </form>
-    <form action="" method="get">
-        <input type="submit" value="Уже есть аккаунт" name="authorization_button"
-               style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
-    </form>
-</div>
+    <div class="gray_page">
+    </div>
+    <div class="authorization_registration">
+        <input type="submit" value="Выйти" onclick="location.href='/';"
+               style="width:12%; height:10%; cursor: pointer;">
+        Создайте аккаунт:
+        <form action="" method="get">
+            <p>Логин: <input type="text" name="reg_login" style="height:10%; "></p>
+            <p>Пароль: <input type="password" name="reg_password" style="height:10%; "></p>
+            <p> Повторите пароль: <input type="password" name="password_confirm" style="height:10%; "></p>
+            {% if user_data_error != "" %}
+                {{ user_data_error }}
+            {% endif %}
+            <input type="submit" value="Зарегистрироваться" name="registration_user_button"
+                   style="width:70%; height:20%; margin-top:5%; cursor: pointer;">
+        </form>
+        <form action="" method="get">
+            <input type="submit" value="Уже есть аккаунт" name="authorization_button"
+                   style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
+        </form>
+    </div>
 {% endmacro %}
 
 <!--кнопка выход-->
 {% macro exit() %}
-<form action={{url_for('catalog_favorites')}} method="get">
-    <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';"
-           style="background:#fc6c85; color: #fff0f5; height:10%; border: none; cursor: pointer;">
-</form>
+    <form action={{ url_for('catalog_favorites') }} method="get">
+        <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';"
+               style="background:#fc6c85; color: #fff0f5; height:10%; border: none; cursor: pointer;">
+    </form>
 {% endmacro %}

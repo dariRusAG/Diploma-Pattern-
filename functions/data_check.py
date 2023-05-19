@@ -1,5 +1,4 @@
 from flask import request, session
-from forms import *
 from functions.create_scheme import create_user_scheme
 from models.admin_profile_model import *
 from models.model_general import *
@@ -10,9 +9,6 @@ def role(conn):
     is_authorization = False  # нажата ли кнопка "войти"
     is_registration = False  # нажата ли кнопка "зарегистрироваться"
     user_data_error = ""  # ошибка данных
-
-    auth_form = AuthorizationForm(request.form)  # форма авторизации
-    reg_form = RegistrationForm(request.form)  # форма регистрации
 
     # нажата кнопка войти на странице каталога
     if request.values.get('authorization_button'):
@@ -44,18 +40,32 @@ def role(conn):
         login = request.values.get('reg_login')
         password = request.values.get('reg_password')
         password_confirmation = request.values.get('password_confirm')
-        if get_user_id(conn, login) == "error":
-            if password == password_confirmation:
-                registration(conn, login, password)
-                session['user_id'] = f'{get_user_id(conn, login)}'
-                new_user_params(conn, session['user_id'])
-                session['user_role'] = "user"
-            else:
+        if login == '' or password == '' or password_confirmation == '':
+            is_registration = True
+            user_data_error = "Введены пустые данные"
+        elif len(login) < 4:
+            is_registration = True
+            user_data_error = "Логин должен быть больше 4 символов"
+        elif len(login) > 15:
+            is_registration = True
+            user_data_error = "Логин должен быть меньше 15 символов"
+        elif len(password) < 8:
+            is_registration = True
+            user_data_error = "Пароль должен быть больше 8 символов"
+        elif len(password) > 60:
+            is_registration = True
+            user_data_error = "Логин должен быть меньше 60 символов"
+        elif get_user_id(conn, login) != "error":
+            is_registration = True
+            user_data_error = "Пользователь с таким логином уже существует"
+        elif password != password_confirmation:
                 is_registration = True
                 user_data_error = "Пароли должны совпадать"
         else:
-            is_registration = True
-            user_data_error = "Пользователь с таким логином уже существует"
+            registration(conn, login, password)
+            session['user_id'] = f'{get_user_id(conn, login)}'
+            new_user_params(conn, session['user_id'])
+            session['user_role'] = "user"
 
     # нажата кнопка выйти в личном кабинете
     elif request.values.get('exit_button'):
@@ -71,7 +81,7 @@ def role(conn):
     if 'user_id' not in session:
         session['user_role'] = "guest"
 
-    return is_authorization, is_registration, user_data_error, auth_form, reg_form
+    return is_authorization, is_registration, user_data_error
 
 
 def is_float(string):

@@ -34,7 +34,7 @@ def favorites_pattern(conn, category, complexity):
 def catalog_favorites():
     conn = get_db_connection()
 
-    is_authorization, is_registration, user_data_error, auth_form, reg_form = role(conn)
+    is_authorization, is_registration, user_data_error = role(conn)
 
     # Если нажата кнопка "Список избранного"
     if request.values.get('favorites'):
@@ -69,30 +69,33 @@ def catalog_favorites():
         category = []
         complexity = []
 
-    return render_template(
-        'catalog_favorites.html',
-        title=session['title'],
-        page=session['page'],
+    if session['user_role'] != "admin":
+        return render_template(
+            'catalog_favorites.html',
+            title=session['title'],
+            page=session['page'],
 
-        # Пользователь
-        is_authorization=is_authorization,
-        is_registration=is_registration,
-        user_data_error=user_data_error,
+            # Пользователь
+            is_authorization=is_authorization,
+            is_registration=is_registration,
+            user_data_error=user_data_error,
 
-        user_role=session['user_role'],
-        auth_form=auth_form,
-        reg_form=reg_form,
+            user_role=session['user_role'],
 
-        # Выбор фильтров
-        category=df_category,
-        choice_category=category,
-        choice_complexity=complexity,
+            # Выбор фильтров
+            category=df_category,
+            choice_category=category,
+            choice_complexity=complexity,
 
-        # Выкройки
-        pattern=df_pattern,
-        favorite_list=favorite_list,
+            # Выкройки
+            pattern=df_pattern,
+            favorite_list=favorite_list,
 
-        # Функции
-        len=len,
-        str=str
-    )
+            # Функции
+            len=len,
+            str=str
+        )
+    else:
+        return render_template(
+            'admin_profile.html',
+            user_role=session['user_role'])
