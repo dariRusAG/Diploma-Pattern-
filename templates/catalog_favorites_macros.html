@@ -94,9 +94,10 @@
         </form>
         {% endif %}
        </p>
-        <form action="{{url_for('scheme')}}" method="get">
+        <form action="{{url_for('scheme')}}#content-1" method="get">
             <button type="submit" name="scheme" class="button button_pattern"> Построить
                 <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
+                <input hidden type="text" name="page" value="#content-1">
             </button>
         </form>
 

@@ -29,7 +29,7 @@
 
                     <label>
                         <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
-                        <input hidden type="text" name="page" value="content-1">
+                        <input hidden type="text" name="page" value="#content-1">
                     </label>
 
                     {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, len, zip) }}
@@ -82,10 +82,10 @@
 
                     <label>
                         <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
-                        <input hidden type="text" name="page" value="content-2">
+                        <input hidden type="text" name="page" value="#content-2">
                     </label>
 
-                    {{ macros.render_measure_detail(measure, param, standard_size, info_param, len, zip) }}
+                    {{ macros.render_measure_detail(measure, param, standard_size, info_param, len, zip, str) }}
 
                     <div class="title title-2">
                         <p>Автозаполнение типовыми параметрами</p>
@@ -126,8 +126,8 @@
     </div>
 
     <div class="tabs__links">
-        <a href="#content-1">Ввести мерки для всей выкройки</a>
-        <a href="#content-2">Ввести мерки для каждой детали</a>
+        <a href="{{url_for('scheme')}}#content-1">Ввести мерки для всей выкройки</a>
+        <a href="{{url_for('scheme')}}#content-2">Ввести мерки для каждой детали</a>
 
         {% if name_scheme_pattern != '' %}
             <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>

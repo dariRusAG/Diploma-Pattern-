@@ -113,7 +113,6 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
     df_formula = get_formula_detail(conn, id_detail)
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
 
-
     measurements = dict(zip(user_param["Обозначение"], user_param["Значение"]))
     for key in measurements:
         measurements[key] = float(measurements[key])

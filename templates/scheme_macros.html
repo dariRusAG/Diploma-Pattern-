@@ -32,7 +32,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода мерок схемы выкройки по деталям с параметрами пользователя-->
-{% macro render_measure_detail(measure, param, standard_size, info_param, len, zip) %}
+{% macro render_measure_detail(measure, param, standard_size, info_param, len, zip, str) %}
 {% for i in range(len(measure)) %}
     <div class="block_detail">
         {% set measure = measure.iloc[i] %}
@@ -50,7 +50,7 @@
                 <td>
                     {{ full_title }} ({{ designation }}):
                     <label>
-                        <input hidden type="text" name="param_designation-2" value="{{designation}}">
+                        <input hidden type="text" name="param_designation" value="{{ designation }}">
                         <input hidden type="text" name="detail" value="{{ measure['ID'] }}">
                     </label>
                 </td>
@@ -59,13 +59,13 @@
                     {% if designation not in param["Обозначение"].unique() %}
                         {% if designation == 'ДИ' and standard_size != 'base' %}
                             <label>
-                                <input type="text" name="param_value-2" class="write_personal"
+                                <input type="text" name="param_value" class="write_personal"
                                        value="{{ measure['Длина_детали'] }}"
                                        placeholder="{{ measure['Длина_детали'] }}">
                             </label>
                         {% else %}
                             <label>
-                                <input type="text" name="param_value-2" class="write_personal" value=""
+                                <input type="text" name="param_value" class="write_personal" value=""
                                        placeholder="необходимо заполнить">
                             </label>
                         {% endif %}
@@ -73,19 +73,19 @@
                     {% else %}
 
                     {% for j in range(len(param)) %}
-                        {% if param.loc[j, "Обозначение"] == designation %}
-                            {% if ('ID' in param.columns and param.loc[j, 'ID'] == measure['ID']) or 'ID' not in param.columns %}
-                                <label>
-                                    {% if param.loc[j, "Значение"] != '' %}
-                                    <input type="text" name="param_value-2" class="write_personal"
-                                           value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
-                                    {% else %}
-                                    <input type="text" name="param_value-2" class="write_personal" value=""
-                                           placeholder="необходимо заполнить">
-                                    {% endif %}
-                                </label>
-                            {% endif %}
+                    {% if param.loc[j, 'Обозначение'] == designation %}
+                        {% if (param.loc[j, 'ID'] == str(measure['ID']) and 'ID' in param.columns) or 'ID' not in param.columns %}
+                            <label>
+                                {% if param.loc[j, "Значение"] != '' %}
+                                <input type="text" name="param_value" class="write_personal"
+                                       value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
+                                {% else %}
+                                <input type="text" name="param_value" class="write_personal" value=""
+                                       placeholder="необходимо заполнить">
+                                {% endif %}
+                            </label>
                         {% endif %}
+                    {% endif %}
                     {% endfor %}
 
                     {% endif %}
@@ -115,7 +115,7 @@
 {% endfor %}
 
 <div class="container_button">
-    <input type="submit" name="build_scheme-2" value="Построить" class="button button_build">
+    <input type="submit" name="build_scheme" value="Построить" class="button button_build">
     <input type="submit" {% if standard_size == 'base' %} value="Отменить изменения"
     {% else %} value="Вернуть свои параметры" {% endif %}
     onclick="window.location.reload()" class="button button_build">
@@ -126,12 +126,14 @@
 {% macro render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, len, zip) %}
     <div class="block_detail">
         <table style="display: flex; justify-content: center;">
+
             {% for designation, full_title, length in zip(measure_name, measure_full_name, details_lengths) %}
+
             <tr>
                 <td>
                     {{ full_title }} ({{ designation }}):
                     <label>
-                        <input hidden type="text" name="param_designation-1" value="{{designation}}">
+                        <input hidden type="text" name="param_designation" value="{{designation}}">
                     </label>
                 </td>
 
@@ -139,30 +141,34 @@
                     {% if designation not in param["Обозначение"].unique() %}
                         {% if designation == 'ДИ' and standard_size != 'base' %}
                             <label>
-                                <input type="text" name="param_value-1" class="write_personal"
+                                <input type="text" name="param_value" class="write_personal"
                                        value="{{ length }}"
                                        placeholder="{{ length }}">
                             </label>
                         {% else %}
                             <label>
-                                <input type="text" name="param_value-1" class="write_personal" value=""
+                                <input type="text" name="param_value" class="write_personal" value=""
                                        placeholder="необходимо заполнить">
                             </label>
                         {% endif %}
 
                     {% else %}
 
-                    {% for j in range(len(param)) %}
-                        {% if param.loc[j, "Обозначение"] == designation %}
-                                <label>
+                    {% for j in range(len(param) + 1) %}
+                        {% if designation == param.loc[j, "Обозначение"] %}
+                            <label>
+                                {% if (designation == 'ДИ' and full_title == param.loc[j, "Полное_название"]) or designation != 'ДИ' %}
                                     {% if param.loc[j, "Значение"] != '' %}
-                                    <input type="text" name="param_value-1" class="write_personal"
-                                           value="{{ param.loc[j, 'Значение']}}" placeholder="{{ param.loc[j, 'Значение']}}">
+                                        <input type="text" name="param_value" class="write_personal"
+                                               value="{{ param.loc[j, 'Значение'] }}" placeholder="{{ param.loc[j, 'Значение'] }}">
+
                                     {% else %}
-                                    <input type="text" name="param_value-1" class="write_personal" value=""
-                                           placeholder="необходимо заполнить">
+
+                                        <input type="text" name="param_value" class="write_personal" value=""
+                                               placeholder="необходимо заполнить">
                                     {% endif %}
-                                </label>
+                                {% endif %}
+                            </label>
                         {% endif %}
                     {% endfor %}
 
@@ -192,7 +198,7 @@
     </div>
 
 <div class="container_button">
-    <input type="submit" name="build_scheme-1" value="Построить" class="button button_build">
+    <input type="submit" name="build_scheme" value="Построить" class="button button_build">
     <input type="submit" {% if standard_size == 'base' %} value="Отменить изменения"
     {% else %} value="Вернуть свои параметры" {% endif %}
     onclick="window.location.reload()" class="button button_build">
