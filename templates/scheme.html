@@ -32,7 +32,7 @@
                         <input hidden type="text" name="page" value="#content-1">
                     </label>
 
-                    {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, len, zip) }}
+                    {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param_1, standard_size_1, info_param, len, zip) }}
 
                     <div class="title title-2">
                         <p>Автозаполнение типовыми параметрами</p>
@@ -40,9 +40,9 @@
 
                     <label>
                         <input type="radio" name="gender_size-1" value="param_value_w"
-                               {% if gender_size == 'param_value_w' %} checked {% endif %}>Женский размер
+                               {% if gender_size_1 == 'param_value_w' %} checked {% endif %}>Женский размер
                         <input type="radio" name="gender_size-1" value="param_value_m"
-                               {% if gender_size == 'param_value_m' %} checked {% endif %}>Мужской размер
+                               {% if gender_size_1 == 'param_value_m' %} checked {% endif %}>Мужской размер
                     </label>
 
                     <div class="container_button">
@@ -56,14 +56,14 @@
                 </form>
             </div>
 
-            {% if empty != 1 %}
-                {% if checked_value != True %}
+            {% if empty_1 != 1 %}
+                {% if checked_value_1 != True %}
                 <div class="pattern_info">
                     {{ macros.render_pattern_info(pattern) }}
                 </div>
                 {% else %}
                 <div class="scheme_view">
-                    {{ macros.render_pattern_scheme(name_scheme_detail) }}
+                    {{ macros.render_pattern_scheme(name_scheme_detail_1) }}
                 </div>
                 {% endif %}
             {% else %}
@@ -85,7 +85,7 @@
                         <input hidden type="text" name="page" value="#content-2">
                     </label>
 
-                    {{ macros.render_measure_detail(measure, param, standard_size, info_param, len, zip, str) }}
+                    {{ macros.render_measure_detail(measure, param_2, standard_size_2, info_param, len, zip, str) }}
 
                     <div class="title title-2">
                         <p>Автозаполнение типовыми параметрами</p>
@@ -93,9 +93,9 @@
 
                     <label>
                         <input type="radio" name="gender_size-2" value="param_value_w"
-                               {% if gender_size == 'param_value_w' %} checked {% endif %}>Женский размер
+                               {% if gender_size_2 == 'param_value_w' %} checked {% endif %}>Женский размер
                         <input type="radio" name="gender_size-2" value="param_value_m"
-                               {% if gender_size == 'param_value_m' %} checked {% endif %}>Мужской размер
+                               {% if gender_size_2 == 'param_value_m' %} checked {% endif %}>Мужской размер
                     </label>
 
                     <div class="container_button">
@@ -109,14 +109,14 @@
                 </form>
             </div>
 
-            {% if empty != 1 %}
-                {% if checked_value != True %}
+            {% if empty_2 != 1 %}
+                {% if checked_value_2 != True %}
                 <div class="pattern_info">
                     {{ macros.render_pattern_info(pattern) }}
                 </div>
                 {% else %}
                 <div class="scheme_view">
-                    {{ macros.render_pattern_scheme(name_scheme_detail) }}
+                    {{ macros.render_pattern_scheme(name_scheme_detail_2) }}
                 </div>
                 {% endif %}
             {% else %}
@@ -126,8 +126,8 @@
     </div>
 
     <div class="tabs__links">
-        <a href="{{url_for('scheme')}}#content-1" onclick="window.location.reload()">Ввести мерки для всей выкройки</a>
-        <a href="{{url_for('scheme')}}#content-2" onclick="window.location.reload()">Ввести мерки для каждой детали</a>
+        <a href="#content-1">Ввести мерки для всей выкройки</a>
+        <a href="#content-2">Ввести мерки для каждой детали</a>
 
         {% if name_scheme_pattern != '' %}
             <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>

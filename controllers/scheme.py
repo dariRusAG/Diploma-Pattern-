@@ -51,56 +51,63 @@ def scheme():
     measure_name_pattern = int_list(measure_name_pattern)
     measure_full_name_pattern = int_list(measure_full_name_pattern)
 
-    df_param = get_param_user(conn, session['user_id'])
     df_info_param = get_info_param(conn)
 
+    gender_size_1 = 'param_value_w'
+    standard_size_1 = 'base'
+
+    gender_size_2 = 'param_value_w'
+    standard_size_2 = 'base'
+
+    df_param_1 = get_param_user(conn, session['user_id'])
+    df_param_2 = get_param_user(conn, session['user_id'])
+
     param_value = []
-    empty = 0
-    checked_value = False
+
+    empty_1 = 0
+    empty_2 = 0
+
+    checked_value_1 = False
+    checked_value_2 = False
 
     name_scheme_pattern = ''
-    name_scheme_detail = []
+    name_scheme_detail_1 = []
+    name_scheme_detail_2 = []
 
-    gender_size = 'param_value_w'
-    standard_size = 'base'
+    if page == '#content-1':
 
-    # Если нажата одна из кнопок для заполнения стандартными мерками
-    if request.values.get('fill_standard_param'):
-        if page == '#content-1':
-            gender_size = request.values.get('gender_size-1')
-        elif page == '#content-2':
-            gender_size = request.values.get('gender_size-2')
+        # Автозаполнение параметрами
+        if request.values.get('fill_standard_param'):
+            gender_size_1 = request.values.get('gender_size-1')
+            if gender_size_1 == 'param_value_w':
+                df_param_1 = get_param_standard_w(conn)
+            elif gender_size_1 == 'param_value_m':
+                df_param_1 = get_param_standard_m(conn)
 
-        if gender_size == 'param_value_w':
-            df_param = get_param_standard_w(conn)
-        elif gender_size == 'param_value_m':
-            df_param = get_param_standard_m(conn)
+            standard_size_1 = request.values.get('fill_standard_param')
+            for index, row in df_param_1.iterrows():
+                all_size_param = row['Значение'].split(",")
+                if standard_size_1 == 'XS':
+                    row['Значение'] = float(all_size_param[0])
+                if standard_size_1 == 'S':
+                    row['Значение'] = float(all_size_param[1])
+                if standard_size_1 == 'M':
+                    row['Значение'] = float(all_size_param[2])
+                if standard_size_1 == 'L':
+                    row['Значение'] = float(all_size_param[3])
+                if standard_size_1 == 'XL':
+                    row['Значение'] = float(all_size_param[4])
+                if standard_size_1 == 'XXL':
+                    row['Значение'] = float(all_size_param[5])
 
-        standard_size = request.values.get('fill_standard_param')
-        for index, row in df_param.iterrows():
-            all_size_param = row['Значение'].split(",")
-            if standard_size == 'XS':
-                row['Значение'] = float(all_size_param[0])
-            if standard_size == 'S':
-                row['Значение'] = float(all_size_param[1])
-            if standard_size == 'M':
-                row['Значение'] = float(all_size_param[2])
-            if standard_size == 'L':
-                row['Значение'] = float(all_size_param[3])
-            if standard_size == 'XL':
-                row['Значение'] = float(all_size_param[4])
-            if standard_size == 'XXL':
-                row['Значение'] = float(all_size_param[5])
-
-    # Если нажата кнопка "Построить" в разделе построения по деталям
-    if request.values.get('build_scheme'):
-        if page == '#content-1':
+        # Построение в разделе построения по деталям
+        if request.values.get('build_scheme'):
             param_value = request.form.getlist('param_value')
             param_designation = request.form.getlist('param_designation')
 
             name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
             pdf = PdfPages(name_scheme_pattern)
-            df_param = pd.DataFrame(columns=['ID', 'Обозначение', 'Значение'])
+            df_param_1 = pd.DataFrame(columns=['ID', 'Обозначение', 'Значение'])
 
             list_id_detail = df_measure['ID'].tolist()
             for id_detail in list_id_detail:
@@ -120,44 +127,73 @@ def scheme():
                     param_value_all)),
                     columns=['ID', 'Обозначение', 'Полное_название', 'Значение'])
 
-                df_param = pd.concat([df_param, df_param_detail], axis=0, ignore_index=True)
+                df_param_1 = pd.concat([df_param_1, df_param_detail], axis=0, ignore_index=True)
 
-                if check_null_param(df_param) == 0:
-                    checked_value = True
+                if check_null_param(df_param_1) == 0:
+                    checked_value_1 = True
                     create_user_scheme(conn, df_param_detail, id_detail, pdf)
-                    name_scheme_detail.append(
+                    name_scheme_detail_1.append(
                         'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
+                else:
+                    empty_1 = 1
 
-            for index, row in df_param.iterrows():
+            for index, row in df_param_1.iterrows():
                 if row['Обозначение'] == 'ДИ':
                     new_measure_full_name = row['Полное_название'] + ' "' + str(get_detail_name(conn, row['ID'])) + '"'
                     row['Полное_название'] = new_measure_full_name
 
-            df_param = df_param.drop_duplicates(subset=['Полное_название', 'Значение'], ignore_index=True)
-
+            df_param_1 = df_param_1.drop_duplicates(subset=['Полное_название', 'Значение'], ignore_index=True)
             pdf.close()
-            # standard_size = request.values.get('fill_standard_param')
+            standard_size_1 = request.values.get('fill_standard_param')
 
-        elif page == '#content-2':
+    elif page == '#content-2':
+
+        # Автозаполнение параметрами
+        if request.values.get('fill_standard_param'):
+            gender_size_2 = request.values.get('gender_size-2')
+            if gender_size_2 == 'param_value_w':
+                df_param_2 = get_param_standard_w(conn)
+            elif gender_size_2 == 'param_value_m':
+                df_param_2 = get_param_standard_m(conn)
+
+            standard_size_2 = request.values.get('fill_standard_param')
+            for index, row in df_param_2.iterrows():
+                all_size_param = row['Значение'].split(",")
+                if standard_size_2 == 'XS':
+                    row['Значение'] = float(all_size_param[0])
+                if standard_size_2 == 'S':
+                    row['Значение'] = float(all_size_param[1])
+                if standard_size_2 == 'M':
+                    row['Значение'] = float(all_size_param[2])
+                if standard_size_2 == 'L':
+                    row['Значение'] = float(all_size_param[3])
+                if standard_size_2 == 'XL':
+                    row['Значение'] = float(all_size_param[4])
+                if standard_size_2 == 'XXL':
+                    row['Значение'] = float(all_size_param[5])
+
+        # Построение в разделе построения по деталям
+        if request.values.get('build_scheme'):
             list_id_detail = request.form.getlist('detail')
             param_value = request.form.getlist('param_value')
             param_designation = request.form.getlist('param_designation')
-            df_param = pd.DataFrame(list(zip(list_id_detail, param_designation, param_value)),
+            df_param_2 = pd.DataFrame(list(zip(list_id_detail, param_designation, param_value)),
                                     columns=['ID', 'Обозначение', 'Значение'])
 
-            if check_null_param(df_param) == 0:
-                checked_value = True
+            if check_null_param(df_param_2) == 0:
+                checked_value_2 = True
                 name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
                 pdf = PdfPages(name_scheme_pattern)
                 list_id_detail = list(set(list_id_detail))
                 for id_detail in list_id_detail:
-                    df_param_detail = df_param.loc[(df_param['ID'] == id_detail)]
+                    df_param_detail = df_param_2.loc[(df_param_2['ID'] == id_detail)]
                     create_user_scheme(conn, df_param_detail, id_detail, pdf)
-                    name_scheme_detail.append(
+                    name_scheme_detail_2.append(
                         'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
                 pdf.close()
-
-            # standard_size = request.values.get('fill_standard_param')
+            else:
+                empty_2 = 1
+            standard_size_2 = request.values.get('fill_standard_param')
 
     return render_template(
         'scheme.html',
@@ -171,10 +207,12 @@ def scheme():
         # Выкройки
         pattern=df_pattern,
         measure=df_measure,
-        param=df_param,
+        param_1=df_param_1,
+        param_2=df_param_2,
         param_value=param_value,
         info_param=df_info_param,
-        empty=empty,
+        empty_1=empty_1,
+        empty_2=empty_2,
 
         # Данные при построении выкройки целиком
         measure_name=measure_name_pattern,
@@ -183,15 +221,19 @@ def scheme():
 
         # Имена файлов
         name_scheme_pattern=name_scheme_pattern,
-        name_scheme_detail=name_scheme_detail,
+        name_scheme_detail_1=name_scheme_detail_1,
+        name_scheme_detail_2=name_scheme_detail_2,
         page=page,
 
         # Размеры
-        gender_size=gender_size,
-        standard_size=standard_size,
+        gender_size_1=gender_size_1,
+        standard_size_1=standard_size_1,
+        gender_size_2=gender_size_2,
+        standard_size_2=standard_size_2,
 
         # Счетчики
-        checked_value=checked_value,
+        checked_value_1=checked_value_1,
+        checked_value_2=checked_value_2,
 
         # Функции
         len=len,
