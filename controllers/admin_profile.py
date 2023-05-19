@@ -1,6 +1,5 @@
 from app import app
 from flask import render_template, request, session
-
 from functions.data_check import *
 from models.admin_profile_model import *
 from models.model_general import get_detail_name

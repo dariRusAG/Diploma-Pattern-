@@ -201,3 +201,11 @@ def scheme():
         zip=zip,
         str=str
     )
+
+# error_info = []
+# for i in range(len(df_param)):
+#     print(df_param.loc[i, "Значение"])
+#     print(df_param.loc[i, "Обозначение"])
+#     if is_correct_params(conn, df_param.loc[i, "Значение"], df_param.loc[i, "Обозначение"]) != "True":
+#         error_info.append(is_correct_params(conn, df_param.loc[i, "Значение"], df_param.loc[i, "Обозначение"]))
+# print(error_info)

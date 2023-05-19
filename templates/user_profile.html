@@ -12,22 +12,30 @@
 {{ macros_general.render_menu(user_role) }}
 
 <div>
-    <form action="{{url_for('user_profile')}}" method="post">
+    <form action="{{ url_for('user_profile') }}" method="post">
         <p><b>Личные данные</b></p>
         {{ macros.render_data_user(data_user, len) }}
-        <p><b>Мерки тела</b></p>
-        {{ macros.render_param_user(param_user, error_param, len) }}
-
+            <p><b>Мерки тела</b></p>
+            <div class = "user_info">
+            {{ macros.render_param_user(param_user, error_param, len) }}
+            {% if len(error_param[1]) != 0 %}
+                <div class="admin_panel_error" style="margin-left: 5%; overflow-y: scroll; height: 40vh;">
+                    {% for elem in error_param[1] %}
+                        <p>{{ elem }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
         <div>
             <input type="submit" name="save" value="Сохранить изменения" class="button">
             <br><br>
             <input type="button" value="Отменить изменения" class="button"
-                   onclick="window.location='{{url_for('user_profile')}}'">
+                   onclick="window.location='{{ url_for('user_profile') }}'">
             <br><br>
         </div>
     </form>
 
-    <form action="{{url_for('catalog_favorites')}}" method="get">
+    <form action="{{ url_for('catalog_favorites') }}" method="get">
         <input type="submit" name="remove_profile_button" value="Удалить аккаунт"
                disabled="disabled" class="button">
     </form>

@@ -30,12 +30,12 @@
                     ({{ param_user.loc[i, "param_name"] }}):
                 </td>
                 <td>
-                    {% if error_param[i] != 'q' and error_param != [] %}
+                    {% if error_param[0][i] != 'q' and error_param[0] != [] %}
                         <input type="text" name="param_user" class="error_personal"
                                 {% if param_user.loc[i,"user_param_value"] == '' %} placeholder=''
                                 {% else %}
                                     placeholder={{ param_user.loc[i,"user_param_value"]}}
-                                {% endif %} value={{ error_param[i] }}>
+                                {% endif %} value={{ error_param[0][i] }}>
                     {% else %}
                         <input type="text" name="param_user" class="write_personal"
                                 {% if param_user.loc[i,"user_param_value"] != '' %}
