@@ -126,8 +126,8 @@
     </div>
 
     <div class="tabs__links">
-        <a href="{{url_for('scheme')}}#content-1">Ввести мерки для всей выкройки</a>
-        <a href="{{url_for('scheme')}}#content-2">Ввести мерки для каждой детали</a>
+        <a href="{{url_for('scheme')}}#content-1" onclick="window.location.reload()">Ввести мерки для всей выкройки</a>
+        <a href="{{url_for('scheme')}}#content-2" onclick="window.location.reload()">Ввести мерки для каждой детали</a>
 
         {% if name_scheme_pattern != '' %}
             <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>
