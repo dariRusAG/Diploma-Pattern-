@@ -450,7 +450,7 @@
                 <p> Детали:
                     {% if pattern_info[1][0] != "error" %}
                         {% for detail in pattern_info[1] %}
-                            <p>&bull; {{ detail }}</p>
+                            <li> {{ detail }}</li>
                         {% endfor %}
                     {% else %}
                         Детали отсутствуют
