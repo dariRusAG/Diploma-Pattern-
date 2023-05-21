@@ -205,3 +205,25 @@ def is_correct_params(conn, elem, name):
         return "Ошибка! Значение параметра " + str(name) + " должно быть от " + str(min) + " до " + str(max)
     else:
         return "True"
+
+def is_correct_params_scheme(conn, elem, name, detail_name, func):
+    min = get_params_max_min(conn, name)[0]
+    max = get_params_max_min(conn, name)[1]
+    if func == "detail_pattern" or str(name) == "ДИ":
+        if elem == '':
+            return "Ошибка! Значение " + str(name) +" у детали " + '"' + detail_name + '"' + " не должно быть пустым"
+        elif not is_float(elem):
+            return "Ошибка! Значение параметра " + str(name)  + " у детали " + '"' + detail_name + '"' +  " должно быть числом"
+        elif min > float(elem) or max < float(elem):
+            return "Ошибка! Значение параметра " + str(name)  + " у детали " + '"' + detail_name + '"' + " должно быть от " + str(min) + " до " + str(max)
+        else:
+            return "True"
+    else:
+        if elem == '':
+            return "Ошибка! Значение " + str(name) + " не должно быть пустым"
+        elif not is_float(elem):
+            return "Ошибка! Значение параметра " + str(name) + " должно быть числом"
+        elif min > float(elem) or max < float(elem):
+            return "Ошибка! Значение параметра " + str(name) + " должно быть от " + str(min) + " до " + str(max)
+        else:
+            return "True"

@@ -11,18 +11,18 @@
 {{ macros_general.render_menu(user_role) }}
 
 {% if is_authorization == True %}
-{{ macros_general.authorization(user_data_error, auth_form) }}
+    {{ macros_general.authorization(user_data_error, auth_form) }}
 {% endif %}
 
 {% if is_registration == True %}
-{{ macros_general.registration(user_data_error, reg_form) }}
+    {{ macros_general.registration(user_data_error, reg_form) }}
 {% endif %}
 
 <div class="tabs">
     <div id="content-1">
         <div class="scheme_panel">
             <div class="block_measure">
-                <form action="{{url_for('scheme')}}#content-1" method="post">
+                <form action="{{ url_for('scheme') }}#content-1" method="post">
                     <div class="title">
                         <p>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</p>
                     </div>
@@ -40,9 +40,9 @@
 
                     <label>
                         <input type="radio" name="gender_size-1" value="param_value_w"
-                               {% if gender_size_1 == 'param_value_w' %} checked {% endif %}>Женский размер
+                                {% if gender_size_1 == 'param_value_w' %} checked {% endif %}>Женский размер
                         <input type="radio" name="gender_size-1" value="param_value_m"
-                               {% if gender_size_1 == 'param_value_m' %} checked {% endif %}>Мужской размер
+                                {% if gender_size_1 == 'param_value_m' %} checked {% endif %}>Мужской размер
                     </label>
 
                     <div class="container_button">
@@ -56,18 +56,22 @@
                 </form>
             </div>
 
-            {% if empty_1 != 1 %}
+            {% if len(error_info[0]) == 0 %}
                 {% if checked_value_1 != True %}
-                <div class="pattern_info">
-                    {{ macros.render_pattern_info(pattern) }}
-                </div>
+                    <div class="pattern_info">
+                        {{ macros.render_pattern_info(pattern) }}
+                    </div>
                 {% else %}
-                <div class="scheme_view">
-                    {{ macros.render_pattern_scheme(name_scheme_detail_1) }}
-                </div>
+                    <div class="scheme_view">
+                        {{ macros.render_pattern_scheme(name_scheme_detail_1) }}
+                    </div>
                 {% endif %}
             {% else %}
-                Введите недостающие параметры!
+                <div class="admin_panel_error">
+                    {% for i in range(len(error_info[0])) %}
+                        <p>{{ error_info[0][i] }}</p>
+                    {% endfor %}
+                </div>
             {% endif %}
         </div>
     </div>
@@ -75,7 +79,7 @@
     <div id="content-2">
         <div class="scheme_panel">
             <div class="block_measure">
-                <form action="{{url_for('scheme')}}#content-2" method="post">
+                <form action="{{ url_for('scheme') }}#content-2" method="post">
                     <div class="title">
                         <p>Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</p>
                     </div>
@@ -93,9 +97,9 @@
 
                     <label>
                         <input type="radio" name="gender_size-2" value="param_value_w"
-                               {% if gender_size_2 == 'param_value_w' %} checked {% endif %}>Женский размер
+                                {% if gender_size_2 == 'param_value_w' %} checked {% endif %}>Женский размер
                         <input type="radio" name="gender_size-2" value="param_value_m"
-                               {% if gender_size_2 == 'param_value_m' %} checked {% endif %}>Мужской размер
+                                {% if gender_size_2 == 'param_value_m' %} checked {% endif %}>Мужской размер
                     </label>
 
                     <div class="container_button">
@@ -109,18 +113,22 @@
                 </form>
             </div>
 
-            {% if empty_2 != 1 %}
+            {% if len(error_info[1]) == 0 %}
                 {% if checked_value_2 != True %}
-                <div class="pattern_info">
-                    {{ macros.render_pattern_info(pattern) }}
-                </div>
+                    <div class="pattern_info">
+                        {{ macros.render_pattern_info(pattern) }}
+                    </div>
                 {% else %}
-                <div class="scheme_view">
-                    {{ macros.render_pattern_scheme(name_scheme_detail_2) }}
-                </div>
+                    <div class="scheme_view">
+                        {{ macros.render_pattern_scheme(name_scheme_detail_2) }}
+                    </div>
                 {% endif %}
             {% else %}
-                Введите недостающие параметры!
+                <div class="admin_panel_error">
+                    {% for i in range(len(error_info[1])) %}
+                        <p>{{ error_info[1][i] }}</p>
+                    {% endfor %}
+                </div>
             {% endif %}
         </div>
     </div>
@@ -129,7 +137,7 @@
         <a href="#content-1">Ввести мерки для всей выкройки</a>
         <a href="#content-2">Ввести мерки для каждой детали</a>
 
-        {% if name_scheme_pattern != '' %}
+        {% if name_scheme_pattern != '' and len(error_info[0]) == 0 and len(error_info[1]) == 0 %}
             <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>
         {% endif %}
     </div>
