@@ -117,6 +117,9 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
     for key in measurements:
         measurements[key] = float(measurements[key])
 
+    measurements['sqrt'] = math.sqrt
+    measurements['pow'] = math.pow
+
     try:
         # расчёт всех формул в зависимости от значений мерок
         for formula in df_formula:
