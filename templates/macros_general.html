@@ -1,35 +1,47 @@
 <!DOCTYPE html>
 
 {% macro render_menu(user_role) %}
-    <div class=menu>
-        <ul>
-            {% if user_role != 'admin' %}
-                <form action="{{ url_for('catalog_favorites') }}" method="get">
-                    <input type="submit" name="catalog" value="Каталог"
-                           style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
-                </form>
-                {% else %}
-                    <input type="submit" style="visibility: hidden">
-            {% endif %}
-            {% if user_role == 'guest' %}
-                <form action="" method="get">
-                    <input type="submit" name="authorization_button" value="Войти"
-                           style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
-                </form>
-            {% else %}
+    <nav class="navbar nav-justified navbar-expand-lg navbar-light" style="background: #f1f1f1">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">
+                <img src="https://www.clipartmax.com/png/full/83-832289_beirut-hand-sewing-needles-clip-art-beirut-hand-sewing-needles-clip-art.png"
+                     width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+                Your sewing pattern
+            </a>
+            <div
+                    class="collapse navbar-collapse "
+                    id="navbarCenteredExample"
+            >
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    {% if user_role != 'admin' %}
+                        <form action="{{ url_for('catalog_favorites') }}" method="get">
+                            <button class="nav-link active text-white me-4" name="catalog" value="Каталог">Каталог
+                            </button>
+                        </form>
+                    {% endif %}
+                    {% if user_role == 'guest' %}
+                        <form action="" method="get">
+                            <button class="btn me-4" name="authorization_button" value="Войти">Войти</button>
+                        </form>
+                    {% else %}
+                        {% if user_role == 'admin' %}
+                            <a class="nav-link active text-white" aria-current="page"
+                               href="{{ url_for("admin_profile") }}">Личный кабинет</a>
+                        {% else %}
+                            <form action="{{ url_for('catalog_favorites') }}" method="get">
+                                <button class="nav-link active text-white me-4" name="favorites"
+                                        value="Список избранного">Список избранного
+                                </button>
+                            </form>
 
-                {% if user_role == 'admin' %}
-                    <li class=active><a href={{ url_for("admin_profile") }}>Личный кабинет</a></li>
-                {% else %}
-                    <form action="{{ url_for('catalog_favorites') }}" method="get">
-                        <input type="submit" name="favorites" value="Список избранного"
-                               style="background:#fc6c85; color: #fff0f5; height:100%; border: none; cursor: pointer;">
-                    </form>
-                    <li class=active><a href={{ url_for("user_profile") }}>Личный кабинет</a></li>
-                {% endif %}
-            {% endif %}
-        </ul>
-    </div>
+                            <a class="btn text-nowrap me-4" aria-current="page"
+                               href="{{ url_for("user_profile") }}">Личный кабинет</a>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 {% endmacro %}
 
 <!--окно авторизации-->
@@ -37,21 +49,33 @@
     <div class="gray_page">
     </div>
     <div class="authorization_registration">
-        <input type="submit" value="Выйти" onclick="location.href='/';" style="width:12%; height:10%; cursor: pointer;">
-        Войдите в аккаунт:
-        <form action="" method="get">
-            <p>Логин: <input type="text" name="auth_login" style="height:10%; "></p>
-            <p>Пароль: <input type="password" name="auth_password" style="height:10%; "></p>
-            {% if user_data_error != "" %}
-                {{ user_data_error }}
-            {% endif %}
-            <input type="submit" value="Авторизоваться" name="authorization_user_button"
-                   style="width:70%; height:20%; margin-top:20%;cursor: pointer;">
-        </form>
-        <form action="" method="get">
-            <input type="submit" value="Создать аккаунт" name="registration_button"
-                   style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
-        </form>
+        <button type="button" class="btn-close btn-close-white" onclick="location.href='/';"></button>
+        <div class="myform">
+            <h1 class="text-center">Авторизация</h1>
+            <form action="" method="get">
+                <div class="mb-3 mt-4">
+                    <label for="exampleInputEmail1" class="form-label">Логин</label>
+                    <input type="text" class="form-control" name="auth_login">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                    <input type="password" class="form-control" name="auth_password">
+                </div>
+
+                {% if user_data_error != "" %}
+                    <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                        <i class="bi-exclamation-octagon-fill"></i>
+                        <strong class="mx-1">Ошибка!</strong>
+                        {{ user_data_error }}
+                    </div>
+                {% endif %}
+                <button type="submit" class="btn btn-light mt-3"
+                        value="Авторизоваться" name="authorization_user_button">Войти
+                </button>
+                <p>Нет аккаунта? <a href="?registration_button=Создать аккаунт" value="Создать аккаунт"
+                                    name="registration_button">Зарегистрироваться</a></p>
+            </form>
+        </div>
     </div>
 {% endmacro %}
 
@@ -60,23 +84,36 @@
     <div class="gray_page">
     </div>
     <div class="authorization_registration">
-        <input type="submit" value="Выйти" onclick="location.href='/';"
-               style="width:12%; height:10%; cursor: pointer;">
-        Создайте аккаунт:
-        <form action="" method="get">
-            <p>Логин: <input type="text" name="reg_login" style="height:10%; "></p>
-            <p>Пароль: <input type="password" name="reg_password" style="height:10%; "></p>
-            <p> Повторите пароль: <input type="password" name="password_confirm" style="height:10%; "></p>
-            {% if user_data_error != "" %}
-                {{ user_data_error }}
-            {% endif %}
-            <input type="submit" value="Зарегистрироваться" name="registration_user_button"
-                   style="width:70%; height:20%; margin-top:5%; cursor: pointer;">
-        </form>
-        <form action="" method="get">
-            <input type="submit" value="Уже есть аккаунт" name="authorization_button"
-                   style="width:70%; height:100%;margin-top:5%;cursor: pointer;">
-        </form>
+        <button type="button" class="btn-close btn-close-white" onclick="location.href='/';"></button>
+        <div class="myform">
+            <h1 class="text-center">Регистрация</h1>
+            <form action="" method="get">
+                <div class="mb-3 mt-4">
+                    <label for="exampleInputEmail1" class="form-label">Логин</label>
+                    <input type="text" class="form-control" name="reg_login">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Пароль</label>
+                    <input type="password" class="form-control" name="reg_password">
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Повторите пароль</label>
+                    <input type="password" class="form-control" name="password_confirm">
+                </div>
+                {% if user_data_error != "" %}
+                    <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+                        <i class="bi-exclamation-octagon-fill"></i>
+                        <strong class="mx-1"></strong>
+                        {{ user_data_error }}
+                    </div>
+                {% endif %}
+                <button type="submit" class="btn btn-light mt-3"
+                        value="Авторизоваться" name="registration_user_button">Зарегистрироваться
+                </button>
+                <p>Уже есть аккаунт? <a href="?authorization_button=Войти" value="Войти" name="registration_button">Войти</a>
+                </p>
+            </form>
+        </div>
     </div>
 {% endmacro %}
 

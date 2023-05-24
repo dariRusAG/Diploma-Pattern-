@@ -2,6 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     <title>Личный кабинет</title>
     {% import "macros_general.html" as macros_general %}
@@ -11,7 +14,7 @@
 
 {{ macros_general.render_menu(user_role) }}
 
-<div>
+<div class="user_profile_panel mt-3 ms-3">
     <form action="{{ url_for('user_profile') }}" method="post">
         <p><b>Личные данные</b></p>
         {{ macros.render_data_user(data_user, len) }}
@@ -39,8 +42,7 @@
         <input type="submit" name="remove_profile_button" value="Удалить аккаунт"
                disabled="disabled" class="button">
     </form>
-</div>
-
 {{ macros_general.exit() }}
+</div>
 </body>
 </html>

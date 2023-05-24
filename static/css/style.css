@@ -1,7 +1,7 @@
-html {
+body {
     font-family: 'Lato', sans-serif;
     font-size: 15px;
-    background: #baacd2;
+    background: #d1bde2;
 }
 
 /* Верхнее меню */
@@ -91,7 +91,6 @@ html {
 
 /* Авторизация */
 .authorization_registration {
-    background: #fddde6;
     top: 0;
     left: 0;
     position: fixed;
@@ -102,12 +101,7 @@ html {
     font-size: 15px;
     padding: 7px;
     border-radius: 10%;
-    text-align: left;
-    display: flex;
-    justify-content: space-around;
-    align-content: center;
-    flex-direction: column;
-    flex-wrap: wrap;
+
 }
 
 /* Серый экран авторизации */
@@ -163,7 +157,7 @@ html {
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
     font-size: 14px;
     margin: 15px 15px;
-    width: 190px;
+    width: 20%;
 }
 
 .block_scheme {
@@ -532,4 +526,70 @@ p3 {
 .user_info {
     display: flex;
     flex-direction: row;
+}
+
+
+/*окно авторизации*/
+.btn-close {
+    position: absolute;
+    right: 0;
+    padding: 1em;
+    box-shadow: none !important;
+}
+
+h1 {
+    font-size: 2.3em;
+    font-weight: bold;
+}
+
+.myform {
+    padding: 2em;
+    width: 100%;
+    color: #fff;
+    box-shadow: 0 4px 6px 0 rgba(22, 22, 26, 0.18);
+    background: #d16192;
+}
+
+@media (max-width: 576px) {
+    .myform {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+}
+
+.myform .btn {
+    width: 100%;
+    font-weight: 800;
+    background-color: #fff;
+    border-radius: 0;
+    padding: 0.5em 0;
+}
+
+.myform .btn:hover {
+    background-color: inherit;
+    color: #fff;
+    border-color: #fff;
+}
+
+.pattern_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.user_profile_panel{
+    background: #f1f1f1;
+    height: 88vh;
+    width: 98%;
+    border-radius: 5px;
+}
+
+.admin_button{
+    background: transparent;
+    border: transparent;
+    cursor: pointer;
+}
+
+.admin_button:hover {
+    color: #b537ba;
 }
