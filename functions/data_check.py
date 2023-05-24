@@ -22,7 +22,8 @@ def role(conn):
     elif request.values.get('authorization_user_button'):
         login = request.values.get('auth_login')
         password = request.values.get('auth_password')
-
+        print(login)
+        print(password)
         match is_correct_login_and_password(conn, login, password):
 
             case "user":
@@ -54,7 +55,7 @@ def role(conn):
             user_data_error = "Пароль должен быть больше 8 символов"
         elif len(password) > 60:
             is_registration = True
-            user_data_error = "Логин должен быть меньше 60 символов"
+            user_data_error = "Пароль должен быть меньше 60 символов"
         elif get_user_id(conn, login) != "error":
             is_registration = True
             user_data_error = "Пользователь с таким логином уже существует"

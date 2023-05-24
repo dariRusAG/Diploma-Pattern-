@@ -71,9 +71,6 @@ def scheme():
 
     param_value = []
 
-    empty_1 = 0
-    empty_2 = 0
-
     checked_value_1 = False
     checked_value_2 = False
 
@@ -126,7 +123,6 @@ def scheme():
                     if row['Обозначение'] == 'ДИ':
                         param_value[param_value.index(param_value[index_param_designation])] = ''
                         param_designation[param_designation.index(param_designation[index_param_designation])] = ''
-
                 df_param_detail = pd.DataFrame(list(zip(
                     df_measure_detail['ID'].tolist(),
                     df_measure_detail['Обозначение'].tolist(),
@@ -134,7 +130,6 @@ def scheme():
                     param_value_all)),
                     columns=['ID', 'Обозначение', 'Полное_название', 'Значение'])
                 df_param_1 = pd.concat([df_param_1, df_param_detail], axis=0, ignore_index=True)
-
                 # Проверка на ошибки
                 for i in range(len(df_param_1)):
                     error = is_correct_params_scheme(conn, df_param_1.loc[i, "Значение"],

@@ -14,38 +14,49 @@
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_category" placeholder="Введите название категории" style="width:100%">
-            <input type="submit" name="add_category" value="+" style="cursor: pointer;">
+                <button type="submit" name="add_category" value="+" class="admin_button">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
         </div>
     </form>
     <p2> Список категорий:</p2>
     <div class="admin_panel_right_data_list">
+    <p><table></p>
         {% for i in range(len(category)) %}
-            <div class="admin_panel_right_data_text">
+            <tr>
                 {% if checked_value[1] == '' or checked_value[1] != i %}
                     <form action="{{ url_for('admin_profile') }}" method="get">
-                        {{ category.loc[i, "category_name"] }}
-                        <input type="submit" name="is_edit_category" value="Изменить"
-                               style="margin-left:10px; cursor: pointer;">
+
+                        <td><p>{{ category.loc[i, "category_name"] }}</p></td>
+                        <td><p><button type="submit" name="is_edit_category" value="Изменить" class="admin_button">
+                            <i class="bi bi-pencil-fill" ></i>
+                        </button></p></td>
                         <input type="hidden" name="is_edit_category_id" value={{ i }}>
+
                     </form>
                     <form action="{{ url_for('admin_profile') }}" method="get">
-                        <input type="submit" value="Удалить"
-                               style="margin-left:10px; cursor: pointer;">
-                        <input type="hidden" name="delete_category" value={{ category['category_id'].values[i] }}>
+                        <td><p><button type="submit" value="Удалить" class="admin_button">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                        <input type="hidden" name="delete_category" value={{ category['category_id'].values[i] }}></p></td>
                     </form>
                 {% else %}
                     {% if checked_value[1] == i %}
                         <form action="{{ url_for('admin_profile') }}" method="get">
-                            <input type="text" name="edit_category_name"
-                                   value='{{ category.loc[i, "category_name"] }}' style="width:40%">
-                            <input type="submit" value="Сохранить изменения"
-                                   style="margin-left:10px; cursor: pointer;">
-                            <input type="hidden" name="edit_category" value={{ category['category_id'].values[i] }}>
+                            <p><input type="text" name="edit_category_name"
+                                   value='{{ category.loc[i, "category_name"] }}'>
+
+                                <button type="submit" value="Сохранить изменения" class="admin_button">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+                            <input type="hidden" name="edit_category" value={{ category['category_id'].values[i] }}></p>
                         </form>
                     {% endif %}
+
                 {% endif %}
-            </div>
+            </tr>
         {% endfor %}
+    </table>
     </div>
 {% endmacro %}
 

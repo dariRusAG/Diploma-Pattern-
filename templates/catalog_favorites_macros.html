@@ -3,7 +3,7 @@
 <!--Генерация формы выбора категории-->
 {% macro render_block_choice(category, choice_category, choice_complexity, len, str) %}
 <div class="catalog">
-    <div class="block_choice">
+    <div class="block_choice mt-3">
         <form action="{{url_for('catalog_favorites')}}" method="post">
             <p><b>Категории:</b></p>
             {% for i in range(len(category)) %}
