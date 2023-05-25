@@ -411,7 +411,7 @@ p3 {
 .tooltip2 .tooltiptext2 {
     visibility: hidden;
     width: 380px;
-    background-color: rgba(87,40,40,0.71);
+    background-color: rgba(87, 40, 40, 0.71);
     color: #fffaf1;
     text-align: center;
     padding: 5px 0;
@@ -502,12 +502,12 @@ p3 {
 
     .tabs__links > a {
         height: 32px;
-        margin-top:5%;
+        margin-top: 5%;
         border-radius: 5px;
         box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
         margin-bottom: 5%;
         cursor: pointer;
-        color:#2a1515;
+        color: #2a1515;
     }
 
     .tabs > div:not(.tabs__links) {
@@ -575,9 +575,48 @@ h1 {
 }
 
 .user_profile_panel {
-    background: #fffaf1;
     height: 88vh;
-    width: 98%;
+    width: 99%;
+    display: flex;
+    flex-direction: row;
+}
+
+.user_profile_info {
+    display: block;
+    float: left;
+    margin-left: 6.5%;
+    margin-top: 2%;
+    border-radius: 5px;
+    height: 74vh;
+}
+
+.user_profile_info_buttons {
+    width: 99%;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.user_profile_button {
+    width: 100%;
+    height: 40px;
+    border-radius: 4px;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    margin-top: 2%;
+    margin-bottom: 3%;
+    cursor: pointer;
+    background: #fffaf1;
+}
+
+.user_profile_left {
+    height: 96%;
+    width: 13%;
+}
+
+.user_profile_right {
+    background: #fffaf1;
+    height: 96%;
+    width: 84%;
     border-radius: 5px;
 }
 
