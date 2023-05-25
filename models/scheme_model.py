@@ -52,6 +52,16 @@ def get_measure_detail(conn, index):
     WHERE detail_id == {index}
     ''', conn)
 
+def get_detail_no_measure(conn, index, list_detail):
+    return pd.read_sql(f'''
+    SELECT
+        detail_id AS ID,
+        '' AS Обозначение,
+        '' AS Значение
+    FROM pattern_detail
+    WHERE pattern_id == {index} AND detail_id NOT IN ({str(list_detail).strip('[]')})
+    ''', conn)
+
 def get_info_param(conn):
     return pd.read_sql(f'''
         SELECT 

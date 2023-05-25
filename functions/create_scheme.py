@@ -115,7 +115,8 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
 
     measurements = dict(zip(user_param["Обозначение"], user_param["Значение"]))
     for key in measurements:
-        measurements[key] = float(measurements[key])
+        if measurements[key] != '':
+            measurements[key] = float(measurements[key])
 
     measurements['sqrt'] = math.sqrt
     measurements['pow'] = math.pow
@@ -195,7 +196,6 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
         build_line_curve(curves, curves_points)
 
     name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
-
     plt.savefig(name, bbox_inches='tight')
 
     # количество листов по иксу
