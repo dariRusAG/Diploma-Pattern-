@@ -119,8 +119,6 @@ body {
 
 /*Блок вывода выкроек*/
 .pattern_view {
-    margin-left: 16%;
-    padding: 0 14px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -147,7 +145,7 @@ body {
     box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
     font-size: 14px;
     margin: 15px 15px;
-    width: 280px;
+    width: 240px;
 }
 
 .block_scheme {
