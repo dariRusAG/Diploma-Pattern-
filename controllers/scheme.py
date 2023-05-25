@@ -106,14 +106,23 @@ def scheme():
                 if standard_size_1 == 'XXL':
                     row['Значение'] = float(all_size_param[5])
 
-        # Построение в разделе построения по деталям
+        # Построение в разделе построения выкройки целиком
         if request.values.get('build_scheme'):
             param_value = request.form.getlist('param_value')
             param_designation = request.form.getlist('param_designation')
             name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
             pdf = PdfPages(name_scheme_pattern)
-            df_param_1 = pd.DataFrame(columns=['ID', 'Обозначение', 'Значение'])
+            df_param_1 = pd.DataFrame(columns=['ID', 'Обозначение', 'Полное_название', 'Значение'])
+
             list_id_detail = df_measure['ID'].tolist()
+            list_id_detail_int = [int(x) for x in list_id_detail]
+
+            df_param_detail_no_measure = get_detail_no_measure(conn, index_pattern, list_id_detail_int)
+            for index, row in df_param_detail_no_measure.iterrows():
+                row['ID'] = str(row['ID'])
+
+            list_id_detail += df_param_detail_no_measure['ID'].tolist()
+
             for id_detail in list_id_detail:
                 df_measure_detail = get_measure_detail(conn, id_detail)
                 param_value_all = []
@@ -123,20 +132,24 @@ def scheme():
                     if row['Обозначение'] == 'ДИ':
                         param_value[param_value.index(param_value[index_param_designation])] = ''
                         param_designation[param_designation.index(param_designation[index_param_designation])] = ''
+
                 df_param_detail = pd.DataFrame(list(zip(
                     df_measure_detail['ID'].tolist(),
                     df_measure_detail['Обозначение'].tolist(),
                     df_measure_detail['Полное_название'].tolist(),
                     param_value_all)),
                     columns=['ID', 'Обозначение', 'Полное_название', 'Значение'])
+
                 df_param_1 = pd.concat([df_param_1, df_param_detail], axis=0, ignore_index=True)
+
                 # Проверка на ошибки
                 for i in range(len(df_param_1)):
-                    error = is_correct_params_scheme(conn, df_param_1.loc[i, "Значение"],
-                                                     df_param_1.loc[i, "Обозначение"],
-                                                     str(get_detail_name(conn, id_detail)), "all_pattern")
-                    if error != "True" and error_info[0].count(error) == 0:
-                        error_info[0].append(error)
+                    if df_param_1.loc[i, "Обозначение"] != '':
+                        error = is_correct_params_scheme(conn, df_param_1.loc[i, "Значение"],
+                                                         df_param_1.loc[i, "Обозначение"],
+                                                         str(get_detail_name(conn, id_detail)), "all_pattern")
+                        if error != "True" and error_info[0].count(error) == 0:
+                            error_info[0].append(error)
 
                 if len(error_info[0]) == 0:
                     checked_value_1 = True
@@ -182,17 +195,27 @@ def scheme():
         # Построение в разделе построения по деталям
         if request.values.get('build_scheme'):
             list_id_detail = request.form.getlist('detail')
+            list_id_detail_int = [int(x) for x in list_id_detail]
+
             param_value = request.form.getlist('param_value')
             param_designation = request.form.getlist('param_designation')
             df_param_2 = pd.DataFrame(list(zip(list_id_detail, param_designation, param_value)),
                                       columns=['ID', 'Обозначение', 'Значение'])
 
+            df_param_detail_no_measure = get_detail_no_measure(conn, index_pattern, list_id_detail_int)
+            for index, row in df_param_detail_no_measure.iterrows():
+                row['ID'] = str(row['ID'])
+
+            list_id_detail += df_param_detail_no_measure['ID'].tolist()
+            df_param_2 = pd.concat([df_param_2, df_param_detail_no_measure], axis=0, ignore_index=True)
+
             # Проверка на ошибки
             for i in range(len(df_param_2)):
-                error = is_correct_params_scheme(conn, df_param_2.loc[i, "Значение"], df_param_2.loc[i, "Обозначение"],
-                                                 str(get_detail_name(conn, list_id_detail[i])), "detail_pattern")
-                if error != "True" and error_info[1].count(error) == 0:
-                    error_info[1].append(error)
+                if df_param_2.loc[i, "Обозначение"] != '':
+                    error = is_correct_params_scheme(conn, df_param_2.loc[i, "Значение"], df_param_2.loc[i, "Обозначение"],
+                                                     str(get_detail_name(conn, list_id_detail[i])), "detail_pattern")
+                    if error != "True" and error_info[1].count(error) == 0:
+                        error_info[1].append(error)
 
             if len(error_info[1]) == 0:
                 checked_value_2 = True
@@ -205,7 +228,9 @@ def scheme():
                     name_scheme_detail_2.append(
                         'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
                 pdf.close()
+
             standard_size_2 = request.values.get('fill_standard_param')
+
     return render_template(
         'scheme.html',
 
