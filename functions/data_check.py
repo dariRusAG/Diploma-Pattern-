@@ -2,6 +2,7 @@ from flask import request, session
 from functions.create_scheme import create_user_scheme
 from models.admin_profile_model import *
 from models.model_general import *
+from models.user_profile_model import is_correct_user_data
 
 
 def role(conn):
@@ -191,8 +192,8 @@ def is_correct_login_password(conn, login, password):
         return "Ошибка! Логин не может быть пустым"
     elif password == '':
         return "Ошибка! Пароль не может быть пустым"
-    elif is_correct_login_and_password(conn, login, password) == "error":
-        return "Ошибка! Такой логин уже занят"
+    # elif is_correct_user_data(conn, login) != "error":
+    #     return "Ошибка! Такой логин уже занят"
     else:
         return "True"
 
@@ -200,6 +201,8 @@ def is_correct_login_password(conn, login, password):
 def is_correct_params(conn, elem, name):
     min = get_params_max_min(conn, name)[0]
     max = get_params_max_min(conn, name)[1]
+    if str(elem) == '':
+        return "True"
     if not is_float(elem):
         return "Ошибка! Значение параметра " + str(name) + " должно быть числом"
     elif min > float(elem) or max < float(elem):

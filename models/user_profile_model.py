@@ -23,7 +23,6 @@ def get_param_user(conn, user_id):
 
 def update_data_user(conn, user_id, new_data_user):
     cur = conn.cursor()
-
     cur.execute('''
     UPDATE users
     SET 
@@ -37,12 +36,11 @@ def update_data_user(conn, user_id, new_data_user):
 
 def update_param_user(conn, user_id, elem, new_param_user):
     cur = conn.cursor()
-
     cur.execute('''
     UPDATE user_param
-    SET user_param_value = :param
-    WHERE (users_id = :user_id) AND (param_id = :i)
-    ''', {"user_id": user_id, "param": new_param_user[elem], "i": elem + 1})
+    SET user_param_value = :new_param_user
+    WHERE (users_id = :user_id) AND (param_id = :elem)
+    ''', {"user_id": user_id, "new_param_user": new_param_user, "elem": elem})
 
     return conn.commit()
 
@@ -54,3 +52,24 @@ def get_param(conn, user_id):
     INNER JOIN user_param ON param.param_id = user_param.param_id
     WHERE users_id = {user_id}
     ''', conn)
+
+def get_param_id(conn, param_name):
+    try:
+        return pandas.read_sql('''SELECT param_id
+        FROM param
+        WHERE param_name = :param_name
+        ''', conn, params={"param_name": param_name}).values[0][0]
+    except IndexError:
+        return "error"
+
+
+def is_correct_user_data(conn, login):
+    try:
+        return pandas.read_sql('''
+        SELECT users_role
+        FROM users
+        WHERE users_login = :login
+        ''', conn, params={"login": login}).values[0][0]
+
+    except IndexError:
+        return "error"
