@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 
 {% macro render_menu(user_role) %}
-    <nav class="navbar nav-justified navbar-expand-lg navbar-light" style="background: #f1f1f1">
+    <nav class="navbar nav-justified navbar-expand-lg navbar-light" style="background: #f5ede1">
         <div class="container-fluid">
             <a class="navbar-brand" href="">
-                <img src="https://www.clipartmax.com/png/full/83-832289_beirut-hand-sewing-needles-clip-art-beirut-hand-sewing-needles-clip-art.png"
-                     width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
-                Your sewing pattern
+                <img src="\static\image\icons\your-sewing-pattern-logo.png"
+                     width="350" height="35" class="d-inline-block align-top" alt="" loading="lazy">
             </a>
             <div
                     class="collapse navbar-collapse "
@@ -121,6 +120,6 @@
 {% macro exit() %}
     <form action={{ url_for('catalog_favorites') }} method="get">
         <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';"
-               style="background:#fc6c85; color: #fff0f5; height:10%; border: none; cursor: pointer;">
+               style="background:#b47d82; color: #fffaf1; height:20%; border: none; cursor: pointer;">
     </form>
 {% endmacro %}
