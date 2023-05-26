@@ -46,13 +46,19 @@ def scheme():
             measure_name_pattern.append(measure_name)
             if measure_name != 'ДИ':
                 measure_full_name_pattern.append(measure_full_name)
-                details_lengths.append(row['Длина_детали'])
             if measure_name == 'ДИ':
-                measure_full_name_pattern.append(measure_full_name + ' "' + row['Название_детали'] + '"')
-                details_lengths.append(row['Длина_детали'])
+                measure_full_name_pattern.append('Длина детали "' + row['Название_детали'] + '"')
 
     measure_name_pattern = int_list(measure_name_pattern)
     measure_full_name_pattern = int_list(measure_full_name_pattern)
+
+    check_measure = []
+
+    for index, row in df_measure.iterrows():
+        for measure_name in row['Обозначение'].split(","):
+            if measure_name not in check_measure or measure_name == 'ДИ':
+                details_lengths.append(row['Длина_детали'])
+                check_measure.append(measure_name)
 
     df_info_param = get_info_param(conn)
 
@@ -110,8 +116,10 @@ def scheme():
         if request.values.get('build_scheme'):
             param_value = request.form.getlist('param_value')
             param_designation = request.form.getlist('param_designation')
+
             name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
             pdf = PdfPages(name_scheme_pattern)
+
             df_param_1 = pd.DataFrame(columns=['ID', 'Обозначение', 'Полное_название', 'Значение'])
 
             list_id_detail = df_measure['ID'].tolist()
@@ -123,15 +131,17 @@ def scheme():
 
             list_id_detail += df_param_detail_no_measure['ID'].tolist()
 
+            # Обработка мерок и параметров для построения по деталям
             for id_detail in list_id_detail:
                 df_measure_detail = get_measure_detail(conn, id_detail)
+
                 param_value_all = []
                 for index, row in df_measure_detail.iterrows():
                     index_param_designation = param_designation.index(row['Обозначение'])
                     param_value_all.append(param_value[index_param_designation])
                     if row['Обозначение'] == 'ДИ':
-                        param_value[param_value.index(param_value[index_param_designation])] = ''
-                        param_designation[param_designation.index(param_designation[index_param_designation])] = ''
+                        # param_value[index_param_designation] = ''
+                        param_designation[index_param_designation] = ''
 
                 df_param_detail = pd.DataFrame(list(zip(
                     df_measure_detail['ID'].tolist(),
@@ -159,10 +169,11 @@ def scheme():
 
             for index, row in df_param_1.iterrows():
                 if row['Обозначение'] == 'ДИ':
-                    new_measure_full_name = row['Полное_название'] + ' "' + str(get_detail_name(conn, row['ID'])) + '"'
+                    new_measure_full_name = 'Длина детали "' + str(get_detail_name(conn, row['ID'])) + '"'
                     row['Полное_название'] = new_measure_full_name
 
             df_param_1 = df_param_1.drop_duplicates(subset=['Полное_название', 'Обозначение'], ignore_index=True)
+
             pdf.close()
             standard_size_1 = request.values.get('fill_standard_param')
 

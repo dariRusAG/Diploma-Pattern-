@@ -133,8 +133,8 @@
 
                 <tr>
                     <td>
-                        {{ full_title }} ({{ designation }}):
                         <label>
+                            {{ full_title }} ({{ designation }}):
                             <input hidden type="text" name="param_designation" value="{{ designation }}">
                         </label>
                     </td>
@@ -146,19 +146,18 @@
                                     <input type="text" name="param_value" class="write_personal"
                                            value="{{ length }}"
                                            placeholder="{{ length }}">
-                                </label>
                             {% else %}
-                                <label>
+
                                     <input type="text" name="param_value" class="write_personal" value=""
                                            placeholder="необходимо заполнить">
                                 </label>
                             {% endif %}
 
                         {% else %}
-
+                            <label>
                             {% for j in range(len(param) + 1) %}
                                 {% if designation == param.loc[j, "Обозначение"] %}
-                                    <label>
+
                                         {% if (designation == 'ДИ' and full_title == param.loc[j, "Полное_название"]) or designation != 'ДИ' %}
                                             {% if param.loc[j, "Значение"] != '' %}
                                                 <input type="text" name="param_value" class="write_personal"
@@ -171,10 +170,10 @@
                                                        placeholder="необходимо заполнить">
                                             {% endif %}
                                         {% endif %}
-                                    </label>
+
                                 {% endif %}
                             {% endfor %}
-
+                            </label>
                         {% endif %}
                     </td>
 

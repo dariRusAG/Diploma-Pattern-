@@ -128,7 +128,6 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
     except NameError:
         return "error_mes"
 
-    print(df_formula)
     # получение всех линий
     df_line = get_line_detail(conn, id_detail)
 
