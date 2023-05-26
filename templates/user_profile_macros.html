@@ -21,14 +21,14 @@
 {% endmacro %}
 
 <!--Макрос для вывода параметров пользователя-->
-{% macro render_param_user(param_user, error_param, len, func_name, func_name2) %}
+{% macro render_param_user(param_user, error_param, info_param, len, func_name, func_name2) %}
     <table>
         {% if func_name == "осн" %}
             {% set k = range(10) %}
         {% elif func_name == "доп1" %}
-            {% set k = range(10, 30) %}
+            {% set k = range(10, 22) %}
         {% else %}
-            {% set k = range(30, len(param_user)) %}
+            {% set k = range(22, len(param_user)) %}
         {% endif %}
         {% for i in k %}
             {% if func_name == "осн" %}
@@ -59,6 +59,32 @@
                                 {% endif %}>
                     {% endif %}
                 </td>
+
+                <td>
+                    <div class="tooltip2">?
+                        <span class="tooltiptext2"
+                                {% if func_name == "осн" %}
+                              style="width: 450px;"
+                                {% else %}
+                              style="width: 200px;"
+                                {% endif %}>
+                            <table style="display: flex; justify-content: center;">
+                                <tr>
+                                    <td>
+                                        {{ info_param.loc[(info_param['Обозначение'] == param_user.loc[i, "param_name"])]['Информация_о_параметрах'].values[0] }}
+                                    </td>
+                                    <td>
+                                        <img src="
+
+                                                {{ info_param.loc[(info_param['Обозначение'] == param_user.loc[i, "param_name"])]['Изображение'].values[0] }}"
+                                             alt="" style="width: auto; height: 100px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </span>
+                    </div>
+                </td>
+
             </tr>
         {% endfor %}
     </table>

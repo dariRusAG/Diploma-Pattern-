@@ -29,11 +29,11 @@
                     or admin_panel_button == 'Добавить Линию'or admin_panel_button == "Линии" or
                     admin_panel_button == "Список Деталей" %}
                 <input type="submit" name="panel" value="Список деталей" class="admin_panel_button"
-                       style="margin-top:100%">
+                       style="margin-top:60%">
             {% endif %}
             {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Список Выкроек" %}
                 <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button"
-                       style="margin-top:100%">
+                       style="margin-top:60%">
             {% endif %}
         </form>
     </div>
@@ -85,6 +85,6 @@
         {% endif %}
     </div>
 </div>
-{{ macros_general.exit() }}
+<p2 class="mb-5">{{ macros_general.exit() }}</p2>
 </body>
 </html>

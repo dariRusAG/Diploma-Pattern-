@@ -63,13 +63,13 @@ def get_param_id(conn, param_name):
         return "error"
 
 
-def is_correct_user_data(conn, login):
+def is_correct_user_data(conn, login, user_id):
     try:
         return pandas.read_sql('''
         SELECT users_role
         FROM users
-        WHERE users_login = :login
-        ''', conn, params={"login": login}).values[0][0]
+        WHERE users_login = :login AND NOT users_id= :user_id
+        ''', conn, params={"login": login, "user_id": user_id}).values[0][0]
 
     except IndexError:
         return "error"

@@ -7,34 +7,31 @@
                 <img src="\static\image\icons\your-sewing-pattern-logo.png"
                      width="350" height="35" class="d-inline-block align-top" alt="" loading="lazy">
             </a>
-            <div
-                    class="collapse navbar-collapse "
-                    id="navbarCenteredExample"
-            >
+            <div class="collapse navbar-collapse" id="navbarCenteredExample">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user_role != 'admin' %}
                         <form action="{{ url_for('catalog_favorites') }}" method="get">
-                            <button class="nav-link active text-white me-4" name="catalog" value="Каталог">Каталог
+                            <button class="button_menu me-4" name="catalog" value="Каталог">Каталог
                             </button>
                         </form>
                     {% endif %}
                     {% if user_role == 'guest' %}
                         <form action="" method="get">
-                            <button class="btn me-4" name="authorization_button" value="Войти">Войти</button>
+                            <button class="button_menu me-4" name="authorization_button" value="Войти">Войти</button>
                         </form>
                     {% else %}
                         {% if user_role == 'admin' %}
-                            <a class="nav-link active text-white" aria-current="page"
-                               href="{{ url_for("admin_profile") }}">Личный кабинет</a>
+                            <button class="button_menu  text-nowrap me-4" aria-current="page"
+                               onclick="location.href='/admin_profile';">Личный кабинет</button>
                         {% else %}
                             <form action="{{ url_for('catalog_favorites') }}" method="get">
-                                <button class="nav-link active text-white me-4" name="favorites"
+                                <button class="button_menu me-4" name="favorites"
                                         value="Список избранного">Список избранного
                                 </button>
                             </form>
 
-                            <a class="btn text-nowrap me-4" aria-current="page"
-                               href="{{ url_for("user_profile") }}">Личный кабинет</a>
+                            <button class="button_menu text-nowrap me-4" aria-current="page"
+                            onclick="location.href='/user_profile';">Личный кабинет</button>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -120,6 +117,7 @@
 {% macro exit() %}
     <form action={{ url_for('catalog_favorites') }} method="get">
         <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';"
-               style="background:#b47d82; color: #fffaf1; height:20%; border: none; cursor: pointer;">
+               class="button_menu"
+               style="background:#b47d82; color: #fffaf1; height:18%;  cursor: pointer;">
     </form>
 {% endmacro %}
