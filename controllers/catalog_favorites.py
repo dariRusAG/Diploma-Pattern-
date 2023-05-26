@@ -6,20 +6,24 @@ from models.catalog_favorites_model import *
 
 
 def favorites_pattern(conn, category, complexity):
-    if request.values.get('empty'):
-        choice_favorite_pattern = request.values.get('pattern')
-        if (choice_favorite_pattern != 0) or ('user_id' in session):
-            add_pattern(conn, session['user_id'], choice_favorite_pattern)
-
-    elif request.values.get('shaded'):
-        choice_favorite_pattern = request.values.get('pattern')
-        if (choice_favorite_pattern != 0) or ('user_id' in session):
-            del_pattern(conn, choice_favorite_pattern)
+    is_authorization = False
 
     if 'user_id' not in session:
         user_id = 0
     else:
         user_id = session['user_id']
+
+    if request.values.get('empty'):
+        if user_id == 0:
+            is_authorization = True
+        choice_favorite_pattern = request.values.get('pattern')
+        if (choice_favorite_pattern != 0) and ('user_id' in session):
+            add_pattern(conn, session['user_id'], choice_favorite_pattern)
+
+    elif request.values.get('shaded'):
+        choice_favorite_pattern = request.values.get('pattern')
+        if (choice_favorite_pattern != 0) and ('user_id' in session):
+            del_pattern(conn, choice_favorite_pattern)
 
     df_favorite_pattern = get_favorite_pattern(conn, user_id, category, complexity)
 
@@ -27,7 +31,7 @@ def favorites_pattern(conn, category, complexity):
     for i in range(len(df_favorite_pattern)):
         favorite_list.append(df_favorite_pattern.loc[i, "ID"])
 
-    return df_favorite_pattern, favorite_list
+    return df_favorite_pattern, favorite_list, is_authorization
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -56,7 +60,7 @@ def catalog_favorites():
         category = []
         complexity = []
 
-    df_favorite_pattern, favorite_list = favorites_pattern(conn, category, complexity)
+    df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity)
     df_category = get_category(conn)
     df_pattern = get_pattern(conn, category, complexity)
 

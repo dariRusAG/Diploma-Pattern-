@@ -108,7 +108,7 @@ body {
 .block_choice {
     color: #2a1515;
     background-color: #f5ede1;
-    border-left: 6px solid #be5c6b;
+    border-left: 6px solid #b47d82;
     padding: 10px 20px 25px 20px;
     width: 15.2%;
     display: block;
@@ -234,8 +234,9 @@ body {
 .admin_panel {
     display: flex;
     flex-direction: row;
-    height: 86vh;
+    height: 84.5vh;
     overflow: auto;
+    margin-left:6px;
 }
 
 .admin_panel_left {
@@ -341,7 +342,7 @@ body {
 
 .admin_panel_right_data_list_two_table_left {
     overflow-y: auto;
-    width: 60%;
+    width: 40%;
     height: 96%;
     margin-top: 1%;
     border-radius: 5px;
@@ -350,7 +351,7 @@ body {
 
 .admin_panel_right_data_list_two_table_right {
     overflow-y: auto;
-    width: 50%;
+    width: 60%;
     height: 96%;
     margin-top: 1%;
     margin-left: 2%;
@@ -626,4 +627,28 @@ h1 {
 
 .admin_button:hover {
     color: #b47d82;
+}
+
+.panel_success_message {
+    color: rgba(15,81,50,0.71);
+    background: rgba(209,231,221,0.71);
+    border: 1px solid rgba(24,107,21,0.71);
+    width: 40%;
+    border-radius: 5px;
+}
+
+
+.button_menu{
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 12px;
+    margin: 6px 0;
+    cursor: pointer;
+    color: #fffaf1;
+    background: #b47d82;
+}
+
+.button_menu:hover{
+    color: #fffaf1;
+    background: rgba(122,68,68,0.71);
 }

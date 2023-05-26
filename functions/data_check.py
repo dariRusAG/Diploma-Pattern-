@@ -23,8 +23,6 @@ def role(conn):
     elif request.values.get('authorization_user_button'):
         login = request.values.get('auth_login')
         password = request.values.get('auth_password')
-        print(login)
-        print(password)
         match is_correct_login_and_password(conn, login, password):
 
             case "user":
@@ -187,13 +185,13 @@ def is_correct_scheme(conn, df_param_detail, detail_id, pdf):
         return 'True'
 
 
-def is_correct_login_password(conn, login, password):
+def is_correct_login_password(conn, login, password, user_id):
     if login == '':
         return "Ошибка! Логин не может быть пустым"
     elif password == '':
         return "Ошибка! Пароль не может быть пустым"
-    # elif is_correct_user_data(conn, login) != "error":
-    #     return "Ошибка! Такой логин уже занят"
+    elif is_correct_user_data(conn, login, user_id) != "error":
+        return "Ошибка! Такой логин уже занят"
     else:
         return "True"
 
