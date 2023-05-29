@@ -77,6 +77,9 @@
                                             <label>
                                                 {% if param.loc[j, "Значение"] != '' %}
                                                     <input
+                                                            {% if error_info[3][j] == "error" %}
+                                                                style="background-color: salmon"
+                                                            {% endif %}
                                                                 type="text" name="param_value" class="write_personal"
                                                                 value="{{ param.loc[j, 'Значение']}}"
                                                                 placeholder="{{ param.loc[j, 'Значение']}}">

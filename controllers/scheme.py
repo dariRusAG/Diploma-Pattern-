@@ -249,7 +249,6 @@ def scheme():
 
             standard_size_2 = request.values.get('fill_standard_param')
 
-    print(error_info)
     return render_template(
         'scheme.html',
 
