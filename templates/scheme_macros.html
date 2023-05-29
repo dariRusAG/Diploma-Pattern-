@@ -31,7 +31,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода мерок схемы выкройки по деталям с параметрами пользователя-->
-{% macro render_measure_detail(measure, param, standard_size, info_param, len, zip, str) %}
+{% macro render_measure_detail(measure, param, standard_size, info_param, error_info, len, zip, str) %}
     {% for i in range(len(measure)) %}
         <div class="block_detail">
             {% set measure = measure.iloc[i] %}
@@ -76,9 +76,10 @@
                                         {% if (param.loc[j, 'ID'] == str(measure['ID']) and 'ID' in param.columns) or 'ID' not in param.columns %}
                                             <label>
                                                 {% if param.loc[j, "Значение"] != '' %}
-                                                    <input type="text" name="param_value" class="write_personal"
-                                                           value="{{ param.loc[j, 'Значение']}}"
-                                                           placeholder="{{ param.loc[j, 'Значение']}}">
+                                                    <input
+                                                                type="text" name="param_value" class="write_personal"
+                                                                value="{{ param.loc[j, 'Значение']}}"
+                                                                placeholder="{{ param.loc[j, 'Значение']}}">
                                                 {% else %}
                                                     <input type="text" name="param_value" class="write_personal"
                                                            value=""
@@ -125,7 +126,7 @@
 {% endmacro %}
 
 <!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
-{% macro render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, len, zip) %}
+{% macro render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, error_info, len, zip) %}
     <div class="block_detail">
         <table style="display: flex; justify-content: center;">
 
@@ -146,7 +147,7 @@
                                     <input type="text" name="param_value" class="write_personal"
                                            value="{{ length }}"
                                            placeholder="{{ length }}">
-                            {% else %}
+                                    {% else %}
 
                                     <input type="text" name="param_value" class="write_personal" value=""
                                            placeholder="необходимо заполнить">
@@ -155,14 +156,18 @@
 
                         {% else %}
                             <label>
-                            {% for j in range(len(param) + 1) %}
-                                {% if designation == param.loc[j, "Обозначение"] %}
+                                {% for j in range(len(param) + 1) %}
+                                    {% if designation == param.loc[j, "Обозначение"] %}
 
                                         {% if (designation == 'ДИ' and full_title == param.loc[j, "Полное_название"]) or designation != 'ДИ' %}
                                             {% if param.loc[j, "Значение"] != '' %}
-                                                <input type="text" name="param_value" class="write_personal"
-                                                       value="{{ param.loc[j, 'Значение'] }}"
-                                                       placeholder="{{ param.loc[j, 'Значение'] }}">
+                                                <input
+                                                        {% if param.loc[j, "Полное_название"] in error_info[2] %}
+                                                            style="background-color: salmon"
+                                                        {% endif %}
+                                                            type="text" name="param_value" class="write_personal"
+                                                            value="{{ param.loc[j, 'Значение'] }}"
+                                                            placeholder="{{ param.loc[j, 'Значение'] }}">
 
                                             {% else %}
 
@@ -171,8 +176,8 @@
                                             {% endif %}
                                         {% endif %}
 
-                                {% endif %}
-                            {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
                             </label>
                         {% endif %}
                     </td>

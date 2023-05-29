@@ -62,12 +62,12 @@ def get_category_id(conn, category_name):
         return "error"
 
 
-def get_formula_id_by_value(conn, formula_name, formula_value):
+def get_formula_id_by_value(conn, formula_value):
     try:
         return pd.read_sql('''SELECT formula_id
         FROM formula
-        WHERE formula_name = :formula_name OR formula_value = :formula_value
-        ''', conn, params={"formula_name": formula_name, "formula_value": formula_value}).values[0][0]
+        WHERE formula_value = :formula_value
+        ''', conn, params={ "formula_value": formula_value}).values[0][0]
     except IndexError:
         return "error"
 

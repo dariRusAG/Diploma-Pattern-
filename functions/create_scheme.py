@@ -23,19 +23,25 @@ def build_line_straight(x_coord_line, y_coord_line):
         )
 
 # Построение кривых линий
-def build_line_curve(curve, points):
-    plt.plot(
-        curve[:, 0],
-        curve[:, 1], lw=2.8
-    )
+def build_line_curve(curve, points, func_name):
+    if func_name == "admin":
+        plt.plot(
+            curve[:, 0],
+            curve[:, 1], lw=2.8
+        )
 
-    # Точки для безье
-    plt.plot(
-        points[:, 0],
-        points[:, 1],
-        'ro:',
-        color='darkblue'
-    )
+        # Точки для безье
+        plt.plot(
+            points[:, 0],
+            points[:, 1],
+            'ro:',
+            color='darkblue'
+        )
+    else:
+        plt.plot(
+            curve[:, 0],
+            curve[:, 1], lw=2.8, color='black'
+        )
 
 # Расчет координат кривых линий
 def calculate_line_curve(row, x_coord_line, y_coord_line, df_formula):
@@ -108,7 +114,7 @@ def calculate_line_curve(row, x_coord_line, y_coord_line, df_formula):
     return curve1, points1
 
 
-def create_user_scheme(conn, user_param, id_detail, pdf):
+def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     # создание словаря формул
     df_formula = get_formula_detail(conn, id_detail)
     df_formula = df_formula.set_index('formula_name').T.to_dict('list')
@@ -152,7 +158,7 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
 
             x2 = eval(f"{row['x_second_coord']}", measurements, df_formula)
             y2 = eval(f"{row['y_second_coord']}", measurements, df_formula)
-        except NameError:
+        except Exception:
             return "error_form"
 
         x_coord_line.append(x1)
@@ -193,7 +199,10 @@ def create_user_scheme(conn, user_param, id_detail, pdf):
     for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
         build_line_straight(x_straight, y_straight)
     for curves, curves_points in zip(line_curve, line_curve_points):
-        build_line_curve(curves, curves_points)
+        build_line_curve(curves, curves_points, func_name)
+
+    if func_name != "admin":
+        plt.axis('off')
 
     name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
     plt.savefig(name, bbox_inches='tight')

@@ -58,11 +58,11 @@ def admin_profile():
         admin_panel_button = request.values.get('panel').title()
 
     if request.values.get('add_category'):
-        if is_correct_category(conn, request.values.get('new_category')) == 'True':
+        if is_correct_category(conn, request.values.get('new_category'), -1) == 'True':
             add_category(conn, str(request.values.get('new_category')).strip())
             error_info = "True"
         else:
-            error_info = is_correct_category(conn, request.values.get('new_category'))
+            error_info = is_correct_category(conn, request.values.get('new_category'), -1)
         admin_panel_button = "Категории"
 
     elif request.values.get('delete_category'):
@@ -77,24 +77,24 @@ def admin_profile():
 
     elif request.values.get('edit_category'):
         category_id = int(request.values.get('edit_category'))
-        if is_correct_category(conn, request.values.get('edit_category_name')) == 'True':
+        if is_correct_category(conn, request.values.get('edit_category_name'), category_id) == 'True':
             category_name = request.values.get('edit_category_name')
             update_category(conn, category_id, category_name)
             error_info = "True"
         else:
-            error_info = is_correct_category(conn, request.values.get('edit_category_name'))
+            error_info = is_correct_category(conn, request.values.get('edit_category_name'), category_id)
         checked_value = False
         admin_panel_button = "Категории"
 
     elif request.values.get('add_formula'):
         if is_correct_formula(conn, request.values.get('new_formula_name'),
-                              request.values.get('new_formula_value')) == 'True':
+                              request.values.get('new_formula_value'), -1) == 'True':
             add_formula(conn, str(request.values.get('new_formula_name')).strip(),
                         str(request.values.get('new_formula_value')).strip())
             error_info = "True"
         else:
             error_info = is_correct_formula(conn, request.values.get('new_formula_name'),
-                                            request.values.get('new_formula_value'))
+                                            request.values.get('new_formula_value'), -1)
         admin_panel_button = "Формулы"
 
     elif request.values.get('delete_formula'):
@@ -111,13 +111,13 @@ def admin_profile():
         formula_id = int(request.values.get('edit_formula'))
         formula_name = str(request.values.get('edit_formula_name')).strip()
         formula_value = str(request.values.get('edit_formula_value')).strip()
-        if is_correct_edit_formula(conn, request.values.get('edit_formula_name'),
-                                   request.values.get('edit_formula_value')) == 'True':
+        if is_correct_formula(conn, request.values.get('edit_formula_name'),
+                                   request.values.get('edit_formula_value'), formula_id) == 'True':
             update_formula(conn, formula_id, formula_name, formula_value)
             error_info = "True"
         else:
-            error_info = is_correct_edit_formula(conn, request.values.get('edit_formula_name'),
-                                                 request.values.get('edit_formula_value'))
+            error_info = is_correct_formula(conn, request.values.get('edit_formula_name'),
+                                                 request.values.get('edit_formula_value'), formula_id)
         checked_value = False
         admin_panel_button = "Формулы"
 
@@ -150,11 +150,9 @@ def admin_profile():
         session['detail'][3] = dict(sorted(session['detail'][3].items()))
         session['detail'].append(session['edit_detail_info'][0])
 
-        if is_correct_detail(conn, session['detail'][0], session['detail'][1], session['detail'][2],
-                                 session['detail'][3]) != "True":
+        if is_correct_detail(conn, session['detail'][0], session['detail'][1], session['detail'][4]) != "True":
             admin_panel_button = "Детали"
-            error_info = is_correct_detail(conn, session['detail'][0], session['detail'][1], session['detail'][2],
-                                               session['detail'][3])
+            error_info = is_correct_detail(conn, session['detail'][0], session['detail'][1], session['detail'][4])
 
     elif request.values.get('add_detail_line') or request.values.get('edit_detail_line'):
         if request.values.get('edit_detail_line'):
@@ -215,7 +213,7 @@ def admin_profile():
         name_scheme = 'static/image/save_details/' + str(get_detail_name(conn, detail_id)) + '.jpg'
         pdf = PdfPages('static/pdf/admin.pdf')
         if is_correct_scheme(conn, df_param_detail, detail_id, pdf) == "True":
-            create_user_scheme(conn, df_param_detail, detail_id, pdf)
+            create_user_scheme(conn, df_param_detail, detail_id, pdf, "admin")
         else:
             admin_panel_button = "Детали"
             error_info = is_correct_scheme(conn, df_param_detail, detail_id, pdf)
@@ -273,7 +271,7 @@ def admin_profile():
         for detail in request.values.getlist('new_pattern_detail'):
             difficulty = difficulty + get_measure_number(conn, detail)
 
-        if is_correct_pattern(conn, name, category, picture, request.values.getlist('new_pattern_detail')) == "True":
+        if is_correct_pattern(conn, name, category, picture, request.values.getlist('new_pattern_detail'), -1) == "True":
             add_pattern(conn, name,
                         picture, category, int(difficulty_calculation(get_category_by_id(conn, category),
                                                                       len(request.values.getlist('new_pattern_detail')),
@@ -282,7 +280,7 @@ def admin_profile():
             for detail in request.values.getlist('new_pattern_detail'):
                 add_pattern_detail(conn, int(get_pattern_id(conn, name)), detail)
         else:
-            error_info = is_correct_pattern(conn, name, category, picture, request.values.getlist('new_pattern_detail'))
+            error_info = is_correct_pattern(conn, name, category, picture, request.values.getlist('new_pattern_detail'), -1)
 
         admin_panel_button = "Выкройки"
 
@@ -309,8 +307,8 @@ def admin_profile():
         difficulty = 0
         for detail in request.values.getlist('new_pattern_detail'):
             difficulty = difficulty + get_measure_number(conn, detail)
-        if is_correct_edit_pattern(conn, name, category, picture,
-                                   request.values.getlist('new_pattern_detail')) == "True":
+        if is_correct_pattern(conn, name, category, picture,
+                                   request.values.getlist('new_pattern_detail'), id) == "True":
             update_pattern(conn, id, name, picture, category,
                            int(difficulty_calculation(get_category_by_id(conn, category),
                                                       len(request.values.getlist(
@@ -322,8 +320,8 @@ def admin_profile():
                 add_pattern_detail(conn, id, detail)
             admin_panel_button = "Список Выкроек"
         else:
-            error_info = is_correct_edit_pattern(conn, name, category, picture,
-                                                 request.values.getlist('new_pattern_detail'))
+            error_info = is_correct_pattern(conn, name, category, picture,
+                                                 request.values.getlist('new_pattern_detail'), id)
             info_about_some = [int(request.values.get('edit_pattern_id'))]
             info_about_some.append(get_detail_by_id(conn, info_about_some[0]).split(","))
             admin_panel_button = "Редактирование Выкроек"
