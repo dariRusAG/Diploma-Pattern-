@@ -6,16 +6,16 @@
         {% for i in range(len(data_user)) %}
             {% for name in data_user.dtypes.index %}
                 <tr>
-                <td>
-                    {{ name }}:
-                </td>
+                    <td>
+                        {{ name }}:
+                    </td>
 
                 <td>
                 <input type="text" name="data_user" class="write_personal"
                        placeholder="{{ data_user.loc[i, name] }}" value="{{ data_user.loc[i, name] }}">
             {% endfor %}
-        </td>
-        </tr>
+                </td>
+            </tr>
         {% endfor %}
     </table>
 {% endmacro %}
@@ -30,6 +30,7 @@
         {% else %}
             {% set k = range(22, len(param_user)) %}
         {% endif %}
+
         {% for i in k %}
             {% if func_name == "осн" %}
                 {% set j = i %}
@@ -41,21 +42,20 @@
                     {{ param_user.loc[i, "param_full_name"] }}
                     ({{ param_user.loc[i, "param_name"] }}):
                 </td>
+
                 <td>
-                    {% if error_param[0][j] != 'q' and len(error_param[1]) != 0 and error_param[2] == func_name2 %}
+                    {% if error_param[0][j] != 'upd' and len(error_param[1]) != 0 and error_param[2] == func_name2 %}
                         <input type="text" name="param_user" class="error_personal"
-                                {% if param_user.loc[i,"user_param_value"] == '' %}
-                               placeholder=''
+                                {% if param_user.loc[i, "user_param_value"] == '' %} placeholder = ''
                                 {% else %}
-                                    placeholder={{ param_user.loc[i,"user_param_value"]}}
-                                {% endif %} value='{{ error_param[0][j] }}'>
+                                    placeholder = {{ param_user.loc[i,"user_param_value"]}}
+                                {% endif %}
+                                value = '{{ error_param[0][j] }}'>
                     {% else %}
                         <input type="text" name="param_user" class="write_personal"
-                                {% if param_user.loc[i,"user_param_value"] != '' %}
-                               placeholder={{ param_user.loc[i,"user_param_value"]}} value=
-                                    {{ param_user.loc[i,"user_param_value"]}}
-                                {% else %}
-                               placeholder='' value=''
+                                {% if param_user.loc[i, "user_param_value"] != '' %} placeholder = {{ param_user.loc[i,"user_param_value"]}}
+                                    value = {{ param_user.loc[i,"user_param_value"]}}
+                                {% else %} placeholder = '' value = ''
                                 {% endif %}>
                     {% endif %}
                 </td>
@@ -68,16 +68,15 @@
                                 {% else %}
                               style="width: 320px;"
                                 {% endif %}>
-                            <table style="display: flex; justify-content: center;">
+                            <table class="table_measure">
                                 <tr>
                                     <td>
                                         {{ info_param.loc[(info_param['Обозначение'] == param_user.loc[i, "param_name"])]['Информация_о_параметрах'].values[0] }}
                                     </td>
-                                    <td>
-                                        <img src="
 
-                                                {{ info_param.loc[(info_param['Обозначение'] == param_user.loc[i, "param_name"])]['Изображение'].values[0] }}"
-                                             alt="" style="width: auto; height: 100px;">
+                                    <td>
+                                        <img src="{{ info_param.loc[(info_param['Обозначение'] == param_user.loc[i, 'param_name'])]['Изображение'].values[0] }}"
+                                             alt="" class="img_info_pattern">
                                     </td>
                                 </tr>
                             </table>

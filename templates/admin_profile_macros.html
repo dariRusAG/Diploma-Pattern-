@@ -18,10 +18,11 @@
 <!--Макрос для вывода категорий на панели администратора-->
 {% macro admin_panel_category(category, len, checked_value, error_info) %}
 
-    <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+    <div class="admin_panel_right_data_text">
         Добавление новой категории:
         {{ error_success_message(error_info) }}
     </div>
+
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_category" placeholder="Введите название категории" style="width:100%">
@@ -30,16 +31,18 @@
             </button>
         </div>
     </form>
-    <p2> Список категорий:</p2>
+
+    <p> Список категорий:</p>
     <div class="admin_panel_right_data_list">
-        <p>
-        <table></p>
+        <table>
             {% for i in range(len(category)) %}
                 <tr>
                     {% if checked_value[1] == '' or checked_value[1] != i %}
                         <form action="{{ url_for('admin_profile') }}" method="get">
+                            <td>
+                                <p>{{ category.loc[i, "category_name"] }}</p>
+                            </td>
 
-                            <td><p>{{ category.loc[i, "category_name"] }}</p></td>
                             <td>
                                 <p>
                                     <button type="submit" name="is_edit_category" value="Изменить" class="admin_button">
@@ -47,33 +50,34 @@
                                     </button>
                                 </p>
                             </td>
-                            <input type="hidden" name="is_edit_category_id" value={{ i }}>
 
+                            <input type="hidden" name="is_edit_category_id" value="{{ i }}">
                         </form>
+
                         <form action="{{ url_for('admin_profile') }}" method="get">
                             <td>
                                 <p>
                                     <button type="submit" value="Удалить" class="admin_button">
                                         <i class="bi bi-x-lg"></i>
                                     </button>
-                                    <input type="hidden" name="delete_category"
-                                           value={{ category['category_id'].values[i] }}></p>
+                                    <input type="hidden" name="delete_category" value="{{ category['category_id'].values[i] }}">
+                                </p>
                             </td>
                         </form>
+
                     {% else %}
+
                         {% if checked_value[1] == i %}
                             <form action="{{ url_for('admin_profile') }}" method="get">
-                                <p><input type="text" name="edit_category_name"
-                                          value='{{ category.loc[i, "category_name"] }}'>
-
+                                <p>
+                                    <input type="text" name="edit_category_name" value='{{ category.loc[i, "category_name"] }}'>
                                     <button type="submit" value="Сохранить изменения" class="admin_button">
                                         <i class="bi bi-check-lg"></i>
                                     </button>
-                                    <input type="hidden" name="edit_category"
-                                           value={{ category['category_id'].values[i] }}></p>
+                                    <input type="hidden" name="edit_category" value="{{ category['category_id'].values[i] }}">
+                                </p>
                             </form>
                         {% endif %}
-
                     {% endif %}
                 </tr>
             {% endfor %}
@@ -83,10 +87,11 @@
 
 <!--Макрос для вывода формул на панели администратора-->
 {% macro admin_panel_formuls(formula_list, measure_list, checked_value, error_info, len) %}
-    <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+    <div class="admin_panel_right_data_text">
         Добавление новой формулы:
         {{ error_success_message(error_info) }}
     </div>
+
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_formula_name" placeholder="Введите название формулы" style="width:50%">
@@ -97,31 +102,39 @@
             </button>
         </div>
     </form>
+
     <div class="admin_panel_right_data_two_buttons">
-        <p2>Список формул</p2>
+        <p>Список формул</p>
         <div class="admin_panel_right_data_two_text_right">
             Список мерок
         </div>
     </div>
+
     <div class="admin_panel_right_data_list_two_table" style="height:84%;">
-        <div class="admin_panel_right_data_list_two_table_left" style="width: 72%">
-            <p>
-            <table></p>
+        <div class="admin_panel_right_data_list_two_table_left" style="width:72%">
+            <table>
                 {% for i in range(len(formula_list)) %}
                     <tr>
                         {% if checked_value[1] == '' or checked_value[1] != i %}
                             <form action="{{ url_for('admin_profile') }}" method="get">
-                                <td><p>{{ formula_list['formula_name'].values[i] }}
-                                    &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}</p></td>
+                                <td>
+                                    <p>
+                                        {{ formula_list['formula_name'].values[i] }}
+                                    &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
+                                    </p>
+                                </td>
+
                                 <td>
                                     <p>
                                         <button type="submit" name="is_edit_formula" value="Изменить"
                                                 class="admin_button">
                                             <i class="bi bi-pencil-fill"></i>
                                         </button>
-                                        <input type="hidden" name="is_edit_formula_id" value={{ i }}></p>
+                                        <input type="hidden" name="is_edit_formula_id" value="{{ i }}">
+                                    </p>
                                 </td>
                             </form>
+
                             <form action="{{ url_for('admin_profile') }}" method="get">
                                 <td>
                                     <p>
@@ -129,21 +142,29 @@
                                             <i class="bi bi-x-lg"></i>
                                         </button>
                                         <input type="hidden" name="delete_formula"
-                                               value={{ formula_list['formula_id'].values[i] }}></p>
+                                               value="{{ formula_list['formula_id'].values[i] }}">
+                                    </p>
                                 </td>
                             </form>
+
                         {% else %}
+
                             {% if checked_value[1] == i %}
                                 <form action="{{ url_for('admin_profile') }}" method="get">
-                                    <p><input type="text" name="edit_formula_name"
-                                              value='{{ formula_list['formula_name'].values[i] }}' style="width:40%">
+                                    <p>
+                                        <input type="text" name="edit_formula_name"
+                                              value="{{ formula_list['formula_name'].values[i] }}" class="mt_admin_width">
+
                                         <input type="text" name="edit_formula_value"
-                                               value='{{ formula_list['formula_value'].values[i] }}' style="width:40%">
+                                               value="{{ formula_list['formula_value'].values[i] }}" class="mt_admin_width">
+
                                         <button type="submit" value="Сохранить изменения" class="admin_button">
                                             <i class="bi bi-check-lg"></i>
                                         </button>
+
                                         <input type="hidden" name="edit_formula"
-                                               value={{ formula_list['formula_id'].values[i] }}></p>
+                                               value="{{ formula_list['formula_id'].values[i] }}">
+                                    </p>
                                 </form>
                             {% endif %}
                         {% endif %}
@@ -152,8 +173,7 @@
             </table>
         </div>
 
-
-        <div class="admin_panel_right_data_list_two_table_right" style="width: 28%">
+        <div class="admin_panel_right_data_list_two_table_right" style="width:28%">
             {% for i in range(len(measure_list)) %}
                 <div class="admin_panel_right_data_text">
                     {{ measure_list['measure_name'].values[i] }}
@@ -174,12 +194,11 @@
             <input type="submit" name="" value="+" style="cursor: pointer;">
         </div>
     </form>
-    <p2> Список 3D-моделей:</p2>
+
+    <p> Список 3D-моделей:</p>
     <div class="admin_panel_right_data_list">
         {% for i in range(20) %}
-            <div class="admin_panel_right_data_text">
-                info
-            </div>
+            <div class="admin_panel_right_data_text">info</div>
         {% endfor %}
     </div>
 {% endmacro %}
@@ -187,7 +206,7 @@
 <!--Макрос для вывода деталей на панели администратора-->
 {% macro admin_panel_details(formula_list, measure_list, new_detail_list, error_info, len) %}
     <form action="{{ url_for('admin_profile') }}" method="get">
-        <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+        <div class="admin_panel_right_data_text">
             {% if len(new_detail_list) == 0 or new_detail_list[4] == '' %}
                 Добавление новой детали:
             {% else %}
@@ -195,25 +214,28 @@
             {% endif %}
             {{ error_success_message(error_info) }}
         </div>
+
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_detail_name" placeholder="Введите название детали"
                    value="{{ new_detail_list[0] }}" style="width:50%">
             <input type="text" name="new_detail_size" placeholder="Введите эталонную длину (при наличии)"
                    value="{{ new_detail_list[1] }}" style="width:50%; margin-left: 1%">
         </div>
+
         <div class="admin_panel_right_data_two_table">
             <div class="admin_panel_right_data_two_buttons">
-                <p2>Список мерок и их обозначений:</p2>
+                <p>Список мерок и их обозначений:</p>
                 <div class="admin_panel_right_data_two_text_right" style="margin-right:30%">
                     Список формул и их обозначений:
                 </div>
             </div>
+
             <div class="admin_panel_right_data_list_two_table mt-1"
                  style="height:90.5%; justify-content: space-between">
                 <div class="admin_panel_right_data_list_vertical_middle">
                     {% for i in range(len(measure_list)) %}
                         <div class="admin_panel_right_data_text">
-                            <p4>
+                            <p>
                                 {% if measure_list['measure_name'].values[i] in new_detail_list[2] %}
                                     <input type="checkbox" name="new_detail_measure"
                                            value="{{ measure_list['measure_name'].values[i] }}" style="cursor: pointer;"
@@ -224,7 +246,8 @@
                                            style="cursor: pointer;">
                                 {% endif %}
                                 {{ measure_list['measure_name'].values[i] }}
-                                &emsp;:&emsp; {{ measure_list['measure_full_name'].values[i] }}</p4>
+                                &emsp;:&emsp; {{ measure_list['measure_full_name'].values[i] }}
+                            </p>
                         </div>
                     {% endfor %}
                 </div>
@@ -232,21 +255,20 @@
                 <div class="admin_panel_right_data_list_vertical_middle">
                     {% for i in range(len(formula_list)) %}
                         <div class="admin_panel_right_data_text">
-                            <p4>
+                            <p>
                                 <input type="checkbox" name="new_detail_formula"
                                        value="{{ formula_list['formula_name'].values[i] }}" style="cursor: pointer;"
-                                        {% if formula_list["formula_name"].values[i] in new_detail_list[3] %}
-                                       checked>
-                                        {% else %}
-                                            >
-                                        {% endif %}
+                                        {% if formula_list["formula_name"].values[i] in new_detail_list[3] %} checked
+                                        {% endif %}>
                                 {{ formula_list['formula_name'].values[i] }}
-                                &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}</p4>
+                                &emsp;:&emsp; {{ formula_list['formula_value'].values[i] }}
+                            </p>
                         </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
+
         <div class="admin_panel_right_data_two_buttons mt-3">
             <input type="submit" name="add_detail_cancel" value="Отменить изменения" class="admin_panel_button_small">
             <input type="submit" name="panel" value="Добавить линии" class="admin_panel_button_small">
@@ -265,53 +287,64 @@
             </div>
         {% endfor %}
     </div>
+
     {% if len(new_detail_line_list[len(new_detail_line_list)-1]) != 1 %}
-        <p2> Добавление линии:</p2>
+        <p> Добавление линии:</p>
         <div class="admin_panel_right_data_list_small">
-        <form action="{{ url_for('admin_profile') }}" method="get">
-            <p class="mt-5">Координаты для первой точки:
-                <input style="width:40%" type="text" name="first_coord_x" placeholder="X">
-                <input style="width:40%" type="text" name="first_coord_y" placeholder="Y"></p>
-            <p class="mt-4">Координаты для второй точки:
-                <input style="width:40%" type="text" name="second_coord_x" placeholder="X">
-                <input style="width:40%" type="text" name="second_coord_y" placeholder="Y">
-            <p class="mt-4">Отклонение:
-                <input style="width:40%" type="text" name="x_deviation" placeholder="По X">
-                <input style="width:40%" type="text" name="y_deviation" placeholder="По Y"></p>
-            <input class="mt-3" type="submit" name="add_detail_line" value="Добавить линию" style="cursor: pointer;">
-        </form>
+            <form action="{{ url_for('admin_profile') }}" method="get">
+                <p class="mt-5">Координаты для первой точки:
+                    <input class="mt_admin_width" type="text" name="first_coord_x" placeholder="X">
+                    <input class="mt_admin_width" type="text" name="first_coord_y" placeholder="Y">
+                </p>
+
+                <p class="mt-4">Координаты для второй точки:
+                    <input class="mt_admin_width" type="text" name="second_coord_x" placeholder="X">
+                    <input class="mt_admin_width" type="text" name="second_coord_y" placeholder="Y">
+                </p>
+
+                <p class="mt-4">Отклонение:
+                    <input class="mt_admin_width" type="text" name="x_deviation" placeholder="По X">
+                    <input class="mt_admin_width" type="text" name="y_deviation" placeholder="По Y">
+                </p>
+
+                <input class="mt-3" type="submit" name="add_detail_line" value="Добавить линию"
+                       style="cursor: pointer;">
+            </form>
 
     {% else %}
+
         {% set value = new_detail_line_list[len(new_detail_line_list)-1][0] %}
-        <p2> Редактирование линии:</p2>
+        <p> Редактирование линии:</p>
         <div class="admin_panel_right_data_list_small">
+
         <form action="{{ url_for('admin_profile') }}" method="get">
             <p class="mt-5">Координаты для первой точки:
-                <input style="width:40%" type="text" name="first_coord_x" placeholder="X"
+                <input class="mt_admin_width" type="text" name="first_coord_x" placeholder="X"
                        value="{{ new_detail_line_list[value][0] }}">
-                <input style="width:40%" type="text" name="first_coord_y" placeholder="Y"
+                <input class="mt_admin_width" type="text" name="first_coord_y" placeholder="Y"
                        value="{{ new_detail_line_list[value][1] }}">
             </p>
+
             <p class="mt-4">Координаты для второй точки:
-                <input style="width:40%" type="text" name="second_coord_x" placeholder="X"
+                <input class="mt_admin_width" type="text" name="second_coord_x" placeholder="X"
                        value="{{ new_detail_line_list[value][2] }}">
-                <input style="width:40%" type="text" name="second_coord_y" placeholder="Y"
+                <input class="mt_admin_width" type="text" name="second_coord_y" placeholder="Y"
                        value="{{ new_detail_line_list[value][3] }}">
+            </p>
 
             <p class="mt-4">Отклонение:
-                <input style="width:40%" type="text" name="x_deviation" placeholder="По X"
+                <input class="mt_admin_width" type="text" name="x_deviation" placeholder="По X"
                        value="{{ new_detail_line_list[value][4] }}">
-                <input style="width:40%" type="text" name="y_deviation" placeholder="По Y"
+                <input class="mt_admin_width" type="text" name="y_deviation" placeholder="По Y"
                        value="{{ new_detail_line_list[value][5] }}">
             </p>
+
             <input class="mt-3" type="submit" name="edit_detail_line" value="Редактировать линию"
                    style="cursor: pointer;">
-
-
         </form>
     {% endif %}
-</form>
 </div>
+
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_two_buttons mt-3">
             <input type="submit" name="panel" value="Выбрать мерки и формулы" class="admin_panel_button_small">
@@ -328,31 +361,36 @@
             {% for i in range(len(new_detail_line_list)) %}
                 <tr>
                     {% set k = i+1 %}
-                    <td><p>{{ k }}:
-                        ({{ new_detail_line_list[i][0] }}, {{ new_detail_line_list[i][1] }});
-                        ({{ new_detail_line_list[i][2] }}, {{ new_detail_line_list[i][3] }});
-                        {% if new_detail_line_list[i][4] != '' and new_detail_line_list[i][5] != '' %}
+                    <p>
+                        <td>
+                            {{ k }}:
+                            ({{ new_detail_line_list[i][0] }}, {{ new_detail_line_list[i][1] }});
+                            ({{ new_detail_line_list[i][2] }}, {{ new_detail_line_list[i][3] }});
+                            {% if new_detail_line_list[i][4] != '' and new_detail_line_list[i][5] != '' %}
                             ({{ new_detail_line_list[i][4] }};
                             {{ new_detail_line_list[i][5] }});
-                        {% endif %}</td>
+                            {% endif %}
+                        </td>
                     </p>
+
                     <form action="{{ url_for('admin_profile') }}" method="get">
                         <td>
                             <p>
                                 <button type="submit" value="Изменить" class="admin_button">
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
-                                <input type="hidden" name="edit_detail_new_line" value={{ i }}>
-                        </td>
+                                <input type="hidden" name="edit_detail_new_line" value="{{ i }}">
+                            </td>
                         </p>
                     </form>
+
                     <form action="{{ url_for('admin_profile') }}" method="get">
                         <td>
                             <p>
                                 <button type="submit" value="Удалить" class="admin_button">
                                     <i class="bi bi-x-lg"></i>
                                 </button>
-                                <input type="hidden" name="delete_detail_new_line" value={{ i }}>
+                                <input type="hidden" name="delete_detail_new_line" value="{{ i }}">
                         </td>
                         </p>
                     </form>
@@ -377,6 +415,7 @@
             <img src="{{ name_scheme }}" alt="" style="width: 580px; height: auto;">
         </p>
     </div>
+
     <form action="{{ url_for('admin_profile') }}" method="get">
         <div class="admin_panel_right_data_two_buttons mt-3">
             <input type="submit" name="panel" value="Список новых линий" class="admin_panel_button_small">
@@ -391,7 +430,7 @@
 
 <!--Макрос для вывода выкроек на панели администратора-->
 {% macro admin_panel_patterns(pattern_list, category_list, detail_list, pattern_info, error_info, len) %}
-    <div class="admin_panel_right_data_text" style="margin-top:0; justify-content: space-between">
+    <div class="admin_panel_right_data_text">
         {% if pattern_info == ['',''] %}
             Добавление новой выкройки:
         {% else %}
@@ -399,6 +438,7 @@
         {% endif %}
         {{ error_success_message(error_info) }}
     </div>
+
     <form action="{{ url_for('admin_profile') }}" method="get">
         {% if pattern_info == ['',''] %}
             <div class="admin_panel_right_data_text">
@@ -406,58 +446,60 @@
                 <input type="text" name="new_pattern_picture" placeholder="Выберите файл"
                        style="width:50%; margin-left:1%;">
             </div>
+
         {% else %}
+
             <div class="admin_panel_right_data_text">
                 <input type="text" name="edit_pattern_name" placeholder="Введите название выкройки"
-                       value='{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['pattern_name'].values[0] }}'
+                       value="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['pattern_name'].values[0] }}"
                        style="width:50%">
                 <input type="text" name="edit_pattern_picture" placeholder="Выберите файл"
-                       value='{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}'
+                       value="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}"
                        style="width:50%; margin-left:1%;">
             </div>
         {% endif %}
+
         <div class="admin_panel_right_data_three_table">
-            <p2> Список деталей:</p2>
+            <p> Список деталей:</p>
             <div class="admin_panel_right_data_list_vertical_small">
                 {% for i in range(len(detail_list)) %}
                     <div class="admin_panel_right_data_text mt-1">
-                        <p4>
+                        <p>
                             <input type="checkbox" name="new_pattern_detail" style="cursor: pointer;"
-                                   value={{ detail_list['detail_id'].values[i] }}
+                                   value="{{ detail_list['detail_id'].values[i] }}"
                                            {% if pattern_info != ['',''] and detail_list['detail_name'].values[i] in pattern_info[1] %}
-                                               checked
-                                           {% endif %}
-                            >
-                            {{ detail_list['detail_name'].values[i] }}</p4>
+                            checked {% endif %} >
+                            {{ detail_list['detail_name'].values[i] }}
+                        </p>
                     </div>
                 {% endfor %}
             </div>
-            <p2> Список категорий:</p2>
+
+            <p> Список категорий:</p>
             <div class="admin_panel_right_data_list_vertical_small">
                 {% for i in range(len(category_list)) %}
                     <div class="admin_panel_right_data_text">
-                        <p4>
+                        <p>
                             <input type="radio" name="new_pattern_category"
                                    style="cursor: pointer;"
-                                   value={{ category_list['category_id'].values[i] }}
-                                           {% if pattern_info != ['',''] and
-                                       category_list['category_name'].values[i] == pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['category_name'].values[0] %}
-                                               checked
-                                           {% endif %}
-                            > {{ category_list['category_name'].values[i] }}</p4>
+                                   value="{{ category_list['category_id'].values[i] }}"
+                                   {% if pattern_info != ['',''] and
+                                   category_list['category_name'].values[i] == pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['category_name'].values[0] %}
+                            checked {% endif %} > {{ category_list['category_name'].values[i] }}
+                        </p>
                     </div>
                 {% endfor %}
             </div>
-            <p2> Список 3D-моделей:</p2>
-            <div class="admin_panel_right_data_list_vertical_small">
-            </div>
+
+            <p> Список 3D-моделей:</p>
+            <div class="admin_panel_right_data_list_vertical_small"></div>
         </div>
 
         <div class="admin_panel_right_data_two_buttons">
             {% if pattern_info != ['',''] %}
                 <input type="submit" name="edit_pattern_cancel" value="Назад" class="admin_panel_button_small">
                 <input type="submit" name="edit_pattern" value="Изменить выкройку" class="admin_panel_button_small">
-                <input type="hidden" name="edit_pattern_id" value={{ pattern_info[0] }}>
+                <input type="hidden" name="edit_pattern_id" value="{{ pattern_info[0] }}">
             {% else %}
                 <input type="submit" name="add_pattern_cancel" value="Отменить" class="admin_panel_button_small">
                 <input type="submit" name="add_new_pattern" value="Добавить выкройку" class="admin_panel_button_small">
@@ -471,8 +513,7 @@
     Выкройки:
     <div class="admin_panel_right_data_list_two_table">
         <div class="admin_panel_right_data_list_two_table_left">
-            <p>
-            <table></p>
+            <table>
                 {% for i in range(len(pattern_list)) %}
                     <tr>
                         <td><p>{{ pattern_list['pattern_name'].values[i] }}</p></td>
@@ -483,9 +524,11 @@
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
                                     <input type="hidden" name="one_pattern_edit"
-                                           value={{ pattern_list['pattern_id'].values[i] }}></p>
+                                           value="{{ pattern_list['pattern_id'].values[i] }}">
+                                </p>
                             </td>
                         </form>
+
                         <form action="{{ url_for('admin_profile') }}" method="get">
                             <td>
                                 <p>
@@ -493,9 +536,11 @@
                                         <i class="bi bi-x-lg"></i>
                                     </button>
                                     <input type="hidden" name="one_pattern_delete"
-                                           value={{ pattern_list['pattern_id'].values[i] }}></p>
+                                           value="{{ pattern_list['pattern_id'].values[i] }}">
+                                </p>
                             </td>
                         </form>
+
                         <form action="{{ url_for('admin_profile') }}" method="get">
                             <td>
                                 <p>
@@ -503,38 +548,45 @@
                                         <i class="bi bi-three-dots"></i>
                                     </button>
                                     <input type="hidden" name="one_pattern_info"
-                                           value={{ pattern_list['pattern_id'].values[i] }}></p>
+                                           value="{{ pattern_list['pattern_id'].values[i] }}">
+                                </p>
                             </td>
                         </form>
                     </tr>
                 {% endfor %}
             </table>
         </div>
+
         <div class="admin_panel_right_data_list_two_table_right">
             {% if pattern_info[0] != '' %}
-                <p class="ms-2 mt-3"><strong>Сложность:</strong>
-                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['complexity'].values[0] }}</p>
-                <p class="ms-2"><strong>Изображение:</strong>
-                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}</p>
-                <p class="fig">
-                    <img src="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}"
-                         alt="" width="auto" height="350px">
-                </p>
-                <p class="ms-2"><strong>Название:</strong>
-                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['pattern_name'].values[0] }}</p>
-                <p class="ms-2"><strong>Категория:</strong>
-                    {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['category_name'].values[0] }}</p>
+            <p class="ms-2 mt-3"><strong>Сложность:</strong>
+                {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['complexity'].values[0] }}</p>
 
-                <p class="ms-2"><strong>Детали:</strong>
-                    {% if pattern_info[1][0] != "error" %}
-                        {% for detail in pattern_info[1] %}
-                            <li class="ms-2"> {{ detail }}</li>
-                        {% endfor %}
-                    {% else %}
-                        Детали отсутствуют
-                    {% endif %}
+            <p class="ms-2"><strong>Изображение:</strong>
+                {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}</p>
 
-                </p>
+            <p class="fig">
+                <img src="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}"
+                     alt="" class="img_scheme">
+            </p>
+
+            <p class="ms-2"><strong>Название:</strong>
+                {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['pattern_name'].values[0] }}</p>
+
+            <p class="ms-2"><strong>Категория:</strong>
+                {{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['category_name'].values[0] }}</p>
+
+            <p class="ms-2"><strong>Детали:</strong>
+                {% if pattern_info[1][0] != "error" %}
+                {% for detail in pattern_info[1] %}
+                <li class="ms-2">
+                    {{ detail }}
+                </li>
+                {% endfor %}
+                {% else %}
+                Детали отсутствуют
+                {% endif %}
+            </p>
             {% endif %}
         </div>
     </div>
@@ -548,7 +600,7 @@
         <div class="admin_panel_right_data_list_two_table_left">
             <table>
                 {% for i in range(len(detail_list)) %}
-                    <tr><p></p>
+                    <tr>
                         <td><p>{{ detail_list['detail_name'].values[i] }}</p></td>
                         <form action="{{ url_for('admin_profile') }}" method="get">
                             <td>
@@ -557,9 +609,11 @@
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
                                     <input type="hidden" name="one_detail_edit"
-                                           value={{ detail_list['detail_id'].values[i] }}></p>
+                                           value="{{ detail_list['detail_id'].values[i] }}">
+                                </p>
                             </td>
                         </form>
+
                         <form action="{{ url_for('admin_profile') }}" method="get">
                             <td>
                                 <p>
@@ -567,9 +621,11 @@
                                         <i class="bi bi-x-lg"></i>
                                     </button>
                                     <input type="hidden" name="one_detail_delete"
-                                           value={{ detail_list['detail_id'].values[i] }}></p>
+                                           value="{{ detail_list['detail_id'].values[i] }}">
+                                </p>
                             </td>
                         </form>
+
                         <form action="{{ url_for('admin_profile') }}" method="get">
                             <td>
                                 <p>
@@ -577,18 +633,21 @@
                                         <i class="bi bi-three-dots"></i>
                                     </button>
                                     <input type="hidden" name="one_detail_info"
-                                           value={{ detail_list['detail_id'].values[i] }}></p>
+                                           value="{{ detail_list['detail_id'].values[i] }}">
+                                </p>
                             </td>
                         </form>
                     </tr>
                 {% endfor %}
             </table>
         </div>
+
         <div class="admin_panel_right_data_list_two_table_right">
             {% if detail_info != ['',''] %}
                 <p class="ms-2 mt-3"><strong>Название:</strong>
                     {{ detail_info[0] }}
                 </p>
+
                 <p class="ms-2"><strong>Эталонная длина:</strong>
                     {% if detail_info[1] != '' %}
                         {{ detail_info[1] }}
@@ -596,12 +655,14 @@
                         отсутствует
                     {% endif %}
                 </p>
+
                 <p class="ms-2"><strong>Мерки:</strong>
                     {% if len(detail_info[2]) == 0 %}
                         отсутствуют
                     {% else %}
                         {% for i in range(len(detail_info[2])) %}
-                            <li class="ms-2">{{ detail_info[2].values[i][1] }}
+                            <li class="ms-2">
+                                {{ detail_info[2].values[i][1] }}
                                 ({{ detail_info[2].values[i][2] }})
                             </li>
                         {% endfor %}
@@ -613,12 +674,14 @@
                         отсутствуют
                     {% else %}
                         {% for i in range(len(detail_info[3])) %}
-                            <li class="ms-2">{{ detail_info[3].values[i][0] }}
+                            <li class="ms-2">
+                                {{ detail_info[3].values[i][0] }}
                                 ({{ detail_info[3].values[i][1] }})
                             </li>
                         {% endfor %}
                     {% endif %}
                 </p>
+
                 <p class="ms-2"><strong>Линии:</strong>
                     {% if len(detail_info[4]) == 0 %}
                         отсутствуют
@@ -640,4 +703,5 @@
             {% endif %}
         </div>
     </div>
+        </div>
 {% endmacro %}

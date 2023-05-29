@@ -41,7 +41,7 @@
                         <p>Автозаполнение типовыми параметрами</p>
                     </div>
 
-                    <label style="  display: flex; justify-content: center; align-items: center;">
+                    <label class="gender_size">
                         <input type="radio" name="gender_size-1" value="param_value_w"
                                 {% if gender_size_1 == 'param_value_w' %} checked {% endif %}>Женский размер
                         <input type="radio" name="gender_size-1" value="param_value_m" class="ms-5"
@@ -49,12 +49,9 @@
                     </label>
 
                     <div class="container_button mt-3">
-                        <input type="submit" name="fill_standard_param" value="XS" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="S" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="M" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="L" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="XL" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="XXL" class="button button_build">
+                        {% for size in list_size %}
+                            <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
+                        {% endfor %}
                     </div>
                 </form>
             </div>
@@ -69,7 +66,9 @@
                         {{ macros.render_pattern_scheme(name_scheme_detail_1) }}
                     </div>
                 {% endif %}
+
             {% else %}
+
                 <div class="admin_panel_error mt-2 mb-2">
                     {% for i in range(len(error_info[0])) %}
                         <p class="ms-2 mt-2">{{ error_info[0][i] }}</p>
@@ -98,7 +97,7 @@
                         <p>Автозаполнение типовыми параметрами</p>
                     </div>
 
-                    <label style="  display: flex; justify-content: center; align-items: center;">
+                    <label class="gender_size">
                         <input type="radio" name="gender_size-2" value="param_value_w"
                                 {% if gender_size_2 == 'param_value_w' %} checked {% endif %}>Женский размер
                         <input type="radio" name="gender_size-2" value="param_value_m" class="ms-5"
@@ -106,12 +105,9 @@
                     </label>
 
                     <div class="container_button mt-3">
-                        <input type="submit" name="fill_standard_param" value="XS" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="S" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="M" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="L" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="XL" class="button button_build">
-                        <input type="submit" name="fill_standard_param" value="XXL" class="button button_build">
+                        {% for size in list_size %}
+                            <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
+                        {% endfor %}
                     </div>
                 </form>
             </div>
@@ -126,7 +122,9 @@
                         {{ macros.render_pattern_scheme(name_scheme_detail_2) }}
                     </div>
                 {% endif %}
+
             {% else %}
+
                 <div class="admin_panel_error mt-2 mb-2">
                     {% for i in range(len(error_info[1])) %}
                         <p class="ms-2 mt-2">{{ error_info[1][i] }}</p>
@@ -137,8 +135,8 @@
     </div>
 
     <div class="tabs__links">
-        <a href="#content-1">Ввести мерки для всей выкройки</a>
-        <a href="#content-2">Ввести мерки для каждой детали</a>
+        <a href="#content-1">Построить выкройку</a>
+        <a href="#content-2">Построить деталь</a>
 
         {% if name_scheme_pattern != '' and len(error_info[0]) == 0 and len(error_info[1]) == 0 %}
             <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>

@@ -1,7 +1,6 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.backends.backend_pdf import PdfPages
 from models.model_general import get_detail_name
 from models.scheme_model import *
 from functions.bezie import Bezier

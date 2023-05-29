@@ -93,15 +93,14 @@ body {
 
 }
 
-/* Серый экран авторизации */
+/* Фоновый экран авторизации */
 .gray_page {
-    background: gray;
-    top: 0;
-    left: 0;
+    background: black;
     position: fixed;
+    top: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.95;
+    opacity: 0.6;
 }
 
 /*Блок выбора фильтра*/
@@ -217,7 +216,7 @@ body {
     text-transform: uppercase;
 }
 
-.h {
+.clear_button {
     display: flex;
     justify-content: space-between;
     background: transparent;
@@ -270,8 +269,13 @@ body {
     display: flex;
     width: auto;
     height: auto;
-    margin-top: 1%;
     border-radius: 5px;
+    margin-top:0;
+    justify-content: space-between;
+}
+
+.mt_admin_width {
+    width: 40%
 }
 
 .admin_panel_button {
@@ -282,6 +286,10 @@ body {
     margin-top: 2%;
     margin-bottom: 3%;
     cursor: pointer;
+}
+
+.admin_lists {
+    margin-top: 115%
 }
 
 .admin_panel_button_small {
@@ -383,16 +391,10 @@ body {
     border-radius: 5px;
 }
 
-/*-----------*/
-/*  ОТСТУПЫ  */
-/*-----------*/
-
-p2 {
-    margin-top: 1.5%;
-}
-
-p3 {
-    margin-bottom: 1.5%;
+.error_user_param {
+    overflow-y: auto;
+    width: 100%;
+    height: 100%
 }
 
 /*-------------------------*/
@@ -581,12 +583,10 @@ h1 {
 }
 
 .user_profile_info {
-    display: block;
     float: left;
-    margin-left: 6.5%;
+    margin-left: 5%;
     margin-top: 2%;
     border-radius: 5px;
-    height: 100%;
 }
 
 .user_profile_info_buttons {
@@ -647,7 +647,55 @@ h1 {
     background: #b47d82;
 }
 
-.button_menu:hover{
+.button_menu:hover {
     color: #fffaf1;
     background: rgba(122,68,68,0.71);
+}
+
+/*-------------*/
+/* ИЗОБРАЖЕНИЯ */
+/*-------------*/
+
+.star_icon {
+    width: 16px;
+    height: 16px;
+}
+
+.heart_icon {
+    width: 20px;
+    height: 20px;
+}
+
+.img_pattern {
+    width: auto;
+    height: 200px;
+}
+
+.img_scheme{
+    width: 350px;
+    height: auto;
+}
+
+.table_measure{
+    display: flex;
+    justify-content: center;
+}
+
+.navbar-light {
+   background: #f5ede1
+}
+
+.gender_size {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img_info_pattern {
+    width: auto;
+    height: 100px;
+}
+
+.bottom {
+    margin-top: 64vh;
 }

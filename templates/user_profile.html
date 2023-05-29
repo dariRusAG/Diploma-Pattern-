@@ -24,28 +24,30 @@
 
         <div>
             <form action="{{ url_for('catalog_favorites') }}" method="get">
-                <input style="margin-top:64vh" type="submit" name="remove_profile_button" value="Удалить аккаунт"
-                       disabled="disabled" class="button_user">
+                <input type="submit" name="remove_profile_button" value="Удалить аккаунт"
+                       disabled="disabled" class="button_user bottom">
             </form>
             <p class="mt-4">{{ macros_general.exit() }}</p>
         </div>
     </div>
 
     <div class="user_profile_right mt-3 ms-3">
-        <div class="tabs" style="width: 100%">
-            <div id="content-1" style="width: 100%">
+        <div class="tabs">
+            <div id="content-1">
                 <form action="{{ url_for('user_profile') }}#content-1" method="post">
                     <div class="user_profile_info">
                         <p><b>Личные данные</b></p>
                         {{ macros.render_data_user(data_user, len) }}
                     </div>
+
                     <div class="user_profile_info">
                         <p><b>Основные мерки тела</b></p>
                         <div class="user_info">
                             {{ macros.render_param_user(param_user, error_param, info_param, len, 'осн', 'осн') }}
                         </div>
                     </div>
-                    <div class="user_profile_info" style="width: 30%; height: auto">
+
+                    <div class="user_profile_info">
                         {% if len(error_param[1]) == 0  and error_param[2] == 'осн' %}
                             <div class="alert alert-success d-flex align-items-center" role="alert">
                                 <i class="bi bi-check-circle-fill"></i>
@@ -54,15 +56,16 @@
                                 </div>
                             </div>
                         {% endif %}
+
                         {% if len(error_param[1]) != 0  and error_param[2] == 'осн' %}
-                            <div class="admin_panel_error"
-                                 style="overflow-y: auto; width: 100%; height: 100%">
+                            <div class="admin_panel_error error_user_param">
                                 {% for elem in error_param[1] %}
                                     <p>{{ elem }}</p>
                                 {% endfor %}
                             </div>
                         {% endif %}
                     </div>
+
                     <div class="user_profile_info_buttons">
                         <input type="submit" value="Отменить изменения" class="button_user">
                         <input type="submit" name="save" value="Сохранить изменения" class="button_user">
@@ -71,7 +74,7 @@
             </div>
 
 
-            <div id="content-2" style="width: 100%">
+            <div id="content-2">
                 <form action="{{ url_for('user_profile') }}#content-2" method="post">
                     <div class="user_profile_info">
                         <p><b>Дополнительные мерки тела</b></p>
@@ -79,12 +82,14 @@
                             {{ macros.render_param_user(param_user, error_param, info_param, len, 'доп1', 'доп') }}
                         </div>
                     </div>
-                    <div class="user_profile_info" style="height:auto;">
+
+                    <div class="user_profile_info">
                         <div class="user_info">
                             {{ macros.render_param_user(param_user, error_param, info_param, len, 'доп2', 'доп') }}
                         </div>
                     </div>
-                    <div class="user_profile_info" style="width: 42%; height: auto;">
+
+                    <div class="user_profile_info">
                         {% if len(error_param[1]) == 0 and error_param[2] == 'доп' %}
                             <div class="alert alert-success d-flex align-items-center" role="alert">
                                 <i class="bi bi-check-circle-fill"></i>
@@ -94,10 +99,8 @@
                             </div>
                         {% endif %}
 
-
                         {% if len(error_param[1]) != 0 and error_param[2] == 'доп' %}
-                            <div class="admin_panel_error"
-                                 style="overflow-y: auto; width: 100%; height: 100%">
+                            <div class="admin_panel_error error_user_param">
                                 {% for elem in error_param[1] %}
                                     <p>{{ elem }}</p>
                                 {% endfor %}

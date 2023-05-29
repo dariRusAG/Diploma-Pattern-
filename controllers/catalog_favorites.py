@@ -98,6 +98,7 @@ def catalog_favorites():
             len=len,
             str=str
         )
+
     else:
         return render_template(
             'admin_profile.html',

@@ -11,7 +11,7 @@
             </p>
 
             <p class="fig">
-                <img src="{{ pattern.loc[0,'Изображение']}}" alt="" style="max-width: 100%;">
+                <img src="{{ pattern.loc[0,'Изображение']}}" alt="">
             </p>
         </div>
     </div>
@@ -23,7 +23,7 @@
         <div class="block_scheme">
             <div class="data">
                 <p class="fig">
-                    <img src="{{ name }}" alt="" style="width: 350px; height: auto;">
+                    <img src="{{ name }}" alt="" class="img_scheme">
                 </p>
             </div>
         </div>
@@ -43,7 +43,7 @@
             {% set full_title = measure["Полное_название"].split(",") %}
             {% set designation = measure["Обозначение"].split(",") %}
 
-            <table style="display: flex; justify-content: center;">
+            <table class="table_measure">
                 {% for full_title, designation in zip(full_title, designation) %}
                     <tr>
                         <td>
@@ -59,13 +59,12 @@
                                 {% if designation == 'ДИ' and standard_size != 'base' %}
                                     <label>
                                         <input type="text" name="param_value" class="write_personal"
-                                               value="{{ measure['Длина_детали'] }}"
-                                               placeholder="{{ measure['Длина_детали'] }}">
+                                               value="{{ measure['Длина_детали'] }}" placeholder="{{ measure['Длина_детали'] }}">
                                     </label>
                                 {% else %}
                                     <label>
-                                        <input type="text" name="param_value" class="write_personal" value=""
-                                               placeholder="необходимо заполнить">
+                                        <input type="text" name="param_value" class="write_personal"
+                                               value="" placeholder="необходимо заполнить">
                                     </label>
                                 {% endif %}
 
@@ -85,8 +84,7 @@
                                                                 placeholder="{{ param.loc[j, 'Значение']}}">
                                                 {% else %}
                                                     <input type="text" name="param_value" class="write_personal"
-                                                           value=""
-                                                           placeholder="необходимо заполнить">
+                                                           value="" placeholder="необходимо заполнить">
                                                 {% endif %}
                                             </label>
                                         {% endif %}
@@ -97,17 +95,16 @@
                         </td>
 
                         <td>
-
                             <div class="tooltip2">?
                                 <span class="tooltiptext2">
-                            <table style="display: flex; justify-content: center;">
+                            <table class="table_measure">
                                 <tr>
                                     <td>
                                         {{ info_param.loc[(info_param['Обозначение'] == designation)]['Информация_о_параметрах'].values[0] }}
                                     </td>
                                     <td>
                                         <img src="{{ info_param.loc[(info_param['Обозначение'] == designation)]['Изображение'].values[0] }}"
-                                             alt="" style="width: auto; height: 100px;">
+                                             alt="" class="img_info_pattern">
                                     </td>
                                 </tr>
                             </table>
@@ -131,10 +128,8 @@
 <!--Макрос для вывода мерок схемы выкройки с параметрами пользователя-->
 {% macro render_measure_pattern(measure_name, measure_full_name, details_lengths, param, standard_size, info_param, error_info, len, zip) %}
     <div class="block_detail">
-        <table style="display: flex; justify-content: center;">
-
+        <table class="table_measure">
             {% for designation, full_title, length in zip(measure_name, measure_full_name, details_lengths) %}
-
                 <tr>
                     <td>
                         <label>
@@ -148,8 +143,7 @@
                             {% if designation == 'ДИ' and standard_size != 'base' %}
                                 <label>
                                     <input type="text" name="param_value" class="write_personal"
-                                           value="{{ length }}"
-                                           placeholder="{{ length }}">
+                                           value="{{ length }}" placeholder="{{ length }}">
                                     {% else %}
 
                                     <input type="text" name="param_value" class="write_personal" value=""
@@ -188,14 +182,14 @@
                     <td>
                         <div class="tooltip2">?
                             <span class="tooltiptext2">
-                            <table style="display: flex; justify-content: center;">
+                            <table class="table_measure">
                                 <tr>
                                     <td>
                                         {{ info_param.loc[(info_param['Обозначение'] == designation)]['Информация_о_параметрах'].values[0] }}
                                     </td>
                                     <td>
                                         <img src="{{ info_param.loc[(info_param['Обозначение'] == designation)]['Изображение'].values[0] }}"
-                                             alt="" style="width: auto; height: 100px;">
+                                             alt="" class="img_info_pattern">
                                     </td>
                                 </tr>
                             </table>

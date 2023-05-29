@@ -4,6 +4,8 @@ from functions.data_check import *
 from utils import get_db_connection
 from functions.create_scheme import *
 from models.scheme_model import *
+from matplotlib.backends.backend_pdf import PdfPages
+
 
 def int_list(list_measures):
     temp = []
@@ -137,6 +139,8 @@ def scheme():
     name_scheme_pattern = ''
     name_scheme_detail_1 = []
     name_scheme_detail_2 = []
+
+    list_size = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
     error_info = [[], [], [], []]
 
@@ -275,6 +279,7 @@ def scheme():
         page=page,
 
         # Размеры
+        list_size=list_size,
         gender_size_1=gender_size_1,
         standard_size_1=standard_size_1,
         gender_size_2=gender_size_2,

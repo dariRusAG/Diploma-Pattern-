@@ -11,12 +11,9 @@
     {% import "macros_general.html" as macros_general %}
     {% import "catalog_favorites_macros.html" as macros %}
 </head>
-<body
-{% if is_authorization == True or is_registration == True %}
-style="overflow: hidden">
-{% else %}
->
-{% endif %}
+
+<body {% if is_authorization == True or is_registration == True %}
+style="overflow: hidden" {% endif %}>
 
 {{ macros_general.render_menu(user_role) }}
 
@@ -28,8 +25,8 @@ style="overflow: hidden">
     {{ macros_general.registration(user_data_error, reg_form) }}
 {% endif %}
 
-
 {% if (title == "Список избранного") and (user_role == "user") %}
+
     {% if favorite_list == [] %}
         {% if choice_category == [] and choice_complexity == [] %}
             <strong class="ms-3 fs-4">Список избранного пуст</strong>
@@ -40,19 +37,23 @@ style="overflow: hidden">
     {% else %}
         {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
     {% endif %}
+
 {% else %}
+
     {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
     {% if len(pattern) == 0 %}
         <strong class="ms-3 fs-4">Ничего не найдено</strong>
     {% endif %}
+
 {% endif %}
 
 <div class="pattern_view">
     {{ macros.render_pattern(pattern, len, favorite_list, page, user_role) }}
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
-        crossorigin="anonymous"></script>
-
+        crossorigin="anonymous">
+</script>
 </body>
 </html>

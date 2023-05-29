@@ -26,14 +26,12 @@
             <input type="submit" name="panel" value="3D-модель" class="admin_panel_button">
             {% if admin_panel_button == 'Детали' or admin_panel_button == 'Добавить Линии'
             or admin_panel_button == 'Просмотреть Список Линий' or admin_panel_button == 'Выбрать Мерки И Формулы'
-                    or admin_panel_button == 'Добавить Линию'or admin_panel_button == "Линии" or
+                    or admin_panel_button == 'Добавить Линию' or admin_panel_button == "Линии" or
                     admin_panel_button == "Список Деталей" %}
-                <input type="submit" name="panel" value="Список деталей" class="admin_panel_button"
-                       style="margin-top:60%">
+                <input type="submit" name="panel" value="Список деталей" class="admin_panel_button admin_lists">
             {% endif %}
             {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Список Выкроек" %}
-                <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button"
-                       style="margin-top:60%">
+                <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button admin_lists">
             {% endif %}
         </form>
     </div>
@@ -85,6 +83,6 @@
         {% endif %}
     </div>
 </div>
-<p2 class="mb-5">{{ macros_general.exit() }}</p2>
+<p class="mb-5">{{ macros_general.exit() }}</p>
 </body>
 </html>

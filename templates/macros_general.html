@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 
 {% macro render_menu(user_role) %}
-    <nav class="navbar nav-justified navbar-expand-lg navbar-light" style="background: #f5ede1">
+    <nav class="navbar nav-justified navbar-expand-lg navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('catalog_favorites') }}?catalog=Каталог">
                 <img src="\static\image\icons\your-sewing-pattern-logo.png"
                      width="350" height="35" class="d-inline-block align-top" alt="" loading="lazy">
             </a>
+
             <div class="collapse navbar-collapse" id="navbarCenteredExample">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     {% if user_role != 'admin' %}
                         <form action="{{ url_for('catalog_favorites') }}" method="get">
-                            <button class="button_menu me-4" name="catalog" value="Каталог">Каталог
+                            <button class="button_menu me-4" name="catalog" value="Каталог">
+                                Каталог
                             </button>
                         </form>
                     {% endif %}
+
                     {% if user_role == 'guest' %}
                         <form action="" method="get">
                             <button class="button_menu me-4" name="authorization_button" value="Войти">Войти</button>
                         </form>
+
                     {% else %}
+
                         {% if user_role == 'admin' %}
                             <button class="button_menu  text-nowrap me-4" aria-current="page"
                                onclick="location.href='/admin_profile';">Личный кабинет</button>
                         {% else %}
                             <form action="{{ url_for('catalog_favorites') }}" method="get">
-                                <button class="button_menu me-4" name="favorites"
-                                        value="Список избранного">Список избранного
+                                <button class="button_menu me-4" name="favorites" value="Список избранного">
+                                    Список избранного
                                 </button>
                             </form>
 
@@ -42,17 +47,18 @@
 
 <!--окно авторизации-->
 {% macro authorization(user_data_error,auth_form) %}
-    <div class="gray_page">
-    </div>
+    <div class="gray_page"></div>
     <div class="authorization_registration">
         <button type="button" class="btn-close btn-close-white" onclick="location.href='/';"></button>
         <div class="myform">
             <h1 class="text-center">Авторизация</h1>
+
             <form action="" method="get">
                 <div class="mb-3 mt-4">
                     <label for="exampleInputEmail1" class="form-label">Логин</label>
                     <input type="text" class="form-control" name="auth_login">
                 </div>
+
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Пароль</label>
                     <input type="password" class="form-control" name="auth_password">
@@ -65,9 +71,11 @@
                         {{ user_data_error }}
                     </div>
                 {% endif %}
+
                 <button type="submit" class="btn btn-light mt-3"
                         value="Авторизоваться" name="authorization_user_button">Войти
                 </button>
+
                 <p>Нет аккаунта? <a href="?registration_button=Создать аккаунт" value="Создать аккаунт"
                                     name="registration_button">Зарегистрироваться</a></p>
             </form>
@@ -77,25 +85,28 @@
 
 <!--Регистрация пользователя-->
 {% macro registration(user_data_error, reg_form) %}
-    <div class="gray_page">
-    </div>
+    <div class="gray_page"></div>
     <div class="authorization_registration">
         <button type="button" class="btn-close btn-close-white" onclick="location.href='/';"></button>
         <div class="myform">
             <h1 class="text-center">Регистрация</h1>
+
             <form action="" method="get">
                 <div class="mb-3 mt-4">
                     <label for="exampleInputEmail1" class="form-label">Логин</label>
                     <input type="text" class="form-control" name="reg_login">
                 </div>
+
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Пароль</label>
                     <input type="password" class="form-control" name="reg_password">
                 </div>
+
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Повторите пароль</label>
                     <input type="password" class="form-control" name="password_confirm">
                 </div>
+
                 {% if user_data_error != "" %}
                     <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
                         <i class="bi-exclamation-octagon-fill"></i>
@@ -103,10 +114,13 @@
                         {{ user_data_error }}
                     </div>
                 {% endif %}
+
                 <button type="submit" class="btn btn-light mt-3"
                         value="Авторизоваться" name="registration_user_button">Зарегистрироваться
                 </button>
-                <p>Уже есть аккаунт? <a href="?authorization_button=Войти" value="Войти" name="registration_button">Войти</a>
+
+                <p>Уже есть аккаунт?
+                    <a href="?authorization_button=Войти" value="Войти" name="registration_button">Войти</a>
                 </p>
             </form>
         </div>
@@ -115,9 +129,7 @@
 
 <!--кнопка выход-->
 {% macro exit() %}
-    <form action={{ url_for('catalog_favorites') }} method="get">
-        <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';"
-               class="button_menu"
-               style="background:#b47d82; color: #fffaf1; height:18%;  cursor: pointer;">
+    <form action="{{ url_for('catalog_favorites') }}" method="get">
+        <input type="submit" name="exit_button" value="Выйти" onclick="location.href='/';" class="button_menu">
     </form>
 {% endmacro %}

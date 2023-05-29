@@ -26,10 +26,10 @@ def user_profile():
             error_param[1].append(is_correct_login_password(conn, new_data_user[0], new_data_user[1], session['user_id']))
         else:
             update_data_user(conn, session['user_id'], new_data_user)
+
         def update(elem_, new_param_user_):
             update_param_user(conn, session['user_id'], elem_, new_param_user_)
-            error_param[0].append('q')
-
+            error_param[0].append('upd')
 
         new_param_user = request.form.getlist('param_user')
         if len(new_param_user) == 10:
@@ -49,13 +49,17 @@ def user_profile():
     df_data_user = get_data_user(conn, session['user_id'])
     df_param_user = get_param_user(conn, session['user_id'])
     df_info_param = get_info_param(conn)
+
     html = render_template(
         'user_profile.html',
+
         user=session['user_id'],
         info_param=df_info_param,
         data_user=df_data_user,
         param_user=df_param_user,
         error_param=error_param,
+
+        # Функции
         len=len
     )
 
