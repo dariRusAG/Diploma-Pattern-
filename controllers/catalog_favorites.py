@@ -5,8 +5,7 @@ from utils import get_db_connection
 from models.catalog_favorites_model import *
 
 
-def favorites_pattern(conn, category, complexity):
-    is_authorization = False
+def favorites_pattern(conn, category, complexity, is_authorization):
 
     if 'user_id' not in session:
         user_id = 0
@@ -60,7 +59,7 @@ def catalog_favorites():
         category = []
         complexity = []
 
-    df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity)
+    df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity, is_authorization)
     df_category = get_category(conn)
     df_pattern = get_pattern(conn, category, complexity)
 

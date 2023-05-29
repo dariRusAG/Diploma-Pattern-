@@ -35,7 +35,7 @@
                         <input hidden type="text" name="page" value="#content-1">
                     </label>
 
-                    {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param_1, standard_size_1, info_param, len, zip) }}
+                    {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param_1, standard_size_1, info_param, error_info, len, zip) }}
 
                     <div class="title title-2">
                         <p>Автозаполнение типовыми параметрами</p>
@@ -70,9 +70,9 @@
                     </div>
                 {% endif %}
             {% else %}
-                <div class="admin_panel_error">
+                <div class="admin_panel_error mt-2 mb-2">
                     {% for i in range(len(error_info[0])) %}
-                        <p>{{ error_info[0][i] }}</p>
+                        <p class="ms-2 mt-2">{{ error_info[0][i] }}</p>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -92,7 +92,7 @@
                         <input hidden type="text" name="page" value="#content-2">
                     </label>
 
-                    {{ macros.render_measure_detail(measure, param_2, standard_size_2, info_param, len, zip, str) }}
+                    {{ macros.render_measure_detail(measure, param_2, standard_size_2, info_param, error_info, len, zip, str) }}
 
                     <div class="title title-2">
                         <p>Автозаполнение типовыми параметрами</p>
@@ -127,9 +127,9 @@
                     </div>
                 {% endif %}
             {% else %}
-                <div class="admin_panel_error">
+                <div class="admin_panel_error mt-2 mb-2">
                     {% for i in range(len(error_info[1])) %}
-                        <p>{{ error_info[1][i] }}</p>
+                        <p class="ms-2 mt-2">{{ error_info[1][i] }}</p>
                     {% endfor %}
                 </div>
             {% endif %}

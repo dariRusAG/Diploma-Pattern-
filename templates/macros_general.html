@@ -3,7 +3,7 @@
 {% macro render_menu(user_role) %}
     <nav class="navbar nav-justified navbar-expand-lg navbar-light" style="background: #f5ede1">
         <div class="container-fluid">
-            <a class="navbar-brand" href="">
+            <a class="navbar-brand" href="{{ url_for('catalog_favorites') }}?catalog=Каталог">
                 <img src="\static\image\icons\your-sewing-pattern-logo.png"
                      width="350" height="35" class="d-inline-block align-top" alt="" loading="lazy">
             </a>

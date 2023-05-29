@@ -138,7 +138,7 @@ def scheme():
     name_scheme_detail_1 = []
     name_scheme_detail_2 = []
 
-    error_info = [[], []]
+    error_info = [[], [], [], []]
 
     # Если открыта вкладка построения по общим меркам
     if page == '#content-1':
@@ -182,10 +182,14 @@ def scheme():
                                                          str(get_detail_name(conn, id_detail)), "all_pattern")
                         if error != "True" and error_info[0].count(error) == 0:
                             error_info[0].append(error)
+                            if df_param_1.loc[i, "Обозначение"] == "ДИ":
+                                error_info[2].append('Длина детали "' + str(get_detail_name(conn, id_detail)) + '"')
+                            else:
+                                error_info[2].append(df_param_1.loc[i, "Полное_название"])
 
                 if len(error_info[0]) == 0:
                     checked_value_1 = True
-                    create_user_scheme(conn, df_param_detail, id_detail, pdf)
+                    create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
                     name_scheme_detail_1.append(
                         'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
 
@@ -221,6 +225,9 @@ def scheme():
                                                      str(get_detail_name(conn, list_id_detail[i])), "detail_pattern")
                     if error != "True" and error_info[1].count(error) == 0:
                         error_info[1].append(error)
+                        error_info[3].append('error')
+                    else:
+                        error_info[3].append('')
 
             if len(error_info[1]) == 0:
                 checked_value_2 = True
@@ -231,13 +238,14 @@ def scheme():
 
                 for id_detail in list_id_detail:
                     df_param_detail = df_param_2.loc[(df_param_2['ID'] == id_detail)]
-                    create_user_scheme(conn, df_param_detail, id_detail, pdf)
+                    create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
                     name_scheme_detail_2.append(
                         'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
                 pdf.close()
 
             standard_size_2 = request.values.get('fill_standard_param')
 
+    print(error_info)
     return render_template(
         'scheme.html',
 

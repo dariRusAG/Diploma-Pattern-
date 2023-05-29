@@ -1,7 +1,10 @@
+import math
+
 from flask import request, session
 from functions.create_scheme import create_user_scheme
 from models.admin_profile_model import *
 from models.model_general import *
+from models.scheme_model import get_param_standard_w
 from models.user_profile_model import is_correct_user_data
 
 
@@ -101,54 +104,59 @@ def is_correct_overall(name):
         return 'True'
 
 
-def is_correct_category(conn, name):
+def is_correct_category(conn, name, category_id):
     if is_correct_overall(name) != 'True':
         return is_correct_overall(name)
-    elif get_category_id(conn, name) != "error":
+    elif get_category_id(conn, name) != "error" and get_category_id(conn, name) != category_id:
         return "Ошибка! Такая категория уже существует"
     else:
         return 'True'
 
 
-def is_correct_formula(conn, name, value):
+def is_correct_formula(conn, name, value, formula_id):
+    df_param = get_param_standard_w(conn)
+    for index, row in df_param.iterrows():
+        all_size_param = row['Значение'].split(",")
+        row['Значение'] = float(all_size_param[2])
+    df_param_detail = dict(zip(df_param["Обозначение"], df_param["Значение"]))
+    df_param_detail['sqrt'] = math.sqrt
+    df_param_detail['pow'] = math.pow
+    df_param_detail['ДИ'] = 10
+
+    try:
+        eval(value, df_param_detail)
+    except Exception:
+        return "Ошибка! Неверный синтаксис формулы"
+
     if is_correct_overall(name.replace("_"," ")) != 'True':
         return is_correct_overall(name)
-    elif get_formula_id(conn, name) != "error":
+    elif get_formula_id(conn, name) != "error" and get_formula_id(conn, name) != formula_id:
         return "Ошибка! Такое название формулы уже существует"
     elif value == '':
         return "Ошибка! Введено пустое поле"
-    elif get_formula_id_by_value(conn, name, value) != "error":
+    elif get_formula_id_by_value(conn, value) != "error" and get_formula_id_by_value(conn, value) != formula_id:
         return "Ошибка! Такая формула уже существует"
     else:
         return 'True'
 
 
-def is_correct_edit_formula(conn, name, value):
-    if is_correct_overall(name.replace("_"," ")) != 'True':
-        return is_correct_overall(name)
-    elif value == '':
-        return "Ошибка! Введено пустое поле"
-    else:
-        return 'True'
-
-
-def is_correct_detail(conn, name, size, measure, formula):
+def is_correct_detail(conn, name, size, detail_id):
+    if detail_id == '':
+        detail_id = -1
     if is_correct_overall(name) != 'True':
         return is_correct_overall(name)
+    elif get_detail_id(conn, name) != "error" and get_detail_id(conn, name) != int(detail_id):
+        return "Ошибка! Такое название детали уже существует"
     elif is_float(size) != True and size != '':
         return "Ошибка! Неверное значение эталонной длины"
-    elif len(measure) == 0:
-        return "Ошибка! Список мерок пуст"
-    elif len(formula) == 0:
-        return "Ошибка! Список формул пуст"
     else:
         return 'True'
 
 
-def is_correct_pattern(conn, name, category, picture, detail_list):
-    if is_correct_overall(name.replace(" ", "")) != 'True':
+def is_correct_pattern(conn, name, category, picture, detail_list, pattern_id):
+    if is_correct_overall((name.replace(" ", "")).replace("-", "")) != 'True':
         return is_correct_overall(name)
-    elif get_pattern_id(conn, name) != "error":
+    elif get_pattern_id(conn, name) != "error" and get_pattern_id(conn, name) != pattern_id:
         return "Ошибка! Выкройка с таким именем уже существует"
     elif picture == '':
         return "Ошибка! Вместо картинки введено пустое поле"
@@ -160,21 +168,8 @@ def is_correct_pattern(conn, name, category, picture, detail_list):
         return 'True'
 
 
-def is_correct_edit_pattern(conn, name, category, picture, detail_list):
-    if is_correct_overall(name.replace(" ", "")) != 'True':
-        return is_correct_overall(name)
-    elif picture == '':
-        return "Ошибка! Вместо картинки введено пустое поле"
-    elif not detail_list:
-        return "Ошибка! Отсутствуют детали"
-    elif category is None:
-        return "Ошибка! Отсутствует категория"
-    else:
-        return 'True'
-
-
 def is_correct_scheme(conn, df_param_detail, detail_id, pdf):
-    scheme = create_user_scheme(conn, df_param_detail, detail_id, pdf)
+    scheme = create_user_scheme(conn, df_param_detail, detail_id, pdf, "admin")
     if scheme == "error_mes":
         return "Ошибка! Выбраны не все мерки для формул"
     elif scheme == "error_form":
