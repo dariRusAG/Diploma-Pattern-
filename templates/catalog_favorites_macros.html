@@ -5,7 +5,11 @@
 <div class="catalog">
     <div class="block_choice mt-3">
         <form action="{{url_for('catalog_favorites')}}" method="post">
-            <p><b>Категории:</b></p>
+
+            <div class="title title-3">
+                Категории
+            </div>
+<!--                <p><b>Категории:</b></p>-->
             {% for i in range(len(category)) %}
             <p>
                 {% set value=category.loc[i, "category_name"] %}
@@ -18,7 +22,10 @@
             </p>
             {% endfor %}
 
-            <p><b>Сложность:</b></p>
+            <div class="title title-3">
+                Сложность
+            </div>
+<!--            <p><b>Сложность:</b></p>-->
             {% for i in range(5) %}
             <p>
                 <input type="checkbox" name="complexity" value="{{ i + 1 }}" class="cursor"
@@ -46,38 +53,33 @@
 {% macro render_pattern(pattern, len, favorite_list, page, user_role) %}
 {% for i in range(len(pattern)) %}
 <div class="block">
-    <div class="data">
-        {% for name in pattern.dtypes.index %}
-        {% if name != "ID" %}
 
-        <p class="fig">
-            {% set value=pattern.loc[i, name] %}
+    <div class="outer" style="height: 60px;">
+        <span class="product-title">
+            {{ pattern.loc[i, 'Название'] }}
+        </span>
+    </div>
 
-            {% if name == "Сложность" %}
-            {% for i in range(value) %}
+    <div class="outer" style="height: 30px;">
+        <span class="product-caption">
+            {{ pattern.loc[i, 'Категория'] }}
+        </span>
+    </div>
+
+    <img src="{{ pattern.loc[i, 'Изображение'] }}" alt="" class="img_pattern">
+
+    <div class="complexity">
+        {% set value = pattern.loc[i, 'Сложность'] %}
+        {% for i in range(value) %}
             <img src="/static/image/icons/shaded_star_icon.png" alt="" class="star_icon">
-            {% endfor %}
-
-            {% for j in range(5 - value) %}
-            <img src="/static/image/icons/empty_star_icon.png" alt="" class="star_icon">
-            {% endfor %}
-
-            {% elif name == "Изображение" %}
-            <img src="{{value}}" alt="" class="img_pattern">
-
-            {% elif name == "Название" %}
-            <span class="product-title">{{ value }}</span>
-
-            {% elif name == "Категория" %}
-            <span class="product-caption">{{ value }}</span>
-
-            {% else %}
-            <b>{{ name }}: </b>{{ value }}
-            {% endif %}
-            {% endif %}
-
         {% endfor %}
-        {% if user_role != "admin" %}
+
+        {% for j in range(5 - value) %}
+            <img src="/static/image/icons/empty_star_icon.png" alt="" class="star_icon">
+        {% endfor %}
+    </div>
+
+    {% if user_role != "admin" %}
         <form action="{{url_for('catalog_favorites')}}" method="get">
             {% if pattern.loc[i, 'ID'] in favorite_list %}
 
@@ -92,19 +94,16 @@
             </button>
 
             {% endif %}
-            <label>
-                <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
-            </label>
+            <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
         </form>
-        {% endif %}
-       </p>
-        <form action="{{url_for('scheme')}}#content-1" method="get">
-            <button type="submit" name="scheme" class="button button_pattern"> Построить
-                <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
-                <input hidden type="text" name="page" value="#content-1">
-            </button>
-        </form>
-    </div>
+    {% endif %}
+
+    <form action="{{url_for('scheme')}}#content-1" method="get">
+        <button type="submit" name="scheme" class="button button_pattern"> Построить
+            <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
+            <input hidden type="text" name="page" value="#content-1">
+        </button>
+    </form>
 </div>
 {% endfor %}
 {% endmacro %}

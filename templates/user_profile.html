@@ -15,8 +15,8 @@
 
 {{ macros_general.render_menu(user_role) }}
 
-<div class="user_profile_panel mt-3 ms-3">
-    <div class="user_profile_left mt-3 ms-3">
+<div class="panel">
+    <div class="panel_left">
         <div class="tabs__links">
             <a href="#content-1">Основные данные</a>
             <a href="#content-2">Дополнительные данные</a>
@@ -24,14 +24,13 @@
 
         <div>
             <form action="{{ url_for('catalog_favorites') }}" method="get">
-                <input type="submit" name="remove_profile_button" value="Удалить аккаунт"
-                       disabled="disabled" class="button_user bottom">
+                <input type="submit" name="remove_profile_button" value="Удалить аккаунт" class="button_user bottom">
             </form>
             <p class="mt-4">{{ macros_general.exit() }}</p>
         </div>
     </div>
 
-    <div class="user_profile_right mt-3 ms-3">
+    <div class="panel_right">
         <div class="tabs">
             <div id="content-1">
                 <form action="{{ url_for('user_profile') }}#content-1" method="post">

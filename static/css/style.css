@@ -37,6 +37,11 @@ body {
     color: #fffaf1;
 }
 
+.button_user:hover {
+    background: #b47d82;
+    color: #fffaf1;
+}
+
 .container_button {
     width: 100%;
     text-align: center;
@@ -90,7 +95,6 @@ body {
     font-size: 15px;
     padding: 7px;
     border-radius: 10%;
-
 }
 
 /* Фоновый экран авторизации */
@@ -108,12 +112,13 @@ body {
     color: #2a1515;
     background-color: #f5ede1;
     border-left: 6px solid #b47d82;
-    padding: 10px 20px 25px 20px;
-    width: 15.2%;
+    padding: 20px;
+    width: 240px;
     display: block;
     float: left;
-    margin-bottom: 6px;
-    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    margin-left: 15px;
+    box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
 }
 
 /*Блок вывода выкроек*/
@@ -121,6 +126,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    text-align: center;
 }
 
 .pattern_info {
@@ -137,13 +143,13 @@ body {
 
 /*Поле каждой выкройки блока выкроек*/
 .block {
-    padding: 15px 20px;
+    padding: 10px 12px;
     background: #b47d82;
     border-radius: 10px;
     color: #fffaf1;
-    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
     font-size: 14px;
-    margin: 15px 15px;
+    margin: 14px 14px;
     width: 240px;
 }
 
@@ -152,7 +158,7 @@ body {
     background: #b47d82;
     border-radius: 10px;
     color: #fffaf1;
-    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
     font-size: 14px;
     margin: 15px 15px;
 }
@@ -177,7 +183,6 @@ body {
 /*-----------*/
 
 .title {
-    margin: 15px;
     display: block;
     font-size: 20px;
     letter-spacing: 1px;
@@ -186,27 +191,48 @@ body {
     text-align: center;
 }
 
+.title-1 {
+    margin: 20px 15px -20px;
+}
+
 .title-2 {
+    margin: 12px;
     font-size: 15px;
 }
 
-/*Содержимое поля каждой выкройки*/
-.data {
-    margin-right: 30px;
-    display: block;
-    width: 100%;
+.title-3 {
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
-.fig {
-    text-align: center;
+/*Содержимое поля каждой выкройки*/
+/*.data {*/
+/*    margin-right: 30px;*/
+/*    display: block;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.fig {*/
+/*    text-align: center;*/
+/*    line-height: 40px;*/
+/*}*/
+
+.complexity {
+    width: 100%;
 }
 
 .product-title {
     padding: 2px 15px;
     display: block;
-    font-size: 17px;
+    font-size: 16px;
     letter-spacing: 1px;
     text-transform: uppercase;
+}
+
+.outer {
+    display: flex;
+    justify-content: center; /*Центрирование по горизонтали*/
+    align-items: center;     /*Центрирование по вертикали */
 }
 
 .product-caption {
@@ -214,6 +240,7 @@ body {
     padding: 0 20px;
     font-size: 12px;
     text-transform: uppercase;
+
 }
 
 .clear_button {
@@ -440,15 +467,6 @@ body {
 /*-------------------------*/
 /* ПАНЕЛЬ ПОСТРОЕНИЯ СХЕМЫ */
 /*-------------------------*/
-.scheme_panel {
-    background: #f5ede1;
-    display: flex;
-    width: 99.5%;
-    margin-left: 0.5%;
-    height: max-content;
-    border-radius: 5px;
-    margin-top: 1%;
-}
 
 *::before,
 *::after {
@@ -490,7 +508,7 @@ body {
     order: 1;
 }
 
-@media (min-width: 576px) {
+@media {
     .tabs {
         flex-direction: row;
     }
@@ -503,16 +521,16 @@ body {
 
     .tabs__links > a {
         height: 32px;
-        margin-top: 5%;
+        margin: 0 4% 8%;
         border-radius: 5px;
         box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
-        margin-bottom: 5%;
         cursor: pointer;
         color: #2a1515;
+        width: 100%;
     }
 
     .tabs > div:not(.tabs__links) {
-        padding-left: 10px;
+        padding-left: 5px;
     }
 }
 
@@ -525,7 +543,6 @@ body {
     display: flex;
     flex-direction: row;
 }
-
 
 /*окно авторизации*/
 .btn-close {
@@ -575,13 +592,6 @@ h1 {
     justify-content: space-evenly;
 }
 
-.user_profile_panel {
-    height: 88vh;
-    width: 99%;
-    display: flex;
-    flex-direction: row;
-}
-
 .user_profile_info {
     float: left;
     margin-left: 5%;
@@ -593,29 +603,6 @@ h1 {
     width: 99%;
     display: flex;
     justify-content: space-between;
-}
-
-.user_profile_button {
-    width: 100%;
-    height: 40px;
-    border-radius: 4px;
-    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
-    margin-top: 2%;
-    margin-bottom: 3%;
-    cursor: pointer;
-    background: #fffaf1;
-}
-
-.user_profile_left {
-    height: 96%;
-    width: 13%;
-}
-
-.user_profile_right {
-    background: #fffaf1;
-    height: 96%;
-    width: 84%;
-    border-radius: 5px;
 }
 
 .admin_button {
@@ -662,13 +649,14 @@ h1 {
 }
 
 .heart_icon {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
+    margin: 10px;
 }
 
 .img_pattern {
     width: auto;
-    height: 200px;
+    height: 220px;
 }
 
 .img_scheme{
@@ -698,4 +686,30 @@ h1 {
 
 .bottom {
     margin-top: 64vh;
+}
+
+.panel_right {
+    background: #f5ede1;
+    display: flex;
+    width: 100%;
+    height: max-content;
+    border-radius: 5px;
+    margin-left: 4px;
+
+
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.panel_left {
+    width: 240px;
+    margin-right: 15px;
+}
+
+.panel {
+    width: 99%;
+    display: flex;
+    flex-direction: row;
+    height: max-content;
+    margin-top: 1%;
 }

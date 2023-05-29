@@ -2,19 +2,21 @@
 
 <!--Макрос для вывода данных выкройки-->
 {% macro render_pattern_info(pattern) %}
-    <div class="block_scheme">
-        <div class="data">
-            <p class="fig">
-                <span class="product-title">{{ pattern.loc[0, "Название"] }}</span>
-            <p class="fig">
-                <span class="product-caption">{{ pattern.loc[0, "Категория"] }}</span>
-            </p>
-
-            <p class="fig">
-                <img src="{{ pattern.loc[0,'Изображение']}}" alt="">
-            </p>
-        </div>
+<div class="block_scheme">
+    <div class="outer" style="height: 60px;">
+        <span class="product-title">
+            {{ pattern.loc[0, 'Название'] }}
+        </span>
     </div>
+
+    <div class="outer" style="height: 30px;">
+        <span class="product-caption">
+            {{ pattern.loc[0, 'Категория'] }}
+        </span>
+    </div>
+
+    <img src="{{ pattern.loc[0, 'Изображение'] }}" alt="">
+</div>
 {% endmacro %}
 
 <!--Макрос для вывода построенных схем выкройки-->

@@ -123,8 +123,8 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
         if measurements[key] != '':
             measurements[key] = float(measurements[key])
 
-    measurements['sqrt'] = math.sqrt
-    measurements['pow'] = math.pow
+    measurements['Корень'] = math.sqrt
+    measurements['Степень'] = math.pow
 
     try:
         # расчёт всех формул в зависимости от значений мерок

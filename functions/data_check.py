@@ -119,8 +119,8 @@ def is_correct_formula(conn, name, value, formula_id):
         all_size_param = row['Значение'].split(",")
         row['Значение'] = float(all_size_param[2])
     df_param_detail = dict(zip(df_param["Обозначение"], df_param["Значение"]))
-    df_param_detail['sqrt'] = math.sqrt
-    df_param_detail['pow'] = math.pow
+    df_param_detail['Корень'] = math.sqrt
+    df_param_detail['Степень'] = math.pow
     df_param_detail['ДИ'] = 10
 
     try:
