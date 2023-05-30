@@ -72,7 +72,7 @@
                         {% if checked_value[1] == i %}
                             <form action="{{ url_for('admin_profile') }}" method="get">
                                 <p>
-                                    <input type="text" name="edit_category_name"
+                                    <input type="text" name="edit_category_name" class="ms-2 mt-2"
                                            value='{{ category.loc[i, "category_name"] }}'>
                                     <button type="submit" value="Сохранить изменения" class="admin_button">
                                         <i class="bi bi-check-lg"></i>
@@ -160,11 +160,11 @@
                                     <p>
                                         <input type="text" name="edit_formula_name"
                                                value="{{ formula_list['formula_name'].values[i] }}"
-                                               class="mt_admin_width">
+                                               class="mt_admin_width mt-2 ms-2">
 
                                         <input type="text" name="edit_formula_value"
                                                value="{{ formula_list['formula_value'].values[i] }}"
-                                               class="mt_admin_width">
+                                               class="mt_admin_width mt-2 ms-2">
 
                                         <button type="submit" value="Сохранить изменения" class="admin_button">
                                             <i class="bi bi-check-lg"></i>
@@ -295,7 +295,7 @@
     <div class="admin_panel_right_data_text mb-2">
         Список выбранных формул и их обозначений:
     </div>
-    <div class="admin_panel_right_data_list_small" style="height:45%">
+    <div class="admin_panel_right_data_list_small" style="height:43.3%">
         <table class="ms-2 mt-2">
             {% for key in new_detail_list[3] %}
                 <tr>
