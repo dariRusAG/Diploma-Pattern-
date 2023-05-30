@@ -58,7 +58,7 @@
                                {% if gender_size_1 == 'param_value_m' %} checked {% endif %}>Мужской размер
                     </label>
 
-                    <div class="container_button mt-3">
+                    <div class="container_button mt-3 mb-3">
                         {% for size in list_size %}
                             <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
                         {% endfor %}
@@ -73,7 +73,8 @@
                     </div>
                 {% else %}
                     <div class="scheme_view">
-                        {{ macros.render_pattern_scheme(name_scheme_detail_1) }}
+                        <div class="title title-1 mb-2">Схемы выкройки "{{ pattern.loc[0, "Название"] }}":</div>
+                        {{ macros.render_pattern_scheme(name_scheme_detail_1_url, name_scheme_detail_1, zip) }}
                     </div>
                 {% endif %}
 
@@ -111,7 +112,7 @@
                                     {% if gender_size_2 == 'param_value_m' %} checked {% endif %}>Мужской размер
                         </label>
 
-                        <div class="container_button mt-3">
+                        <div class="container_button mt-3 mb-3">
                             {% for size in list_size %}
                                 <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
                             {% endfor %}
@@ -126,7 +127,8 @@
                         </div>
                     {% else %}
                         <div class="scheme_view">
-                            {{ macros.render_pattern_scheme(name_scheme_detail_2) }}
+                            <div class="title title-1 mb-2"> Схема выкройки "{{ pattern.loc[0, "Название"] }}":</div>
+                            {{ macros.render_pattern_scheme(name_scheme_detail_2_url, name_scheme_detail_2, zip) }}
                         </div>
                     {% endif %}
 
@@ -138,6 +140,7 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+
             </div>
         </div>
     </div>

@@ -7,7 +7,6 @@ from functions.bezie import Bezier
 
 
 def setting_plt(value):
-    plt.figure(figsize=(value / 2.54, value / 2.54))
     plt.xlim([0, value])
     plt.ylim([0, value])
 
@@ -194,6 +193,8 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     else:
         setting_plt(length_y + 2)
 
+    plt.figure(figsize=(length_x / 2.54, length_y / 2.54))
+
     # Построение всех линий
     for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
         build_line_straight(x_straight, y_straight)
@@ -215,7 +216,10 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
         y = 1 + 29.7 * i
         for j in range(pages_x):
             x = 1 + 21 * j
-            plt.title("Деталь: " + str(get_detail_name(conn, id_detail)) + ". Строка " + str(i+1) + "; столбец " + str(j+1), fontsize=29, weight='ultralight', alpha=0.5)
+            plt.title("Деталь: " + str(get_detail_name(conn, id_detail)) +
+                      ". Строка " + str(i + 1) +
+                      "; столбец " + str(j+1),
+                      fontsize=29, weight='ultralight', alpha=0.5)
             add_to_pdf(pdf, x, x + 21, y, y + 29.7)
 
             # # Удаление пустых листов А4

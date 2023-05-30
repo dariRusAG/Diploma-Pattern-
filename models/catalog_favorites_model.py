@@ -22,7 +22,7 @@ def get_pattern(conn, category, complexity):
     FROM pattern
     JOIN category USING (category_id)
     WHERE (category_name IN ({str(category).strip('[]')}) OR {not category})
-    AND (complexity IN ({str(complexity).strip('[]')}) OR {not complexity})
+    AND (complexity == {complexity} OR ({complexity} == 0 AND complexity <= 5))
     GROUP BY pattern_id
     ORDER BY pattern_name
     ''', conn)
@@ -47,7 +47,7 @@ def get_favorite_pattern(conn, user_id, category, complexity):
     JOIN category USING (category_id)
     JOIN get_favorite_id USING (pattern_id)
     WHERE (category_name IN ({str(category).strip('[]')}) OR {not category})
-    AND (complexity IN ({str(complexity).strip('[]')}) OR {not complexity})
+    AND (complexity == {complexity} OR ({complexity} == 0 AND complexity <= 5))
     GROUP BY pattern_id
     ORDER BY pattern_name
     ''', conn)

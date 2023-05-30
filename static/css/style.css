@@ -114,6 +114,7 @@ body {
     border-left: 6px solid #b47d82;
     padding: 20px;
     width: 240px;
+    height: max-content;
     display: block;
     float: left;
     margin-left: 15px;
@@ -139,6 +140,7 @@ body {
     padding: 0 14px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 /*Поле каждой выкройки блока выкроек*/
@@ -161,6 +163,8 @@ body {
     box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
     font-size: 14px;
     margin: 15px 15px;
+    text-align: center;
+    height: min-content;
 }
 
 .block_measure {
@@ -173,7 +177,7 @@ body {
     background: #b47d82;
     border-radius: 10px;
     color: #fffaf1;
-    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 5px rgba(0, 0, 0, 0.4);
     font-size: 14px;
     margin: 15px 15px;
 }
@@ -192,7 +196,7 @@ body {
 }
 
 .title-1 {
-    margin: 20px 15px -20px;
+    margin: 20px 15px -15px;
 }
 
 .title-2 {
@@ -202,7 +206,7 @@ body {
 
 .title-3 {
     font-size: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 /*Содержимое поля каждой выкройки*/
@@ -219,6 +223,7 @@ body {
 
 .complexity {
     width: 100%;
+    text-align: center;
 }
 
 .product-title {
@@ -244,12 +249,17 @@ body {
 }
 
 .clear_button {
-    display: flex;
+    /*display: flex;*/
     justify-content: space-between;
     background: transparent;
     border: transparent;
     margin: auto;
     cursor: pointer;
+}
+
+.star {
+    margin: 0;
+    display: inline-block;
 }
 
 .error_personal {
@@ -643,9 +653,9 @@ h1 {
 /* ИЗОБРАЖЕНИЯ */
 /*-------------*/
 
-.star_icon {
-    width: 16px;
-    height: 16px;
+.star_icon_scheme {
+    width: 15px;
+    height: 15px;
 }
 
 .heart_icon {
@@ -659,9 +669,10 @@ h1 {
     height: 220px;
 }
 
-.img_scheme{
-    width: 350px;
+.img_scheme {
+    width: auto;
     height: auto;
+    max-width: 400px;
 }
 
 .table_measure{
@@ -695,8 +706,6 @@ h1 {
     height: max-content;
     border-radius: 5px;
     margin-left: 4px;
-
-
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -712,4 +721,47 @@ h1 {
     flex-direction: row;
     height: max-content;
     margin-top: 1%;
+}
+
+/*------------------------*/
+/* ПЕРЕКАТЫВАНИЕ КАРТИНКИ */
+/*------------------------*/
+
+.change-photos {
+    margin: auto;
+    width: 60px;
+    height: 100%;
+}
+
+.change-photos .clear_button img {
+  object-fit: cover;
+}
+
+/* Сразу скрываем вторую картинку */
+.change-photos .clear_button:nth-of-type(2) {
+  display: none;
+}
+
+/* При наведении курсора на родительский класс change-photos первую картинку скрываем, а вторую показываем */
+.change-photos:hover .clear_button:nth-of-type(1) {
+  display: none;
+}
+
+.change-photos:hover .clear_button:nth-of-type(2) {
+  display: block;
+}
+
+.category {
+    margin-top: calc(1em - 4px);
+    margin-bottom: calc(1em - 4px);
+}
+
+.star_icon {
+    width: 18px;
+    height: 18px;
+    transition: 0.2s; /* Время эффекта */
+}
+
+.star_icon:hover {
+    transform: scale(1.5); /* Увеличиваем масштаб */
 }

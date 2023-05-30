@@ -40,7 +40,7 @@ style="overflow: hidden" {% endif %}>
 
 {% else %}
 
-    {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
+    {{ macros.render_block_choice(category, choice_category, choice_complexity, new_complexity, len, str, reversed) }}
     {% if len(pattern) == 0 %}
         <strong class="ms-3 fs-4">Ничего не найдено</strong>
     {% endif %}

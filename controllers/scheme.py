@@ -137,6 +137,9 @@ def scheme():
     checked_value_2 = False
 
     name_scheme_pattern = ''
+    name_scheme_detail_1_url = []
+    name_scheme_detail_2_url = []
+
     name_scheme_detail_1 = []
     name_scheme_detail_2 = []
 
@@ -194,8 +197,9 @@ def scheme():
                 if len(error_info[0]) == 0:
                     checked_value_1 = True
                     create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
-                    name_scheme_detail_1.append(
+                    name_scheme_detail_1_url.append(
                         'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
+                    name_scheme_detail_1.append(str(get_detail_name(conn, id_detail)))
 
             for index, row in df_param_1.iterrows():
                 if row['Обозначение'] == 'ДИ':
@@ -243,8 +247,9 @@ def scheme():
                 for id_detail in list_id_detail:
                     df_param_detail = df_param_2.loc[(df_param_2['ID'] == id_detail)]
                     create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
-                    name_scheme_detail_2.append(
+                    name_scheme_detail_2_url.append(
                         'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
+                    name_scheme_detail_2.append(str(get_detail_name(conn, id_detail)))
                 pdf.close()
 
             standard_size_2 = request.values.get('fill_standard_param')
@@ -274,6 +279,8 @@ def scheme():
 
         # Имена файлов
         name_scheme_pattern=name_scheme_pattern,
+        name_scheme_detail_1_url=name_scheme_detail_1_url,
+        name_scheme_detail_2_url=name_scheme_detail_2_url,
         name_scheme_detail_1=name_scheme_detail_1,
         name_scheme_detail_2=name_scheme_detail_2,
         page=page,

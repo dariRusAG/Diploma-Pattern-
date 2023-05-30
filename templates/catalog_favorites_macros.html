@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <!--Генерация формы выбора категории-->
-{% macro render_block_choice(category, choice_category, choice_complexity, len, str) %}
+{% macro render_block_choice(category, choice_category, choice_complexity, new_complexity, len, str, reversed) %}
 <div class="catalog">
     <div class="block_choice mt-3">
         <form action="{{url_for('catalog_favorites')}}" method="post">
@@ -9,9 +9,9 @@
             <div class="title title-3">
                 Категории
             </div>
-<!--                <p><b>Категории:</b></p>-->
+
             {% for i in range(len(category)) %}
-            <p>
+            <p class="category">
                 {% set value=category.loc[i, "category_name"] %}
                 {% if value in choice_category %}
                 <input type="checkbox" name="category" value="{{ value }}" class="cursor" checked>
@@ -22,23 +22,30 @@
             </p>
             {% endfor %}
 
-            <div class="title title-3">
+            <div class="title title-3 mt-4">
                 Сложность
             </div>
-<!--            <p><b>Сложность:</b></p>-->
-            {% for i in range(5) %}
-            <p>
-                <input type="checkbox" name="complexity" value="{{ i + 1 }}" class="cursor"
-                       {% if str(i + 1) in choice_complexity %} checked {% endif %}>
-                {% for j in range(i + 1) %}
-                <img src="/static/image/icons/shaded_star_icon.png" alt="" class="star_icon">
+
+            {% if new_complexity != 0 %}
+                {% set choice_complexity = new_complexity %}
+            {% endif %}
+
+            <p class="complexity">
+
+                {% for i in range(choice_complexity) %}
+                <button type="submit" name="complexity" value="{{ i + 1 }}" class="clear_button star">
+                    <img alt="" src="/static/image/icons/shaded_star_icon.png" class="star_icon">
+                </button>
                 {% endfor %}
 
-                {% for j in range(5 - (i + 1)) %}
-                <img src="/static/image/icons/empty_star_icon.png" alt="" class="star_icon">
+                <input hidden type="text" name="complexity_shaded" value="{{ choice_complexity }}">
+
+                {% for i in reversed(range(5 - choice_complexity)) %}
+                <button type="submit" name="complexity" value="{{ 5 - i }}" class="clear_button star">
+                    <img alt="" src="/static/image/icons/empty_star_icon.png" class="star_icon">
+                </button>
                 {% endfor %}
             </p>
-            {% endfor %}
 
             <div>
                 <input type="submit" name="search" value="Показать" class="button button_search">
@@ -71,11 +78,7 @@
     <div class="complexity">
         {% set value = pattern.loc[i, 'Сложность'] %}
         {% for i in range(value) %}
-            <img src="/static/image/icons/shaded_star_icon.png" alt="" class="star_icon">
-        {% endfor %}
-
-        {% for j in range(5 - value) %}
-            <img src="/static/image/icons/empty_star_icon.png" alt="" class="star_icon">
+            <img src="/static/image/icons/shaded_star_icon.png" alt="" class="star_icon_scheme">
         {% endfor %}
     </div>
 
@@ -83,15 +86,27 @@
         <form action="{{url_for('catalog_favorites')}}" method="get">
             {% if pattern.loc[i, 'ID'] in favorite_list %}
 
-            <button type="submit" name="shaded" value=" " class="clear_button">
-                <img alt="" src="/static/image/icons/shaded_heart_icon.png" class="heart_icon">
-            </button>
+            <div class="change-photos">
+                    <button type="submit" name="shaded" value=" " class="clear_button">
+                        <img alt="" src="/static/image/icons/shaded_heart_icon.png" class="heart_icon">
+                    </button>
+
+                    <button type="submit" name="empty" value=" " class="clear_button">
+                        <img alt="" src="/static/image/icons/empty_heart_icon.png" class="heart_icon">
+                    </button>
+            </div>
 
             {% else %}
 
-            <button type="submit" name="empty" value=" " class="clear_button">
-                <img alt="" src="/static/image/icons/empty_heart_icon.png" class="heart_icon">
-            </button>
+            <div class="change-photos">
+                <button type="submit" name="empty" value=" " class="clear_button">
+                    <img alt="" src="/static/image/icons/empty_heart_icon.png" class="heart_icon">
+                </button>
+
+                <button type="submit" name="shaded" value=" " class="clear_button">
+                    <img alt="" src="/static/image/icons/shaded_heart_icon.png" class="heart_icon">
+                </button>
+            </div>
 
             {% endif %}
             <input hidden type="text" name="pattern" value="{{ pattern.loc[i, 'ID'] }}">
