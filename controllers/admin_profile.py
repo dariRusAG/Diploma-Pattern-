@@ -4,6 +4,7 @@ from functions.data_check import *
 from models.admin_profile_model import *
 from utils import get_db_connection
 from functions.create_scheme import *
+from matplotlib.backends.backend_pdf import PdfPages
 import os
 
 
@@ -49,7 +50,7 @@ def info_some(request_text, button, conn):
     info_about_some.append(get_detail_by_id(conn, info_about_some[0]).split(","))
     admin_panel_button = button
 
-    return admin_panel_button
+    return admin_panel_button, info_about_some
 
 
 @app.route('/admin_profile', methods=['GET', 'POST'])
@@ -291,10 +292,10 @@ def admin_profile():
         admin_panel_button = "Выкройки"
 
     elif request.values.get('one_pattern_info'):
-        admin_panel_button = info_some('one_pattern_info', 'Список Выкроек', conn)
+        admin_panel_button, info_about_some = info_some('one_pattern_info', 'Список Выкроек', conn)
 
     elif request.values.get('one_pattern_edit'):
-        admin_panel_button = info_some('one_pattern_edit', 'Редактирование Выкроек', conn)
+        admin_panel_button, info_about_some = info_some('one_pattern_edit', 'Редактирование Выкроек', conn)
 
     elif request.values.get('one_pattern_delete'):
         delete_pattern(conn, int(request.values.get('one_pattern_delete')))
@@ -325,7 +326,7 @@ def admin_profile():
         else:
             error_info = is_correct_pattern(conn, name, category, picture,
                                                  request.values.getlist('new_pattern_detail'), id)
-            admin_panel_button = info_some('edit_pattern_id', 'Редактирование Выкроек', conn)
+            admin_panel_button, info_about_some = info_some('edit_pattern_id', 'Редактирование Выкроек', conn)
 
     elif request.values.get('add_pattern_cancel'):
         admin_panel_button = "Выкройки"
