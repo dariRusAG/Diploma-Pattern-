@@ -33,7 +33,7 @@
                    style="color: #fffaf1; background: #b47d82;"
                     {% endif %}>
             <input type="submit" name="panel" value="Выкройки" class="admin_panel_button"
-                    {% if admin_panel_button == 'Выкройки' %}
+                    {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Редактирование Выкроек"%}
                    style="color: #fffaf1; background: #b47d82;"
                     {% endif %}>
             <input type="submit" name="panel" value="3D-модель" class="admin_panel_button"
@@ -49,7 +49,7 @@
                        style="color: #fffaf1; background: #b47d82;"
                         {% endif %}>
             {% endif %}
-            {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Список Выкроек" %}
+            {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Список Выкроек" or admin_panel_button == "Редактирование Выкроек"%}
                 <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button admin_lists"
                         {% if admin_panel_button == 'Список Выкроек' %}
                        style="color: #fffaf1; background: #b47d82;"

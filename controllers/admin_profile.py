@@ -353,7 +353,7 @@ def admin_profile():
     df_measure = get_measure(conn)
     df_line = get_line(conn)
     df_patterns = get_pattern(conn)
-    print(admin_panel_button)
+
     html = render_template(
         'admin_profile.html',
         user_role=session['user_role'],
