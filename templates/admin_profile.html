@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
@@ -19,19 +19,41 @@
 <div class="admin_panel">
     <div class="admin_panel_left">
         <form action="{{ url_for('admin_profile') }}" method="get">
-            <input type="submit" name="panel" value="Категории" class="admin_panel_button">
-            <input type="submit" name="panel" value="Формулы" class="admin_panel_button">
-            <input type="submit" name="panel" value="Детали" class="admin_panel_button">
-            <input type="submit" name="panel" value="Выкройки" class="admin_panel_button">
-            <input type="submit" name="panel" value="3D-модель" class="admin_panel_button">
+            <input type="submit" name="panel" value="Категории" class='admin_panel_button'
+                    {% if admin_panel_button == 'Категории' %}
+                   style="color: #fffaf1; background: #b47d82;"
+                    {% endif %}>
+            <input type="submit" name="panel" value="Формулы" class="admin_panel_button"
+                    {% if admin_panel_button == 'Формулы' %}
+                   style="color: #fffaf1; background: #b47d82;"
+                    {% endif %}>
+            <input type="submit" name="panel" value="Детали" class="admin_panel_button"
+                    {% if admin_panel_button == 'Детали' or admin_panel_button == 'Добавить Линии' or admin_panel_button == 'Добавить Линию' or
+            admin_panel_button == 'Просмотреть Схему' or admin_panel_button == 'Выбрать Мерки И Формулы' or admin_panel_button == 'Список Новых Линий' %}
+                   style="color: #fffaf1; background: #b47d82;"
+                    {% endif %}>
+            <input type="submit" name="panel" value="Выкройки" class="admin_panel_button"
+                    {% if admin_panel_button == 'Выкройки' %}
+                   style="color: #fffaf1; background: #b47d82;"
+                    {% endif %}>
+            <input type="submit" name="panel" value="3D-модель" class="admin_panel_button"
+                    {% if admin_panel_button == '3D-Модель' %}
+                   style="color: #fffaf1; background: #b47d82;"
+                    {% endif %}>
             {% if admin_panel_button == 'Детали' or admin_panel_button == 'Добавить Линии'
             or admin_panel_button == 'Просмотреть Список Линий' or admin_panel_button == 'Выбрать Мерки И Формулы'
                     or admin_panel_button == 'Добавить Линию' or admin_panel_button == "Линии" or
                     admin_panel_button == "Список Деталей" %}
-                <input type="submit" name="panel" value="Список деталей" class="admin_panel_button admin_lists">
+                <input type="submit" name="panel" value="Список деталей" class="admin_panel_button admin_lists"
+                        {% if admin_panel_button == 'Список Деталей' %}
+                       style="color: #fffaf1; background: #b47d82;"
+                        {% endif %}>
             {% endif %}
             {% if admin_panel_button == 'Выкройки' or admin_panel_button == "Список Выкроек" %}
-                <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button admin_lists">
+                <input type="submit" name="panel" value="Список выкроек" class="admin_panel_button admin_lists"
+                        {% if admin_panel_button == 'Список Выкроек' %}
+                       style="color: #fffaf1; background: #b47d82;"
+                        {% endif %}>
             {% endif %}
         </form>
     </div>
@@ -83,6 +105,6 @@
         {% endif %}
     </div>
 </div>
-<p class="mb-5">{{ macros_general.exit() }}</p>
+{{ macros_general.exit() }}
 </body>
 </html>

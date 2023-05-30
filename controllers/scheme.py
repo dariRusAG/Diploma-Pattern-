@@ -142,7 +142,7 @@ def scheme():
 
     list_size = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 
-    error_info = [[], [], [], []]
+    error_info = [[], [], [], [], []]
 
     # Если открыта вкладка построения по общим меркам
     if page == '#content-1':
@@ -179,17 +179,19 @@ def scheme():
                 df_param_1 = pd.concat([df_param_1, df_param_detail], axis=0, ignore_index=True)
 
                 # Проверка на ошибки
-                for i in range(len(df_param_1)):
-                    if df_param_1.loc[i, "Обозначение"] != '':
-                        error = is_correct_params_scheme(conn, df_param_1.loc[i, "Значение"],
-                                                         df_param_1.loc[i, "Обозначение"],
+                detail_measure = df_param_detail.loc[df_param_detail["ID"] == id_detail]
+                for i in range(len(detail_measure)):
+                    if detail_measure.loc[i, "Обозначение"] != '':
+                        error = is_correct_params_scheme(conn, detail_measure.loc[i, "Значение"],
+                                                         detail_measure.loc[i, "Обозначение"],
                                                          str(get_detail_name(conn, id_detail)), "all_pattern")
+
                         if error != "True" and error_info[0].count(error) == 0:
                             error_info[0].append(error)
-                            if df_param_1.loc[i, "Обозначение"] == "ДИ":
+                            if detail_measure.loc[i, "Обозначение"] == "ДИ":
                                 error_info[2].append('Длина детали "' + str(get_detail_name(conn, id_detail)) + '"')
                             else:
-                                error_info[2].append(df_param_1.loc[i, "Полное_название"])
+                                error_info[2].append(detail_measure.loc[i, "Полное_название"])
 
                 if len(error_info[0]) == 0:
                     checked_value_1 = True
@@ -230,10 +232,12 @@ def scheme():
                     if error != "True" and error_info[1].count(error) == 0:
                         error_info[1].append(error)
                         error_info[3].append('error')
+                        if list_id_detail[i] not in error_info[4]:
+                            error_info[4].append(list_id_detail[i])
                     else:
                         error_info[3].append('')
 
-            if len(error_info[1]) == 0:
+            if len(error_info[4]) != len(list_id_detail):
                 checked_value_2 = True
                 name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
                 pdf = PdfPages(name_scheme_pattern)
@@ -241,10 +245,11 @@ def scheme():
                 list_id_detail = list(set(list_id_detail))
 
                 for id_detail in list_id_detail:
-                    df_param_detail = df_param_2.loc[(df_param_2['ID'] == id_detail)]
-                    create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
-                    name_scheme_detail_2.append(
-                        'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
+                    if id_detail not in error_info[4]:
+                        df_param_detail = df_param_2.loc[(df_param_2['ID'] == id_detail)]
+                        create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
+                        name_scheme_detail_2.append(
+                            'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
                 pdf.close()
 
             standard_size_2 = request.values.get('fill_standard_param')

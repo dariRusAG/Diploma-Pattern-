@@ -27,99 +27,119 @@
             <a href="#content-1">Построить выкройку</a>
             <a href="#content-2">Построить деталь</a>
 
-            {% if name_scheme_pattern != '' and len(error_info[0]) == 0 and len(error_info[1]) == 0 %}
+            {% if name_scheme_pattern != '' and len(error_info[0]) == 0 %}
                 <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>
             {% endif %}
         </div>
     </div>
 
-<div class="panel_right">
-    <div class="tabs">
-        <div id="content-1">
-            <div class="block_measure">
-                <form action="{{ url_for('scheme') }}#content-1" method="post">
-                    <div class="title title-1"> Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</div>
-
-                    <label>
-                        <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
-                        <input hidden type="text" name="page" value="#content-1">
-                    </label>
-
-                    {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param_1, standard_size_1, info_param, error_info, len, zip) }}
-
-                    <div class="title title-2">
-                        <p>Автозаполнение типовыми параметрами</p>
-                    </div>
-
-                    <label class="gender_size">
-                        <input type="radio" name="gender_size-1" value="param_value_w"
-                               {% if gender_size_1 == 'param_value_w' %} checked {% endif %}>Женский размер
-                        <input type="radio" name="gender_size-1" value="param_value_m" class="ms-5"
-                               {% if gender_size_1 == 'param_value_m' %} checked {% endif %}>Мужской размер
-                    </label>
-
-                    <div class="container_button mt-3">
-                        {% for size in list_size %}
-                            <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
-                        {% endfor %}
-                    </div>
-                </form>
-            </div>
-
-            {% if len(error_info[0]) == 0 %}
-                {% if checked_value_1 != True %}
-                    <div class="pattern_info">
-                        {{ macros.render_pattern_info(pattern) }}
-                    </div>
-                {% else %}
-                    <div class="scheme_view">
-                        {{ macros.render_pattern_scheme(name_scheme_detail_1) }}
-                    </div>
-                {% endif %}
-
-            {% else %}
-
-                <div class="admin_panel_error mt-2 mb-2">
-                    {% for i in range(len(error_info[0])) %}
-                        <p class="ms-2 mt-2">{{ error_info[0][i] }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-        <div id="content-2">
-            <div class="scheme_panel">
+    <div class="panel_right">
+        <div class="tabs">
+            <div id="content-1">
                 <div class="block_measure">
-                    <form action="{{ url_for('scheme') }}#content-2" method="post">
+                    <form action="{{ url_for('scheme') }}#content-1" method="post">
                         <div class="title title-1"> Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</div>
 
                         <label>
                             <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
-                            <input hidden type="text" name="page" value="#content-2">
+                            <input hidden type="text" name="page" value="#content-1">
                         </label>
 
-                        {{ macros.render_measure_detail(measure, param_2, standard_size_2, info_param, error_info, len, zip, str) }}
+                        {{ macros.render_measure_pattern(measure_name, measure_full_name, details_lengths, param_1, standard_size_1, info_param, error_info, len, zip) }}
 
                         <div class="title title-2">
                             <p>Автозаполнение типовыми параметрами</p>
                         </div>
 
                         <label class="gender_size">
-                            <input type="radio" name="gender_size-2" value="param_value_w"
-                                    {% if gender_size_2 == 'param_value_w' %} checked {% endif %}>Женский размер
-                            <input type="radio" name="gender_size-2" value="param_value_m" class="ms-5"
-                                    {% if gender_size_2 == 'param_value_m' %} checked {% endif %}>Мужской размер
+                            <input type="radio" name="gender_size-1" value="param_value_w"
+                                    {% if gender_size_1 == 'param_value_w' %} checked {% endif %}>Женский размер
+                            <input type="radio" name="gender_size-1" value="param_value_m" class="ms-5"
+                                    {% if gender_size_1 == 'param_value_m' %} checked {% endif %}>Мужской размер
                         </label>
 
                         <div class="container_button mt-3">
                             {% for size in list_size %}
-                                <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
+                                <input type="submit" name="fill_standard_param" value="{{ size }}"
+                                       class="button button_build">
                             {% endfor %}
                         </div>
                     </form>
                 </div>
 
-                {% if len(error_info[1]) == 0 %}
+                {% if len(error_info[0]) == 0 %}
+                    {% if checked_value_1 != True %}
+                        <div class="pattern_info">
+                            {{ macros.render_pattern_info(pattern) }}
+                        </div>
+                    {% else %}
+                        <div class="scheme_view">
+                            {{ macros.render_pattern_scheme(name_scheme_detail_1) }}
+                        </div>
+                    {% endif %}
+
+                {% else %}
+                    <div class="pattern_info">
+                        <div class="block_scheme">
+                            <div class="user_panel_error mt-2 mb-2">
+                                {% for i in range(len(error_info[0])) %}
+                                    <p class="ms-2 mt-2">
+                                        {{ error_info[0][i] }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="content-2">
+                <div class="scheme_panel">
+                    <div class="block_measure">
+                        <form action="{{ url_for('scheme') }}#content-2" method="post">
+                            <div class="title title-1"> Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</div>
+
+                            <label>
+                                <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
+                                <input hidden type="text" name="page" value="#content-2">
+                            </label>
+
+                            {{ macros.render_measure_detail(measure, param_2, standard_size_2, info_param, error_info, len, zip, str) }}
+
+                            <div class="title title-2">
+                                <p>Автозаполнение типовыми параметрами</p>
+                            </div>
+
+                            <label class="gender_size">
+                                <input type="radio" name="gender_size-2" value="param_value_w"
+                                        {% if gender_size_2 == 'param_value_w' %} checked {% endif %}>Женский размер
+                                <input type="radio" name="gender_size-2" value="param_value_m" class="ms-5"
+                                        {% if gender_size_2 == 'param_value_m' %} checked {% endif %}>Мужской размер
+                            </label>
+
+                            <div class="container_button mt-3">
+                                {% for size in list_size %}
+                                    <input type="submit" name="fill_standard_param" value="{{ size }}"
+                                           class="button button_build">
+                                {% endfor %}
+                            </div>
+                        </form>
+                    </div>
+
+                    {% if len(error_info[1]) != 0 %}
+                        <div class="pattern_info">
+                            <div class="block_scheme">
+                                <div class="user_panel_error mt-2 mb-2">
+                                    {% for i in range(len(error_info[1])) %}
+                                        <p class="ms-2 mt-2">
+                                            {{ error_info[1][i] }}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     {% if checked_value_2 != True %}
                         <div class="pattern_info">
                             {{ macros.render_pattern_info(pattern) }}
@@ -130,18 +150,10 @@
                         </div>
                     {% endif %}
 
-                {% else %}
-
-                    <div class="admin_panel_error mt-2 mb-2">
-                        {% for i in range(len(error_info[1])) %}
-                            <p class="ms-2 mt-2">{{ error_info[1][i] }}</p>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>
