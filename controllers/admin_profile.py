@@ -90,6 +90,7 @@ def admin_profile():
         admin_panel_button = "Категории"
         delete_category(conn, category_id)
 
+
     elif request.values.get('is_edit_category'):
         checked_value[0] = True
         checked_value[1] = int(request.values.get('is_edit_category_id'))

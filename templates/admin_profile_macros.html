@@ -437,7 +437,7 @@
     </div>
     <div class="admin_panel_right_data_list" style="height: 82.5%; display: flex; justify-content: center">
         <p class="fig mt-3">
-            <img src="{{ name_scheme }}" alt="" style="width: 580px; height: auto;">
+            <img src="{{ name_scheme }}" alt="" style="max-height: 900px;">
         </p>
     </div>
 
@@ -592,7 +592,7 @@
 
                 <p class="fig ms-2">
                     <img src="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}"
-                         alt="" class="img_scheme">
+                         alt="" class="img_scheme" style="width: 200px">
                 </p>
 
                 <p class="ms-2"><strong>Название:</strong>
