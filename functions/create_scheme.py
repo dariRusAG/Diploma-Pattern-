@@ -7,6 +7,7 @@ from functions.bezie import Bezier
 
 
 def setting_plt(value):
+    plt.figure(figsize=(value / 2.54, value / 2.54))
     plt.xlim([0, value])
     plt.ylim([0, value])
 
@@ -193,8 +194,6 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     else:
         setting_plt(length_y + 2)
 
-    plt.figure(figsize=(length_x / 2.54, length_y / 2.54))
-
     # Построение всех линий
     for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
         build_line_straight(x_straight, y_straight)
@@ -203,9 +202,6 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
 
     if func_name != "admin":
         plt.axis('off')
-
-    name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
-    plt.savefig(name, bbox_inches='tight')
 
     # количество листов по иксу
     pages_x = math.ceil(length_x / 21)
@@ -221,6 +217,20 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
                       "; столбец " + str(j + 1),
                       fontsize=29, weight='ultralight', alpha=0.5)
             add_to_pdf(pdf, x, x + 21, y, y + 29.7)
+
+    plt.figure(figsize=(length_x / 2.54, length_y / 2.54))
+    plt.xlim([0, length_x + 2])
+    plt.ylim([0, length_y + 2])
+
+    for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
+        build_line_straight(x_straight, y_straight)
+    for curves, curves_points in zip(line_curve, line_curve_points):
+        build_line_curve(curves, curves_points, func_name)
+
+    plt.axis('off')
+
+    name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
+    plt.savefig(name, bbox_inches='tight')
 
 def add_to_pdf(pdf, x1, x2, y1, y2):
     plt.axis('off')
