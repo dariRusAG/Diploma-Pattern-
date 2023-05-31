@@ -183,6 +183,7 @@ def scheme():
 
                 # Проверка на ошибки
                 detail_measure = df_param_detail.loc[df_param_detail["ID"] == id_detail]
+
                 for i in range(len(detail_measure)):
                     if detail_measure.loc[i, "Обозначение"] != '':
                         error = is_correct_params_scheme(conn, detail_measure.loc[i, "Значение"],
@@ -258,7 +259,6 @@ def scheme():
                             'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
                         name_scheme_detail_2.append(str(get_detail_name(conn, id_detail)))
                 pdf.close()
-
             standard_size_2 = request.values.get('fill_standard_param')
 
     return render_template(

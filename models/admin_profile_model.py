@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def get_category(conn):
     return pd.read_sql('''
     SELECT category_name, category_id
@@ -275,6 +274,8 @@ def delete_category(conn, category_id):
     return cur.lastrowid
 
 
+
+
 def delete_formula(conn, formula_id):
     cur = conn.cursor()
     cur.execute(f'''
@@ -300,6 +301,11 @@ def delete_detail(conn, detail_id, function_name):
 
     cur.execute(f'''
     DELETE FROM detail_formula
+    WHERE detail_id=:detail_id;
+     ''', {"detail_id": detail_id})
+
+    cur.execute(f'''
+    DELETE FROM pattern_detail
     WHERE detail_id=:detail_id;
      ''', {"detail_id": detail_id})
 
