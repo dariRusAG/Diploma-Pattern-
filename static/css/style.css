@@ -272,7 +272,7 @@ body {
 .admin_panel {
     display: flex;
     flex-direction: row;
-    height: 84.5vh;
+    height: 98vh;
     overflow: auto;
     margin-left: 6px;
     overflow: hidden;
@@ -314,7 +314,7 @@ body {
 }
 
 .mt_admin_width {
-    width: 47%
+    width: 45.7%
 }
 
 .line_admin_width {
@@ -340,13 +340,12 @@ body {
 }
 
 .admin_panel_button_active {
-
     color: #fffaf1;
     background: #b47d82;
 }
 
 .admin_lists {
-    margin-top: 115%
+    margin-top: 30%
 }
 
 .admin_panel_button_small {
@@ -436,14 +435,14 @@ body {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 65vh;
+    height: 75vh;
 }
 
 .admin_panel_right_data_three_table {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 73%;
+    height: 65.4%;
 }
 
 .admin_panel_error {
