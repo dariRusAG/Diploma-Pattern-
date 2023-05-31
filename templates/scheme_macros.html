@@ -2,21 +2,21 @@
 
 <!--Макрос для вывода данных выкройки-->
 {% macro render_pattern_info(pattern) %}
-<div class="block_scheme">
-    <div class="outer" style="height: 60px;">
+    <div class="block_scheme">
+        <div class="outer" style="height: 60px;">
         <span class="product-title">
             {{ pattern.loc[0, 'Название'] }}
         </span>
-    </div>
+        </div>
 
-    <div class="outer" style="height: 30px;">
+        <div class="outer" style="height: 30px;">
         <span class="product-caption">
             {{ pattern.loc[0, 'Категория'] }}
         </span>
-    </div>
+        </div>
 
-    <img src="{{ pattern.loc[0, 'Изображение'] }}" alt="">
-</div>
+        <img src="{{ pattern.loc[0, 'Изображение'] }}" alt="">
+    </div>
 {% endmacro %}
 
 <!--Макрос для вывода построенных схем выкройки-->
@@ -60,7 +60,8 @@
                                 {% if designation == 'ДИ' and standard_size != 'base' %}
                                     <label>
                                         <input type="text" name="param_value" class="write_personal"
-                                               value="{{ measure['Длина_детали'] }}" placeholder="{{ measure['Длина_детали'] }}">
+                                               value="{{ measure['Длина_детали'] }}"
+                                               placeholder="{{ measure['Длина_детали'] }}">
                                     </label>
                                 {% else %}
                                     <label>
@@ -84,8 +85,12 @@
                                                                 value="{{ param.loc[j, 'Значение']}}"
                                                                 placeholder="{{ param.loc[j, 'Значение']}}">
                                                 {% else %}
-                                                    <input type="text" name="param_value" class="write_personal"
-                                                           value="" placeholder="необходимо заполнить">
+                                                    <input
+                                                            {% if error_info[3][j] == "error" %}
+                                                                style="background-color: salmon"
+                                                            {% endif %}
+                                                                type="text" name="param_value" class="write_personal"
+                                                                value="" placeholder="необходимо заполнить">
                                                 {% endif %}
                                             </label>
                                         {% endif %}
@@ -169,8 +174,13 @@
 
                                             {% else %}
 
-                                                <input type="text" name="param_value" class="write_personal" value=""
-                                                       placeholder="необходимо заполнить">
+                                                <input
+                                                        {% if param.loc[j, "Полное_название"] in error_info[2] %}
+                                                            style="background-color: salmon"
+                                                        {% endif %}
+                                                            type="text" name="param_value" class="write_personal"
+                                                            value=""
+                                                            placeholder="необходимо заполнить">
                                             {% endif %}
                                         {% endif %}
 
