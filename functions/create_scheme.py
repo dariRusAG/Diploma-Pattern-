@@ -218,16 +218,9 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
             x = 1 + 21 * j
             plt.title("Деталь: " + str(get_detail_name(conn, id_detail)) +
                       ". Строка " + str(i + 1) +
-                      "; столбец " + str(j+1),
+                      "; столбец " + str(j + 1),
                       fontsize=29, weight='ultralight', alpha=0.5)
             add_to_pdf(pdf, x, x + 21, y, y + 29.7)
-
-            # # Удаление пустых листов А4
-            # for coord_x, coord_y in zip(x_list, y_list):
-            #     if (x <= coord_x < x + 21) and (y <= coord_y < y + 29.7):
-            #         add_to_pdf(pdf, x, x + 21, y, y + 29.7)
-            #         break
-
 
 def add_to_pdf(pdf, x1, x2, y1, y2):
     plt.axis('off')
