@@ -87,11 +87,10 @@ def init_build_scheme(index_pattern, list_id_detail, conn):
     list_id_detail_int = [int(x) for x in list_id_detail]
 
     df_param_detail_no_measure = get_detail_no_measure(conn, index_pattern, list_id_detail_int)
+    for index, row in df_param_detail_no_measure.iterrows():
+        row['ID'] = str(row['ID'])
 
-    list_id_detail_int += df_param_detail_no_measure['ID'].tolist()
-    list_id_detail_int.sort()
-
-    list_id_detail = [str(x) for x in list_id_detail_int]
+    list_id_detail += df_param_detail_no_measure['ID'].tolist()
 
     return param_value, param_designation, list_id_detail, df_param_detail_no_measure
 

@@ -39,9 +39,7 @@ def catalog_favorites():
 
     is_authorization, is_registration, user_data_error = role(conn)
 
-    category = []
     new_complexity = 0
-    complexity = 0
 
     # Если нажата кнопка "Список избранного"
     if request.values.get('favorites'):
@@ -56,29 +54,23 @@ def catalog_favorites():
     # Если нажата кнопка "Найти"
     if request.values.get('search'):
         category = request.form.getlist('category')
-        # session['category'] = category
         complexity = int(request.values.get('complexity_shaded'))
-        # session['complexity'] = complexity
-
-        # df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity, is_authorization)
-        # df_pattern = get_pattern(conn, category, complexity)
+        session['complexity'] = complexity
 
     # Если нажата кнопка выбора сложности
     elif request.values.get('complexity'):
         category = request.form.getlist('category')
         new_complexity = int(request.values.get('complexity'))
-        # session['category'] = category
 
     # Если нажата кнопка "Очистить"
     else:
         category = []
         complexity = 0
-        # session['complexity'] = complexity
-        # session['category'] = category
+        session['complexity'] = complexity
 
-    df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity, is_authorization)
+    df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, session['complexity'], is_authorization)
     df_category = get_category(conn)
-    df_pattern = get_pattern(conn, category, complexity)
+    df_pattern = get_pattern(conn, category, session['complexity'])
 
     if 'page' in session:
         if session['page'] == "favorites":
@@ -86,8 +78,6 @@ def catalog_favorites():
     else:
         session['page'] = "catalog"
         session['title'] = "Каталог"
-        # category = []
-        # session['category'] = category
 
     if session['user_role'] != "admin":
         return render_template(
@@ -105,7 +95,7 @@ def catalog_favorites():
             # Выбор фильтров
             category=df_category,
             choice_category=category,
-            choice_complexity=complexity,
+            choice_complexity=session['complexity'],
             new_complexity=new_complexity,
 
             # Выкройки
