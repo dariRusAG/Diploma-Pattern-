@@ -80,14 +80,14 @@
 
                 {% else %}
                     <div class="pattern_info">
-                        <div class="block_scheme">
-                            <div class="user_panel_error mt-2 mb-2">
+                        <div>
                                 {% for i in range(len(error_info[0])) %}
+                                    <div class="user_panel_error mt-2 mb-2">
                                     <p class="ms-2 mt-2">
                                         {{ error_info[0][i] }}
                                     </p>
+                                    </div>
                                 {% endfor %}
-                            </div>
                         </div>
                     </div>
                 {% endif %}
@@ -127,14 +127,14 @@
 
                     {% if len(error_info[1]) != 0 %}
                         <div class="pattern_info">
-                            <div class="block_scheme">
-                                <div class="user_panel_error mt-2 mb-2">
+                            <div>
                                     {% for i in range(len(error_info[1])) %}
+                                        <div class="user_panel_error mt-2 mb-2">
                                         <p class="ms-2 mt-2">
                                             {{ error_info[1][i] }}
                                         </p>
+                                        </div>
                                     {% endfor %}
-                                </div>
                             </div>
                         </div>
                     {% endif %}

@@ -183,20 +183,18 @@ def scheme():
                 df_param_1 = pd.concat([df_param_1, df_param_detail], axis=0, ignore_index=True)
 
                 # Проверка на ошибки
-                detail_measure = df_param_detail.loc[df_param_detail["ID"] == id_detail]
-
-                for i in range(len(detail_measure)):
-                    if detail_measure.loc[i, "Обозначение"] != '':
-                        error = is_correct_params_scheme(conn, detail_measure.loc[i, "Значение"],
-                                                         detail_measure.loc[i, "Обозначение"],
+                for i in range(len(df_param_detail)):
+                    if df_param_detail.loc[i, "Обозначение"] != '':
+                        error = is_correct_params_scheme(conn, df_param_detail.loc[i, "Значение"],
+                                                         df_param_detail.loc[i, "Обозначение"],
                                                          str(get_detail_name(conn, id_detail)), "all_pattern")
 
                         if error != "True" and error_info[0].count(error) == 0:
                             error_info[0].append(error)
-                            if detail_measure.loc[i, "Обозначение"] == "ДИ":
+                            if df_param_detail.loc[i, "Обозначение"] == "ДИ":
                                 error_info[2].append('Длина детали "' + str(get_detail_name(conn, id_detail)) + '"')
                             else:
-                                error_info[2].append(detail_measure.loc[i, "Полное_название"])
+                                error_info[2].append(df_param_detail.loc[i, "Полное_название"])
 
                 if len(error_info[0]) == 0:
                     checked_value_1 = True
