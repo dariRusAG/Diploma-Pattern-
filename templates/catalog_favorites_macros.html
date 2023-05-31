@@ -80,6 +80,10 @@
         {% for i in range(value) %}
             <img src="/static/image/icons/shaded_star_icon.png" alt="" class="star_icon_scheme">
         {% endfor %}
+
+        {% for i in range(5 - value) %}
+            <img src="/static/image/icons/empty_star_icon.png" alt="" class="star_icon_scheme">
+        {% endfor %}
     </div>
 
     {% if user_role != "admin" %}

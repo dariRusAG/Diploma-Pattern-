@@ -87,10 +87,11 @@ def init_build_scheme(index_pattern, list_id_detail, conn):
     list_id_detail_int = [int(x) for x in list_id_detail]
 
     df_param_detail_no_measure = get_detail_no_measure(conn, index_pattern, list_id_detail_int)
-    for index, row in df_param_detail_no_measure.iterrows():
-        row['ID'] = str(row['ID'])
 
-    list_id_detail += df_param_detail_no_measure['ID'].tolist()
+    list_id_detail_int += df_param_detail_no_measure['ID'].tolist()
+    list_id_detail_int.sort()
+
+    list_id_detail = [str(x) for x in list_id_detail_int]
 
     return param_value, param_designation, list_id_detail, df_param_detail_no_measure
 
@@ -246,13 +247,15 @@ def scheme():
                 name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
                 pdf = PdfPages(name_scheme_pattern)
 
-                list_id_detail = list(set(list_id_detail))
+                list_id_detail_int = [int(x) for x in list_id_detail]
+                list_id_detail_int = list(set(list_id_detail_int))
+                list_id_detail = [str(x) for x in list_id_detail_int]
 
                 for id_detail in list_id_detail:
                     if id_detail not in error_info[4]:
                         df_param_detail = df_param_2.loc[(df_param_2['ID'] == id_detail)]
                         create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
-                        name_scheme_detail_2.append(
+                        name_scheme_detail_2_url.append(
                             'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
                         name_scheme_detail_2.append(str(get_detail_name(conn, id_detail)))
                 pdf.close()

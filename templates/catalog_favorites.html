@@ -28,14 +28,14 @@ style="overflow: hidden" {% endif %}>
 {% if (title == "Список избранного") and (user_role == "user") %}
 
     {% if favorite_list == [] %}
-        {% if choice_category == [] and choice_complexity == [] %}
+        {% if choice_category == [] and choice_complexity == 0 %}
             <strong class="ms-3 fs-4">Список избранного пуст</strong>
         {% else %}
-            {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
+            {{ macros.render_block_choice(category, choice_category, choice_complexity, new_complexity, len, str, reversed) }}
             <strong class="ms-3 fs-4">Ничего не найдено</strong>
         {% endif %}
     {% else %}
-        {{ macros.render_block_choice(category, choice_category, choice_complexity, len, str) }}
+        {{ macros.render_block_choice(category, choice_category, choice_complexity, new_complexity, len, str, reversed) }}
     {% endif %}
 
 {% else %}

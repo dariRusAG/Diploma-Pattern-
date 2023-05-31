@@ -7,8 +7,6 @@ from models.catalog_favorites_model import *
 
 def favorites_pattern(conn, category, complexity, is_authorization):
 
-    print(category)
-
     if 'user_id' not in session:
         user_id = 0
     else:
@@ -41,9 +39,9 @@ def catalog_favorites():
 
     is_authorization, is_registration, user_data_error = role(conn)
 
-    # category = []
-    # complexity = 0
+    category = []
     new_complexity = 0
+    complexity = 0
 
     # Если нажата кнопка "Список избранного"
     if request.values.get('favorites'):
@@ -58,9 +56,9 @@ def catalog_favorites():
     # Если нажата кнопка "Найти"
     if request.values.get('search'):
         category = request.form.getlist('category')
-        session['category'] = category
+        # session['category'] = category
         complexity = int(request.values.get('complexity_shaded'))
-        session['complexity'] = complexity
+        # session['complexity'] = complexity
 
         # df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity, is_authorization)
         # df_pattern = get_pattern(conn, category, complexity)
@@ -69,18 +67,18 @@ def catalog_favorites():
     elif request.values.get('complexity'):
         category = request.form.getlist('category')
         new_complexity = int(request.values.get('complexity'))
-        session['category'] = category
+        # session['category'] = category
 
     # Если нажата кнопка "Очистить"
     else:
         category = []
         complexity = 0
-        session['complexity'] = complexity
-        session['category'] = category
+        # session['complexity'] = complexity
+        # session['category'] = category
 
-    df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, session['category'], session['complexity'], is_authorization)
-    df_pattern = get_pattern(conn, session['category'], session['complexity'])
+    df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity, is_authorization)
     df_category = get_category(conn)
+    df_pattern = get_pattern(conn, category, complexity)
 
     if 'page' in session:
         if session['page'] == "favorites":
@@ -88,8 +86,8 @@ def catalog_favorites():
     else:
         session['page'] = "catalog"
         session['title'] = "Каталог"
-        category = []
-        session['category'] = category
+        # category = []
+        # session['category'] = category
 
     if session['user_role'] != "admin":
         return render_template(
@@ -106,8 +104,8 @@ def catalog_favorites():
 
             # Выбор фильтров
             category=df_category,
-            choice_category=session['category'],
-            choice_complexity=session['complexity'],
+            choice_category=category,
+            choice_complexity=complexity,
             new_complexity=new_complexity,
 
             # Выкройки

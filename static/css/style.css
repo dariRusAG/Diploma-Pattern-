@@ -2,6 +2,7 @@ body {
     font-family: 'Lato', sans-serif;
     font-size: 15px;
     background: #c6a7ab;
+    zoom: 85%;
 }
 
 .active {
@@ -193,6 +194,7 @@ body {
     text-transform: uppercase;
     font-weight: 600;
     text-align: center;
+    width: 100%;
 }
 
 .title-1 {
@@ -701,6 +703,7 @@ h1 {
     width: auto;
     height: auto;
     max-width: 400px;
+    max-height: 350px;
 }
 
 .table_measure {
