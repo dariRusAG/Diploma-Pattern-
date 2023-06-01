@@ -4,6 +4,7 @@ import numpy as np
 from models.model_general import get_detail_name
 from models.scheme_model import *
 from functions.bezie import Bezier
+from matplotlib.backends.backend_pdf import PdfPages
 
 
 def setting_plt(value):
@@ -201,7 +202,11 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     pages_x = math.ceil(length_x / 21)
     # количество листов по игреку
     pages_y = math.ceil(length_y / 29.7)
-    plt.figure(figsize=((1 + pages_x * 21) / 2.54, (1 + pages_y * 29.7) / 2.54))
+
+    if pages_x == 1 and pages_y == 1:
+        plt.figure(figsize=((1 + (pages_x + 1) * 21) / 2.54, (1 + (pages_y + 1) * 29.7) / 2.54))
+    else:
+        plt.figure(figsize=((1 + pages_x * 21) / 2.54, (1 + pages_y * 29.7) / 2.54))
 
     # Построение всех линий
     for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
