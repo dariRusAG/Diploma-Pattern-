@@ -227,7 +227,8 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     for curves, curves_points in zip(line_curve, line_curve_points):
         build_line_curve(curves, curves_points, func_name)
 
-    plt.axis('off')
+    if func_name != "admin":
+        plt.axis('off')
 
     name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
     plt.savefig(name, bbox_inches='tight')

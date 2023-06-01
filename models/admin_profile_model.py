@@ -294,6 +294,11 @@ def delete_detail(conn, detail_id, function_name):
         WHERE detail_id=:detail_id;
          ''', {"detail_id": detail_id})
 
+        cur.execute(f'''
+        DELETE FROM pattern_detail
+        WHERE detail_id=:detail_id;
+         ''', {"detail_id": detail_id})
+
     cur.execute(f'''
     DELETE FROM detail_measure
     WHERE detail_id=:detail_id;
@@ -301,11 +306,6 @@ def delete_detail(conn, detail_id, function_name):
 
     cur.execute(f'''
     DELETE FROM detail_formula
-    WHERE detail_id=:detail_id;
-     ''', {"detail_id": detail_id})
-
-    cur.execute(f'''
-    DELETE FROM pattern_detail
     WHERE detail_id=:detail_id;
      ''', {"detail_id": detail_id})
 
