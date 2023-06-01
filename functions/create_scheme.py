@@ -204,7 +204,7 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     pages_y = math.ceil(length_y / 29.7)
 
     if pages_x == 1 and pages_y == 1:
-        plt.figure(figsize=((1 + (pages_x + 1) * 21) / 2.54, (1 + (pages_y + 1) * 29.7) / 2.54))
+        plt.figure(figsize=((1.8 + (pages_x + 1) * 21) / 2.54, (1.8 + (pages_y + 1) * 29.7) / 2.54))
     else:
         plt.figure(figsize=((1 + pages_x * 21) / 2.54, (1 + pages_y * 29.7) / 2.54))
 
