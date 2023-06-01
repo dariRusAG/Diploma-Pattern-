@@ -20,6 +20,8 @@ def difficulty_calculation(category, number_details, number_measurements):
         complexity *= 3
     elif category == 'Платья':
         complexity *= 4
+    else:
+        complexity *= 2
 
     if complexity in range(1, 20):
         complexity = 1
