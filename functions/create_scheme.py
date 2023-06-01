@@ -194,12 +194,6 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     else:
         setting_plt(length_y + 2)
 
-    # Построение всех линий
-    for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
-        build_line_straight(x_straight, y_straight)
-    for curves, curves_points in zip(line_curve, line_curve_points):
-        build_line_curve(curves, curves_points, func_name)
-
     if func_name != "admin":
         plt.axis('off')
 
@@ -207,6 +201,13 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     pages_x = math.ceil(length_x / 21)
     # количество листов по игреку
     pages_y = math.ceil(length_y / 29.7)
+    plt.figure(figsize=((1 + pages_x * 21) / 2.54, (1 + pages_y * 29.7) / 2.54))
+
+    # Построение всех линий
+    for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
+        build_line_straight(x_straight, y_straight)
+    for curves, curves_points in zip(line_curve, line_curve_points):
+        build_line_curve(curves, curves_points, func_name)
 
     for i in range(pages_y):
         y = 1 + 29.7 * i
@@ -237,4 +238,6 @@ def add_to_pdf(pdf, x1, x2, y1, y2):
     plt.axis('off')
     plt.xlim([x1, x2])
     plt.ylim([y1, y2])
+    ax = plt.gca()
+    ax.set_aspect('equal', adjustable='box')
     pdf.savefig(bbox_inches='tight')
