@@ -7,34 +7,32 @@ from functions.create_scheme import *
 from matplotlib.backends.backend_pdf import PdfPages
 import os
 
+# lines_detail - лист с количеством линий каждой детали,
+# measurements_detail - лист с количеством мерок каждой детали,
+# number_measurements - количество мерок для всей выкройки (не повторяющихся)
 
 # Подсчет сложности выкройки
-def difficulty_calculation(category, number_details, number_measurements):
-    complexity = number_details * number_measurements * 0.5
+def difficulty_calculation(lines_detail, measurements_detail, number_measurements):
+    complexity_detail = 0
 
-    if category == 'Юбки':
-        complexity *= 1
-    elif category == 'Футболки' or category == 'Брюки':
-        complexity *= 2
-    elif category == 'Рубашки':
-        complexity *= 3
-    elif category == 'Платья':
-        complexity *= 4
-    else:
-        complexity *= 2
+    for number_lines_detail, number_measurements_detail in zip(lines_detail, measurements_detail):
+        complexity_detail += number_lines_detail * (number_measurements_detail / number_measurements) + number_lines_detail
 
-    if complexity in range(1, 20):
+    complexity = complexity_detail / number_measurements
+
+    if complexity in range(0, 6):
         complexity = 1
-    elif complexity in range(21, 40):
+    elif complexity in range(5, 11):
         complexity = 2
-    elif complexity in range(41, 60):
+    elif complexity in range(10, 16):
         complexity = 3
-    elif complexity in range(61, 80):
+    elif complexity in range(15, 21):
         complexity = 4
-    elif complexity in range(81, 100):
+    elif complexity in range(20, 26):
         complexity = 5
 
     return complexity
+
 
 def add_data_detail(conn):
     detail_id = int(get_detail_id(conn, session["detail"][0]))
