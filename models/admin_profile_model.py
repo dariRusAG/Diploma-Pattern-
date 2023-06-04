@@ -111,9 +111,21 @@ def get_measure_id(conn, measure_name):
 
 
 def get_measure_number(conn, detail_id):
+    try:
+        return pd.read_sql('''
+        SELECT COUNT(measure_id)
+        FROM detail_measure
+        WHERE detail_id = :detail_id
+        GROUP BY detail_id
+        ''', conn, params={"detail_id": detail_id}).values[0][0]
+    except IndexError:
+        return 0
+
+
+def get_lines_number(conn, detail_id):
     return pd.read_sql('''
-    SELECT COUNT(measure_id)
-    FROM detail_measure
+    SELECT COUNT(line_id)
+    FROM line
     WHERE detail_id = :detail_id
     GROUP BY detail_id
     ''', conn, params={"detail_id": detail_id}).values[0][0]
@@ -138,6 +150,16 @@ def get_detail_measure(conn, detail_id):
           ''', conn, params={"detail_id": detail_id})
     except IndexError:
         return "error"
+
+
+def get_detail_measure_id(conn, detail_id):
+    try:
+        return pd.read_sql('''SELECT measure_id
+          FROM detail_measure
+          WHERE detail_id = :detail_id
+          ''', conn, params={"detail_id": detail_id})
+    except IndexError:
+        return 'error'
 
 
 def get_detail_formula(conn, detail_id):

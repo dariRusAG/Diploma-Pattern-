@@ -19,7 +19,7 @@ def difficulty_calculation(lines_detail, measurements_detail, number_measurement
         complexity_detail += number_lines_detail * (number_measurements_detail / number_measurements) + number_lines_detail
 
     complexity = complexity_detail / number_measurements
-
+    complexity = round(complexity, 0)
     if complexity in range(0, 6):
         complexity = 1
     elif complexity in range(5, 11):
@@ -30,7 +30,6 @@ def difficulty_calculation(lines_detail, measurements_detail, number_measurement
         complexity = 4
     elif complexity in range(20, 26):
         complexity = 5
-
     return complexity
 
 
@@ -275,15 +274,20 @@ def admin_profile():
         name = request.values.get('new_pattern_name')
         picture = request.values.get('new_pattern_picture')
         category = request.values.get('new_pattern_category')
-        difficulty = 0
+        measurements_detail_list = []
+        lines_detail_list = []
+        number_measurements = []
         for detail in request.values.getlist('new_pattern_detail'):
-            difficulty = difficulty + get_measure_number(conn, detail)
+            measurements_detail_list.append(get_measure_number(conn, detail))
+            lines_detail_list.append(get_lines_number(conn, detail))
+            if not get_detail_measure_id(conn, detail).empty:
+                for elem in get_detail_measure_id(conn, detail).iloc[:, 0].tolist():
+                    if elem not in number_measurements:
+                        number_measurements.append(elem)
 
         if is_correct_pattern(conn, name, category, picture, request.values.getlist('new_pattern_detail'), -1) == "True":
             add_pattern(conn, name,
-                        picture, category, int(difficulty_calculation(get_category_by_id(conn, category),
-                                                                      len(request.values.getlist('new_pattern_detail')),
-                                                                      difficulty)))
+                        picture, category, int(difficulty_calculation(lines_detail_list, measurements_detail_list, len(number_measurements))))
             error_info = "True"
             for detail in request.values.getlist('new_pattern_detail'):
                 add_pattern_detail(conn, int(get_pattern_id(conn, name)), detail)
@@ -309,16 +313,22 @@ def admin_profile():
         category = request.values.get('new_pattern_category')
 
         id = int(request.values.get('edit_pattern_id'))
-        difficulty = 0
+        measurements_detail_list = []
+        lines_detail_list = []
+        number_measurements = []
+
         for detail in request.values.getlist('new_pattern_detail'):
-            difficulty = difficulty + get_measure_number(conn, detail)
+            measurements_detail_list.append(get_measure_number(conn, detail))
+            lines_detail_list.append(get_lines_number(conn, detail))
+            if not get_detail_measure_id(conn, detail).empty:
+                for elem in get_detail_measure_id(conn, detail).iloc[:, 0].tolist():
+                    if elem not in number_measurements:
+                        number_measurements.append(elem)
+
         if is_correct_pattern(conn, name, category, picture,
                                    request.values.getlist('new_pattern_detail'), id) == "True":
             update_pattern(conn, id, name, picture, category,
-                           int(difficulty_calculation(get_category_by_id(conn, category),
-                                                      len(request.values.getlist(
-                                                          'new_pattern_detail')),
-                                                      difficulty)))
+                           int(difficulty_calculation(lines_detail_list, measurements_detail_list, len(number_measurements))))
             delete_pattern_detail(conn, id)
             error_info = "True"
             for detail in request.values.getlist('new_pattern_detail'):
