@@ -7,9 +7,6 @@ from functions.create_scheme import *
 from matplotlib.backends.backend_pdf import PdfPages
 import os
 
-# lines_detail - лист с количеством линий каждой детали,
-# measurements_detail - лист с количеством мерок каждой детали,
-# number_measurements - количество мерок для всей выкройки (не повторяющихся)
 
 # Подсчет сложности выкройки
 def difficulty_calculation(lines_detail, measurements_detail, number_measurements):
@@ -18,17 +15,17 @@ def difficulty_calculation(lines_detail, measurements_detail, number_measurement
     for number_lines_detail, number_measurements_detail in zip(lines_detail, measurements_detail):
         complexity_detail += number_lines_detail * (number_measurements_detail / number_measurements) + number_lines_detail
 
-    complexity = complexity_detail / number_measurements
+    complexity = complexity_detail
     complexity = round(complexity, 0)
-    if complexity in range(0, 6):
+    if complexity in range(0, 25):
         complexity = 1
-    elif complexity in range(5, 11):
+    elif complexity in range(24, 50):
         complexity = 2
-    elif complexity in range(10, 16):
+    elif complexity in range(49, 75):
         complexity = 3
-    elif complexity in range(15, 21):
+    elif complexity in range(74, 100):
         complexity = 4
-    elif complexity in range(20, 26):
+    else:
         complexity = 5
     return complexity
 
