@@ -48,30 +48,33 @@
                         </div>
                     </div>
 
-                    <div class="user_profile_info">
-                        {% if len(error_param[1]) == 0  and error_param[2] == 'осн' %}
-                            <div class="alert alert-success d-flex align-items-center" role="alert">
-                                <i class="bi bi-check-circle-fill"></i>
-                                <div class="ms-2">
-                                    Данные успешно сохранены
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% if len(error_param[1]) != 0  and error_param[2] == 'осн' %}
-                            <div class="admin_panel_error error_user_param">
-                                {% for elem in error_param[1] %}
-                                    <p>{{ elem }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
                     <div class="user_profile_info_buttons user_base_buttons" style="width: 65%;">
                         <input type="submit" value="Отменить изменения" class="button_user">
                         <input type="submit" name="save" value="Сохранить изменения" class="button_user">
                     </div>
                 </form>
+
+                <div class="info_alert">
+                    {% if len(error_param[1]) == 0 and error_param[2] == 'осн' %}
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <div class="ms-2">
+                            Данные успешно сохранены
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if len(error_param[1]) != 0 and error_param[2] == 'осн' %}
+                    {% for elem in error_param[1] %}
+                        <div class="user_panel_error mt-1 mb-2" style="width: 100%;">
+                            <div class="ms-2 mt-2 mb-2">
+                                {{ elem }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
             </div>
 
             <div id="content-2">
@@ -90,30 +93,33 @@
                         </div>
                     </div>
 
-                    <div class="user_profile_info">
-                        {% if len(error_param[1]) == 0 and error_param[2] == 'доп' %}
-                            <div class="alert alert-success d-flex align-items-center" role="alert">
-                                <i class="bi bi-check-circle-fill"></i>
-                                <div class="ms-2">
-                                    Данные успешно сохранены
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% if len(error_param[1]) != 0 and error_param[2] == 'доп' %}
-                            <div class="admin_panel_error error_user_param">
-                                {% for elem in error_param[1] %}
-                                    <p>{{ elem }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="user_profile_info_buttons">
+                    <div class="user_profile_info_buttons right_user_buttons">
                         <input type="submit" value="Отменить изменения" class="button_user">
                         <input type="submit" name="save" value="Сохранить изменения" class="button_user">
                     </div>
                 </form>
+
+                <div class="new_setting">
+                    {% if len(error_param[1]) == 0 and error_param[2] == 'доп' %}
+                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <div class="ms-2">
+                            Данные успешно сохранены
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if len(error_param[1]) != 0 and error_param[2] == 'доп' %}
+                    {% for elem in error_param[1] %}
+                        <div class="user_panel_error mt-1 mb-2" style="width: 100%;">
+                            <div class="ms-2 mt-2 mb-2">
+                                {{ elem }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
             </div>
         </div>
     </div>

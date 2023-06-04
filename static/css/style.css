@@ -649,6 +649,23 @@ h1 {
     left: 69px;
 }
 
+.right_user_buttons {
+    position: relative;
+    left: 81px;
+}
+
+.new_setting {
+    width: 89.2%;
+    position: relative;
+    left: 79px;
+}
+
+.info_alert {
+    width: 106.5%;
+    position: relative;
+    right: 39px;
+}
+
 .user_profile_info_buttons {
     width: 89%;
     display: flex;
