@@ -3,6 +3,7 @@ body {
     font-size: 15px;
     background: #c6a7ab;
     zoom: 85%;
+    overflow-x: hidden;
 }
 
 .active {
@@ -632,15 +633,27 @@ h1 {
 
 .user_profile_info {
     float: left;
-    margin-left: 5%;
-    margin-top: 2%;
+    margin-left: 6%;
     border-radius: 5px;
+    margin-top: 2%;
+    margin-bottom: 1%;
+}
+
+.user_base {
+    position: relative;
+    right: 105px;
+}
+
+.user_base_buttons {
+    position: relative;
+    left: 69px;
 }
 
 .user_profile_info_buttons {
-    width: 99%;
+    width: 89%;
     display: flex;
     justify-content: space-between;
+    margin-bottom: calc(2% - 6px);
 }
 
 .admin_button {
@@ -667,10 +680,11 @@ h1 {
     text-transform: uppercase;
     letter-spacing: 1px;
     padding: 2px 12px;
-    margin: 6px 0;
     cursor: pointer;
     color: #fffaf1;
     background: #b47d82;
+    margin: 6px 0;
+
 }
 
 .button_menu:hover {
@@ -726,7 +740,7 @@ h1 {
 }
 
 .bottom {
-    margin-top: 64vh;
+    margin-top: 39vh;
 }
 
 .panel_right {
@@ -751,6 +765,7 @@ h1 {
     flex-direction: row;
     height: max-content;
     margin-top: 1%;
+    margin-bottom: 1%;
 }
 
 /*------------------------*/
@@ -804,4 +819,11 @@ h1 {
     height: auto;
     margin-right: 0;
     border-radius: 3px;
+}
+
+.exit {
+    position:absolute;
+    bottom:0;
+    margin-left: 8px;
+    margin-bottom: 1em;
 }

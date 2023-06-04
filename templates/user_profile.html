@@ -22,21 +22,23 @@
             <a href="#content-2">Дополнительные данные</a>
         </div>
 
-        <div>
+        <div class="exit">
             <form action="{{ url_for('catalog_favorites') }}" method="get">
-                <input type="submit" name="remove_profile_button" value="Удалить аккаунт" class="button_user bottom">
+                <input type="submit" name="remove_profile_button" value="Удалить аккаунт" class="button_user">
             </form>
-            <p class="mt-4">{{ macros_general.exit() }}</p>
+            {{ macros_general.exit() }}
         </div>
     </div>
 
     <div class="panel_right">
         <div class="tabs">
             <div id="content-1">
-                <form action="{{ url_for('user_profile') }}#content-1" method="post">
+                <form action="{{ url_for('user_profile') }}#content-1" method="post" class="user_base">
                     <div class="user_profile_info">
                         <p><b>Личные данные</b></p>
+                        <div class="user_info">
                         {{ macros.render_data_user(data_user, len) }}
+                        </div>
                     </div>
 
                     <div class="user_profile_info">
@@ -65,13 +67,12 @@
                         {% endif %}
                     </div>
 
-                    <div class="user_profile_info_buttons">
+                    <div class="user_profile_info_buttons user_base_buttons" style="width: 65%;">
                         <input type="submit" value="Отменить изменения" class="button_user">
                         <input type="submit" name="save" value="Сохранить изменения" class="button_user">
                     </div>
                 </form>
             </div>
-
 
             <div id="content-2">
                 <form action="{{ url_for('user_profile') }}#content-2" method="post">
@@ -83,6 +84,7 @@
                     </div>
 
                     <div class="user_profile_info">
+                        <p style="width: 100%; opacity: 0;"><b>Дополнительные мерки тела</b></p>
                         <div class="user_info">
                             {{ macros.render_param_user(param_user, error_param, info_param, len, 'доп2', 'доп') }}
                         </div>

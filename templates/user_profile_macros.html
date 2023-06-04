@@ -26,9 +26,9 @@
         {% if func_name == "осн" %}
             {% set k = range(10) %}
         {% elif func_name == "доп1" %}
-            {% set k = range(10, 21) %}
+            {% set k = range(10, 22) %}
         {% else %}
-            {% set k = range(21, len(param_user)) %}
+            {% set k = range(22, len(param_user)) %}
         {% endif %}
 
         {% for i in k %}
@@ -62,12 +62,7 @@
 
                 <td>
                     <div class="tooltip2">?
-                        <span class="tooltiptext2"
-                                {% if func_name == "осн" %}
-                              style="width: 450px;"
-                                {% else %}
-                              style="width: 320px;"
-                                {% endif %}>
+                        <span class="tooltiptext2">
                             <table class="table_measure">
                                 <tr>
                                     <td>
