@@ -182,9 +182,9 @@ def admin_profile():
             admin_panel_button = "Просмотреть Список Линий"
         else:
             admin_panel_button = "Добавить Линии"
-        session['detail_lines'].append([request.values.get('first_coord_x'), request.values.get('first_coord_y'),
-                                        request.values.get('second_coord_x'), request.values.get('second_coord_y'),
-                                        request.values.get('x_deviation'), request.values.get('y_deviation')])
+        session['detail_lines'].append([request.values.get('first_coord_x').strip(), request.values.get('first_coord_y').strip(),
+                                        request.values.get('second_coord_x').strip(), request.values.get('second_coord_y').strip(),
+                                        request.values.get('x_deviation').strip(), request.values.get('y_deviation').strip()])
 
     elif request.values.get('delete_detail_new_line'):
         line_id = int(request.values.get('delete_detail_new_line'))
