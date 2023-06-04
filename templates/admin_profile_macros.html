@@ -208,9 +208,6 @@
 
     <p class="mt-2"> Список 3D-моделей:</p>
     <div class="admin_panel_right_data_list">
-        {% for i in range(20) %}
-            <div class="admin_panel_right_data_text">info</div>
-        {% endfor %}
     </div>
 {% endmacro %}
 
@@ -707,7 +704,7 @@
                             <li class="ms-2">
                                 {{ detail_info[3].values[i][0] }}
                                 : &ensp;
-                                ({{ detail_info[3].values[i][1] }})
+                                {{ detail_info[3].values[i][1] }}
                             </li>
                         {% endfor %}
                     {% endif %}

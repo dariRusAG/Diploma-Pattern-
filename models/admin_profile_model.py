@@ -270,6 +270,11 @@ def delete_category(conn, category_id):
     DELETE FROM category
     WHERE category_id=:category_id;
      ''', {"category_id": category_id})
+
+    cur.execute(f'''
+        DELETE FROM pattern
+        WHERE category_id=:category_id;
+         ''', {"category_id": category_id})
     conn.commit()
     return cur.lastrowid
 
