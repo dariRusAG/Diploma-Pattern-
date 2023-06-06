@@ -104,8 +104,9 @@ def admin_profile():
         admin_panel_button = "Категории"
 
     elif request.values.get('add_formula'):
-        if is_correct_formula(conn, request.values.get('new_formula_name'),
-                              request.values.get('new_formula_value'), -1) == 'True':
+
+        if is_correct_formula(conn, str(request.values.get('new_formula_name')).strip(),
+                              str(request.values.get('new_formula_value')).strip(), -1) == 'True':
             add_formula(conn, str(request.values.get('new_formula_name')).strip(),
                         str(request.values.get('new_formula_value')).strip())
             error_info = "True"
@@ -178,9 +179,10 @@ def admin_profile():
             admin_panel_button = "Просмотреть Список Линий"
         else:
             admin_panel_button = "Добавить Линии"
-        session['detail_lines'].append([request.values.get('first_coord_x').strip(), request.values.get('first_coord_y').strip(),
-                                        request.values.get('second_coord_x').strip(), request.values.get('second_coord_y').strip(),
-                                        request.values.get('x_deviation').strip(), request.values.get('y_deviation').strip()])
+            if request.values.get('first_coord_x').strip() != '' and request.values.get('first_coord_y').strip() != '' and request.values.get('second_coord_x').strip() != '' and request.values.get('second_coord_y').strip() != '':
+                session['detail_lines'].append([request.values.get('first_coord_x').strip(), request.values.get('first_coord_y').strip(),
+                                                request.values.get('second_coord_x').strip(), request.values.get('second_coord_y').strip(),
+                                                request.values.get('x_deviation').strip(), request.values.get('y_deviation').strip()])
 
     elif request.values.get('delete_detail_new_line'):
         line_id = int(request.values.get('delete_detail_new_line'))

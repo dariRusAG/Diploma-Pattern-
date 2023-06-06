@@ -122,22 +122,24 @@ def is_correct_formula(conn, name, value, formula_id):
     df_param_detail['Корень'] = math.sqrt
     df_param_detail['Степень'] = math.pow
     df_param_detail['ДИ'] = 10
-
-    try:
-        eval(value, df_param_detail)
-    except Exception:
-        return "Ошибка! Неверный синтаксис формулы"
-
-    if is_correct_overall(name.replace("_"," ")) != 'True':
-        return is_correct_overall(name)
-    elif get_formula_id(conn, name) != "error" and get_formula_id(conn, name) != formula_id:
-        return "Ошибка! Такое название формулы уже существует"
-    elif value == '':
+    if value == '':
         return "Ошибка! Введено пустое поле"
-    elif get_formula_id_by_value(conn, value) != "error" and get_formula_id_by_value(conn, value) != formula_id:
-        return "Ошибка! Такая формула уже существует"
     else:
-        return 'True'
+        try:
+            eval(value, df_param_detail)
+        except Exception:
+            return "Ошибка! Неверный синтаксис формулы"
+
+        if is_correct_overall(name.replace("_"," ")) != 'True':
+            return is_correct_overall(name)
+        elif get_formula_id(conn, name) != "error" and get_formula_id(conn, name) != formula_id:
+            return "Ошибка! Такое название формулы уже существует"
+        elif value == '':
+            return "Ошибка! Введено пустое поле"
+        elif get_formula_id_by_value(conn, value) != "error" and get_formula_id_by_value(conn, value) != formula_id:
+            return "Ошибка! Такая формула уже существует"
+        else:
+            return 'True'
 
 
 def is_correct_detail(conn, name, size, detail_id):
