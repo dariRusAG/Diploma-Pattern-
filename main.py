@@ -398,7 +398,7 @@ INSERT INTO users (users_login, users_password, users_role)
 VALUES
 ('nakao.pd','1234567','admin'),
 ('srf_adlr','qwerty','admin'),
-('test','test','user');
+('test','testtest','user');
 
 INSERT INTO param (param_name, param_full_name, param_value_w, param_value_m, info_param, info_picture, min_value, max_value)
 VALUES

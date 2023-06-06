@@ -183,10 +183,19 @@ def is_correct_scheme(conn, df_param_detail, detail_id, pdf):
 
 
 def is_correct_login_password(conn, login, password, user_id):
+
     if login == '':
         return "Ошибка! Логин не может быть пустым"
     elif password == '':
         return "Ошибка! Пароль не может быть пустым"
+    elif len(login) < 4:
+        return "Логин должен быть больше 4 символов"
+    elif len(login) > 15:
+        return "Логин должен быть меньше 15 символов"
+    elif len(password) < 8:
+        return "Пароль должен быть больше 8 символов"
+    elif len(password) > 60:
+        return "Пароль должен быть меньше 60 символов"
     elif is_correct_user_data(conn, login, user_id) != "error":
         return "Ошибка! Такой логин уже занят"
     else:
