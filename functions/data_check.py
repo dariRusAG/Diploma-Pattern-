@@ -155,13 +155,13 @@ def is_correct_detail(conn, name, size, detail_id):
         return 'True'
 
 
-def is_correct_pattern(conn, name, category, picture, detail_list, pattern_id):
+def is_correct_pattern(conn, name, category, picture, new_picture,detail_list, pattern_id):
     if is_correct_overall((name.replace(" ", "")).replace("-", "")) != 'True':
         return is_correct_overall(name)
     elif get_pattern_id(conn, name) != "error" and get_pattern_id(conn, name) != pattern_id:
         return "Ошибка! Выкройка с таким именем уже существует"
-    elif picture == '':
-        return "Ошибка! Вместо картинки введено пустое поле"
+    elif picture == '' and new_picture == '':
+        return "Ошибка! Файл изображения отсутствует"
     elif not detail_list:
         return "Ошибка! Отсутствуют детали"
     elif category is None:
