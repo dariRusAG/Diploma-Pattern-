@@ -467,7 +467,7 @@
         {% if pattern_info == ['',''] %}
             <div>
                 <input type="text" name="new_pattern_name" placeholder="Введите название выкройки" style="width:50%">
-                <input type="file" name="new_pattern_picture">
+                <input type="file" name="new_pattern_picture" accept=".png, .jpg, .jpeg">
             </div>
 
         {% else %}
@@ -478,7 +478,7 @@
                 <input type="text" name="edit_pattern_picture" placeholder="Введите ссылку на изображение"
                        value="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}"
                        style="width:50%; margin-left:1%;">
-                <input type="file" name="edit_pattern_new_picture" style="margin-left: 1%">
+                <input type="file" name="edit_pattern_new_picture" style="margin-left: 1%" accept=".png, .jpg, .jpeg">
             </div>
         {% endif %}
 
