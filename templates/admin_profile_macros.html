@@ -452,6 +452,7 @@
 
 <!--Макрос для вывода выкроек на панели администратора-->
 {% macro admin_panel_patterns(pattern_list, category_list, detail_list, pattern_info, error_info, len) %}
+
     <div class="admin_panel_right_data_text mb-2">
         {% if pattern_info == ['',''] %}
             Добавление новой выкройки:
@@ -461,23 +462,23 @@
         {{ error_success_message(error_info) }}
     </div>
 
-    <form action="{{ url_for('admin_profile') }}" method="get">
+    <form method="POST" action="" enctype="multipart/form-data">
+
         {% if pattern_info == ['',''] %}
-            <div class="admin_panel_right_data_text">
+            <div>
                 <input type="text" name="new_pattern_name" placeholder="Введите название выкройки" style="width:50%">
-                <input type="text" name="new_pattern_picture" placeholder="Выберите файл"
-                       style="width:50%; margin-left:1%;">
+                <input type="file" name="new_pattern_picture" accept=".png, .jpg, .jpeg">
             </div>
 
         {% else %}
-
             <div class="admin_panel_right_data_text">
                 <input type="text" name="edit_pattern_name" placeholder="Введите название выкройки"
                        value="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['pattern_name'].values[0] }}"
                        style="width:50%">
-                <input type="text" name="edit_pattern_picture" placeholder="Выберите файл"
+                <input type="text" name="edit_pattern_picture" placeholder="Введите ссылку на изображение"
                        value="{{ pattern_list.loc[pattern_list['pattern_id'] == pattern_info[0]]['picture'].values[0] }}"
                        style="width:50%; margin-left:1%;">
+                <input type="file" name="edit_pattern_new_picture" style="margin-left: 1%" accept=".png, .jpg, .jpeg">
             </div>
         {% endif %}
 

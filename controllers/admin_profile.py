@@ -41,6 +41,7 @@ def add_data_detail(conn):
 
     return detail_id
 
+
 def info_some(request_text, button, conn):
     info_about_some = [int(request.values.get(request_text))]
     info_about_some.append(get_detail_by_id(conn, info_about_some[0]).split(","))
@@ -104,8 +105,9 @@ def admin_profile():
         admin_panel_button = "Категории"
 
     elif request.values.get('add_formula'):
-        if is_correct_formula(conn, request.values.get('new_formula_name'),
-                              request.values.get('new_formula_value'), -1) == 'True':
+
+        if is_correct_formula(conn, str(request.values.get('new_formula_name')).strip(),
+                              str(request.values.get('new_formula_value')).strip(), -1) == 'True':
             add_formula(conn, str(request.values.get('new_formula_name')).strip(),
                         str(request.values.get('new_formula_value')).strip())
             error_info = "True"
@@ -129,12 +131,12 @@ def admin_profile():
         formula_name = str(request.values.get('edit_formula_name')).strip()
         formula_value = str(request.values.get('edit_formula_value')).strip()
         if is_correct_formula(conn, request.values.get('edit_formula_name'),
-                                   request.values.get('edit_formula_value'), formula_id) == 'True':
+                              request.values.get('edit_formula_value'), formula_id) == 'True':
             update_formula(conn, formula_id, formula_name, formula_value)
             error_info = "True"
         else:
             error_info = is_correct_formula(conn, request.values.get('edit_formula_name'),
-                                                 request.values.get('edit_formula_value'), formula_id)
+                                            request.values.get('edit_formula_value'), formula_id)
         checked_value = False
         admin_panel_button = "Формулы"
 
@@ -178,9 +180,13 @@ def admin_profile():
             admin_panel_button = "Просмотреть Список Линий"
         else:
             admin_panel_button = "Добавить Линии"
-        session['detail_lines'].append([request.values.get('first_coord_x').strip(), request.values.get('first_coord_y').strip(),
-                                        request.values.get('second_coord_x').strip(), request.values.get('second_coord_y').strip(),
-                                        request.values.get('x_deviation').strip(), request.values.get('y_deviation').strip()])
+            if request.values.get('first_coord_x').strip() != '' and request.values.get(
+                    'first_coord_y').strip() != '' and request.values.get(
+                    'second_coord_x').strip() != '' and request.values.get('second_coord_y').strip() != '':
+                session['detail_lines'].append(
+                    [request.values.get('first_coord_x').strip(), request.values.get('first_coord_y').strip(),
+                     request.values.get('second_coord_x').strip(), request.values.get('second_coord_y').strip(),
+                     request.values.get('x_deviation').strip(), request.values.get('y_deviation').strip()])
 
     elif request.values.get('delete_detail_new_line'):
         line_id = int(request.values.get('delete_detail_new_line'))
@@ -267,9 +273,12 @@ def admin_profile():
         session['detail'] = []
         session['detail_lines'] = []
 
+
     elif request.values.get('add_new_pattern'):
         name = request.values.get('new_pattern_name')
-        picture = request.values.get('new_pattern_picture')
+
+        picture = request.files['new_pattern_picture']
+        picture_name = "static/image/picture_pattern/" + name + ".jpg"
         category = request.values.get('new_pattern_category')
         measurements_detail_list = []
         lines_detail_list = []
@@ -282,15 +291,22 @@ def admin_profile():
                     if elem not in number_measurements:
                         number_measurements.append(elem)
 
-        if is_correct_pattern(conn, name, category, picture, request.values.getlist('new_pattern_detail'), -1) == "True":
+        if is_correct_pattern(conn, name, category, picture.filename, '', request.values.getlist('new_pattern_detail'),
+                              -1) == "True":
             add_pattern(conn, name,
-                        picture, category, int(difficulty_calculation(lines_detail_list, measurements_detail_list, len(number_measurements))))
+                        picture_name, category, int(difficulty_calculation(lines_detail_list, measurements_detail_list,
+                                                                           len(number_measurements))))
+            picture.save(picture_name)
             error_info = "True"
             for detail in request.values.getlist('new_pattern_detail'):
                 add_pattern_detail(conn, int(get_pattern_id(conn, name)), detail)
         else:
-            error_info = is_correct_pattern(conn, name, category, picture, request.values.getlist('new_pattern_detail'), -1)
+            error_info = is_correct_pattern(conn, name, category, picture.filename, '', request.values.getlist('new_pattern_detail'),
+                                            -1)
 
+        admin_panel_button = "Выкройки"
+
+    elif request.values.get('add_pattern_cancel'):
         admin_panel_button = "Выкройки"
 
     elif request.values.get('one_pattern_info'):
@@ -300,46 +316,10 @@ def admin_profile():
         admin_panel_button, info_about_some = info_some('one_pattern_edit', 'Редактирование Выкроек', conn)
 
     elif request.values.get('one_pattern_delete'):
+        os.remove('static/image/picture_pattern/' + get_pattern_name(conn, int(request.values.get(
+            'one_pattern_delete'))) + '.jpg')
         delete_pattern(conn, int(request.values.get('one_pattern_delete')))
         delete_pattern_detail(conn, int(request.values.get('one_pattern_delete')))
-        admin_panel_button = "Список Выкроек"
-
-    elif request.values.get('edit_pattern'):
-        name = request.values.get('edit_pattern_name')
-        picture = request.values.get('edit_pattern_picture')
-        category = request.values.get('new_pattern_category')
-
-        id = int(request.values.get('edit_pattern_id'))
-        measurements_detail_list = []
-        lines_detail_list = []
-        number_measurements = []
-
-        for detail in request.values.getlist('new_pattern_detail'):
-            measurements_detail_list.append(get_measure_number(conn, detail))
-            lines_detail_list.append(get_lines_number(conn, detail))
-            if not get_detail_measure_id(conn, detail).empty:
-                for elem in get_detail_measure_id(conn, detail).iloc[:, 0].tolist():
-                    if elem not in number_measurements:
-                        number_measurements.append(elem)
-
-        if is_correct_pattern(conn, name, category, picture,
-                                   request.values.getlist('new_pattern_detail'), id) == "True":
-            update_pattern(conn, id, name, picture, category,
-                           int(difficulty_calculation(lines_detail_list, measurements_detail_list, len(number_measurements))))
-            delete_pattern_detail(conn, id)
-            error_info = "True"
-            for detail in request.values.getlist('new_pattern_detail'):
-                add_pattern_detail(conn, id, detail)
-            admin_panel_button = "Список Выкроек"
-        else:
-            error_info = is_correct_pattern(conn, name, category, picture,
-                                                 request.values.getlist('new_pattern_detail'), id)
-            admin_panel_button, info_about_some = info_some('edit_pattern_id', 'Редактирование Выкроек', conn)
-
-    elif request.values.get('add_pattern_cancel'):
-        admin_panel_button = "Выкройки"
-
-    elif request.values.get('edit_pattern_cancel'):
         admin_panel_button = "Список Выкроек"
 
     elif request.values.get('one_detail_info'):
@@ -354,6 +334,53 @@ def admin_profile():
     elif request.values.get('one_detail_delete'):
         delete_detail(conn, int(request.values.get('one_detail_delete')), 'Удаление')
         admin_panel_button = "Список Деталей"
+
+    if request.values.get('edit_pattern'):
+        name = request.values.get('edit_pattern_name')
+        picture = request.values.get('edit_pattern_picture')
+        new_picture = request.files['edit_pattern_new_picture']
+        new_picture_name = "static/image/picture_pattern/" + name + ".jpg"
+        category = request.values.get('new_pattern_category')
+        id = int(request.values.get('edit_pattern_id'))
+        measurements_detail_list = []
+        lines_detail_list = []
+        number_measurements = []
+
+        for detail in request.values.getlist('new_pattern_detail'):
+            measurements_detail_list.append(get_measure_number(conn, detail))
+            lines_detail_list.append(get_lines_number(conn, detail))
+            if not get_detail_measure_id(conn, detail).empty:
+                for elem in get_detail_measure_id(conn, detail).iloc[:, 0].tolist():
+                    if elem not in number_measurements:
+                        number_measurements.append(elem)
+
+        if is_correct_pattern(conn, name, category, picture, new_picture.filename,
+                              request.values.getlist('new_pattern_detail'), id) == "True":
+            if new_picture.filename != '':
+                new_picture.save(new_picture_name)
+                update_pattern(conn, id, name, new_picture_name, category,
+                               int(difficulty_calculation(lines_detail_list, measurements_detail_list,
+                                                          len(number_measurements))))
+            else:
+                update_pattern(conn, id, name, picture, category,
+                               int(difficulty_calculation(lines_detail_list, measurements_detail_list,
+                                                          len(number_measurements))))
+            delete_pattern_detail(conn, id)
+            error_info = "True"
+            info_about_some = ['']
+            for detail in request.values.getlist('new_pattern_detail'):
+                add_pattern_detail(conn, id, detail)
+            admin_panel_button = "Список Выкроек"
+        else:
+            error_info = is_correct_pattern(conn, name, category, picture, new_picture.filename,
+                                            request.values.getlist('new_pattern_detail'), id)
+            admin_panel_button, info_about_some = info_some('edit_pattern_id', 'Редактирование Выкроек', conn)
+            admin_panel_button = "Выкройки"
+
+
+    elif request.values.get('edit_pattern_cancel'):
+        admin_panel_button = "Список Выкроек"
+        info_about_some = ['']
 
     df_detail = get_detail(conn)
     df_category = get_category(conn)

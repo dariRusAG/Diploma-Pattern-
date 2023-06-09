@@ -128,7 +128,7 @@ VALUES
 ('Брюки бананы', 1, 3, '/static/image/picture_pattern/Брюки%20бананы.jpg'),
 ('Брюки скинни', 1, 3, '/static/image/picture_pattern/Брюки%20скинни.jpg'),
 ('Брюки карго', 1, 4, '/static/image/picture_pattern/Брюки%20карго.jpg'),
-('Платье-футляр', 2, 5, '/static/image/picture_pattern/Платье%20футляр.jpg'),
+('Платье-футляр', 2, 5, '/static/image/picture_pattern/Платье-футляр.jpg'),
 ('Платье сафари', 2, 5, '/static/image/picture_pattern/Платье%20сафари.jpg');
 
 INSERT INTO pattern_detail (pattern_id, detail_id)
@@ -398,7 +398,7 @@ INSERT INTO users (users_login, users_password, users_role)
 VALUES
 ('nakao.pd','1234567','admin'),
 ('srf_adlr','qwerty','admin'),
-('test','test','user');
+('test','testtest','user');
 
 INSERT INTO param (param_name, param_full_name, param_value_w, param_value_m, info_param, info_picture, min_value, max_value)
 VALUES

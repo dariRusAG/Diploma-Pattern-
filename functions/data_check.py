@@ -122,22 +122,24 @@ def is_correct_formula(conn, name, value, formula_id):
     df_param_detail['Корень'] = math.sqrt
     df_param_detail['Степень'] = math.pow
     df_param_detail['ДИ'] = 10
-
-    try:
-        eval(value, df_param_detail)
-    except Exception:
-        return "Ошибка! Неверный синтаксис формулы"
-
-    if is_correct_overall(name.replace("_"," ")) != 'True':
-        return is_correct_overall(name)
-    elif get_formula_id(conn, name) != "error" and get_formula_id(conn, name) != formula_id:
-        return "Ошибка! Такое название формулы уже существует"
-    elif value == '':
+    if value == '':
         return "Ошибка! Введено пустое поле"
-    elif get_formula_id_by_value(conn, value) != "error" and get_formula_id_by_value(conn, value) != formula_id:
-        return "Ошибка! Такая формула уже существует"
     else:
-        return 'True'
+        try:
+            eval(value, df_param_detail)
+        except Exception:
+            return "Ошибка! Неверный синтаксис формулы"
+
+        if is_correct_overall(name.replace("_"," ")) != 'True':
+            return is_correct_overall(name)
+        elif get_formula_id(conn, name) != "error" and get_formula_id(conn, name) != formula_id:
+            return "Ошибка! Такое название формулы уже существует"
+        elif value == '':
+            return "Ошибка! Введено пустое поле"
+        elif get_formula_id_by_value(conn, value) != "error" and get_formula_id_by_value(conn, value) != formula_id:
+            return "Ошибка! Такая формула уже существует"
+        else:
+            return 'True'
 
 
 def is_correct_detail(conn, name, size, detail_id):
@@ -153,13 +155,13 @@ def is_correct_detail(conn, name, size, detail_id):
         return 'True'
 
 
-def is_correct_pattern(conn, name, category, picture, detail_list, pattern_id):
+def is_correct_pattern(conn, name, category, picture, new_picture,detail_list, pattern_id):
     if is_correct_overall((name.replace(" ", "")).replace("-", "")) != 'True':
         return is_correct_overall(name)
     elif get_pattern_id(conn, name) != "error" and get_pattern_id(conn, name) != pattern_id:
         return "Ошибка! Выкройка с таким именем уже существует"
-    elif picture == '':
-        return "Ошибка! Вместо картинки введено пустое поле"
+    elif picture == '' and new_picture == '':
+        return "Ошибка! Файл изображения отсутствует"
     elif not detail_list:
         return "Ошибка! Отсутствуют детали"
     elif category is None:
@@ -181,10 +183,19 @@ def is_correct_scheme(conn, df_param_detail, detail_id, pdf):
 
 
 def is_correct_login_password(conn, login, password, user_id):
+
     if login == '':
         return "Ошибка! Логин не может быть пустым"
     elif password == '':
         return "Ошибка! Пароль не может быть пустым"
+    elif len(login) < 4:
+        return "Логин должен быть больше 4 символов"
+    elif len(login) > 15:
+        return "Логин должен быть меньше 15 символов"
+    elif len(password) < 8:
+        return "Пароль должен быть больше 8 символов"
+    elif len(password) > 60:
+        return "Пароль должен быть меньше 60 символов"
     elif is_correct_user_data(conn, login, user_id) != "error":
         return "Ошибка! Такой логин уже занят"
     else:

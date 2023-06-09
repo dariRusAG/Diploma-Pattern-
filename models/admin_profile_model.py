@@ -100,6 +100,12 @@ def get_pattern_id(conn, pattern_name):
     except IndexError:
         return "error"
 
+def get_pattern_name(conn, pattern_id):
+    return pd.read_sql('''SELECT pattern_name
+    FROM pattern
+    WHERE pattern_id = :pattern_id
+    ''', conn, params={"pattern_id": pattern_id}).values[0][0]
+
 def get_measure_id(conn, measure_name):
     try:
         return pd.read_sql('''SELECT measure_id
