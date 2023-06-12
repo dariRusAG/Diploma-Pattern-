@@ -14,22 +14,31 @@ def setting_plt(value):
 
 
 # Построение прямых линий
-def build_line_straight(x_coord_line, y_coord_line):
-    for i in range(0, len(x_coord_line) - 1, 2):
-        plt.plot(
-            [x_coord_line[i], x_coord_line[i + 1]],
-            [y_coord_line[i], y_coord_line[i + 1]],
-            c='black', lw=2.8
-        )
+def build_line_straight(x_coord_line, y_coord_line, func_name, i):
+
+    plt.plot(
+        [x_coord_line[0], x_coord_line[1]],
+        [y_coord_line[0], y_coord_line[1]],
+        c='black', lw=2.8
+    )
+    if func_name == "admin":
+        xmean = (x_coord_line[0] + x_coord_line[1]) / 2
+        ymean = (y_coord_line[0] + y_coord_line[1]) / 2
+        plt.annotate("Прямая - " + str(i), xy=(xmean + 0.2, ymean + 0.2), xycoords='data')
+
 
 # Построение кривых линий
-def build_line_curve(curve, points, func_name):
+def build_line_curve(curve, points, func_name, i):
     if func_name == "admin":
         plt.plot(
             curve[:, 0],
             curve[:, 1], lw=2.8
         )
-
+        curve_x = points[:, 0]
+        curve_y = points[:, 1]
+        xmean = (curve_x[0] + curve_x[len(curve_x)-1] + curve_x[int(len(curve_x) / 2)]) / 3
+        ymean = (curve_y[0] + curve_y[len(curve_y)-1] + curve_y[int(len(curve_y) / 2)]) / 3
+        plt.annotate("Кривая - " + str(i), xy=(xmean, ymean), xycoords='data')
         # Точки для безье
         plt.plot(
             points[:, 0],
@@ -208,11 +217,15 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     else:
         plt.figure(figsize=((1 + pages_x * 21) / 2.54, (1 + pages_y * 29.7) / 2.54))
 
+    i = 0
     # Построение всех линий
     for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
-        build_line_straight(x_straight, y_straight)
+        i = i + 1
+        build_line_straight(x_straight, y_straight, func_name, i)
+    i = 0
     for curves, curves_points in zip(line_curve, line_curve_points):
-        build_line_curve(curves, curves_points, func_name)
+        i = i + 1
+        build_line_curve(curves, curves_points, func_name, i)
 
     for i in range(pages_y):
         y = 1 + 29.7 * i
@@ -227,14 +240,19 @@ def create_user_scheme(conn, user_param, id_detail, pdf, func_name):
     plt.figure(figsize=(length_x / 2.54, length_y / 2.54))
     plt.xlim([0, length_x + 2])
     plt.ylim([0, length_y + 2])
-
+    i = 0
     for x_straight, y_straight in zip(x_coord_line_straight, y_coord_line_straight):
-        build_line_straight(x_straight, y_straight)
+        i = i + 1
+        build_line_straight(x_straight, y_straight, func_name, i)
+    i = 0
     for curves, curves_points in zip(line_curve, line_curve_points):
-        build_line_curve(curves, curves_points, func_name)
+        i = i + 1
+        build_line_curve(curves, curves_points, func_name, i)
 
     if func_name != "admin":
         plt.axis('off')
+    else:
+        plt.grid(linestyle='--')
 
     name = 'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg'
     plt.savefig(name, bbox_inches='tight')

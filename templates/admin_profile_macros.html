@@ -378,12 +378,19 @@
     </div>
     <div class="admin_panel_right_data_list" style="height: 82.5%">
         <table class="mt-2 ms-2">
+            {% set k_line= namespace(counter=false) %}
+            {% set k_curve = namespace(counter=false) %}
             {% for i in range(len(new_detail_line_list)) %}
                 <tr>
-                    {% set k = i+1 %}
                     <p>
                     <td>
-                        {{ k }}:
+                        {% if new_detail_line_list[i][4] != '' and new_detail_line_list[i][5] != '' %}
+                            {% set k_curve.counter = k_curve.counter+1 %}
+                            Кривая №{{ k_curve.counter }}:
+                        {% else %}
+                            {% set k_line.counter = k_line.counter+1 %}
+                            Прямая №{{ k_line.counter }}:
+                        {% endif %}
                         ({{ new_detail_line_list[i][0] }}, {{ new_detail_line_list[i][1] }}); &emsp;
                         ({{ new_detail_line_list[i][2] }}, {{ new_detail_line_list[i][3] }});&emsp;
                         {% if new_detail_line_list[i][4] != '' and new_detail_line_list[i][5] != '' %}
@@ -434,7 +441,7 @@
     </div>
     <div class="admin_panel_right_data_list" style="height: 82.5%; display: flex; justify-content: center">
         <p class="fig mt-3">
-            <img src="{{ name_scheme }}" alt="" style="max-height: 900px;">
+            <img src="{{ name_scheme }}" alt="">
         </p>
     </div>
 
