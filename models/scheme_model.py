@@ -118,6 +118,7 @@ def get_formula_detail(conn, detail):
 def get_line_detail(conn, detail):
     return pd.read_sql(f'''
     SELECT 
+        detail_id,
         x_first_coord, y_first_coord, 
         x_second_coord, y_second_coord,
         x_deviation, y_deviation

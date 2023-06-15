@@ -2,7 +2,9 @@ from app import app
 from flask import render_template
 from functions.data_check import *
 from utils import get_db_connection
-from functions.create_scheme import *
+
+from functions.create_scheme_pattern import *
+from functions.create_scheme_detail import *
 from models.scheme_model import *
 from matplotlib.backends.backend_pdf import PdfPages
 
@@ -137,10 +139,10 @@ def scheme():
     checked_value_2 = False
 
     name_scheme_pattern = ''
-    name_scheme_detail_1_url = []
+    name_scheme_pattern_1_url = ''
     name_scheme_detail_2_url = []
 
-    name_scheme_detail_1 = []
+    name_scheme_pattern_1 = ''
     name_scheme_detail_2 = []
 
     list_size = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
@@ -158,10 +160,7 @@ def scheme():
 
             df_param_1 = pd.DataFrame(columns=['ID', 'Обозначение', 'Полное_название', 'Значение'])
 
-            name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
-            pdf = PdfPages(name_scheme_pattern)
-
-            # Обработка мерок и параметров для построения по деталям
+            # Обработка мерок и параметров для построения выкройки
             for id_detail in list_id_detail:
                 df_measure_detail = get_measure_detail(conn, id_detail)
 
@@ -197,10 +196,15 @@ def scheme():
 
                 if len(error_info[0]) == 0:
                     checked_value_1 = True
-                    create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
-                    name_scheme_detail_1_url.append(
-                        'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
-                    name_scheme_detail_1.append(str(get_detail_name(conn, id_detail)))
+
+            if checked_value_1:
+                name_scheme_pattern_1_url = create_user_scheme_pattern(conn, df_param_1, list_id_detail, df_pattern.loc[0, "Название"], "user")
+                    # name_scheme_detail_1_url.append(
+                    #     'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
+                    # name_scheme_detail_1.append(str(get_detail_name(conn, id_detail)))
+
+            name_scheme_pattern_1 = str(df_pattern.loc[0, "Название"])
+            name_scheme_pattern = 'static/pdf/' + str(df_pattern.loc[0, "Название"]) + '.pdf'
 
             for index, row in df_param_1.iterrows():
                 if row['Обозначение'] == 'ДИ':
@@ -208,8 +212,6 @@ def scheme():
                     row['Полное_название'] = new_measure_full_name
 
             df_param_1 = df_param_1.drop_duplicates(subset=['Полное_название', 'Обозначение'], ignore_index=True)
-
-            pdf.close()
             standard_size_1 = request.values.get('fill_standard_param')
 
     # Если открыта вкладка построения по раздельным меркам
@@ -252,7 +254,7 @@ def scheme():
                 for id_detail in list_id_detail:
                     if id_detail not in error_info[4]:
                         df_param_detail = df_param_2.loc[(df_param_2['ID'] == id_detail)]
-                        create_user_scheme(conn, df_param_detail, id_detail, pdf, "user")
+                        create_user_scheme_detail(conn, df_param_detail, id_detail, pdf, "user")
                         name_scheme_detail_2_url.append(
                             'static/image/save_details/' + str(get_detail_name(conn, id_detail)) + '.jpg')
                         name_scheme_detail_2.append(str(get_detail_name(conn, id_detail)))
@@ -284,9 +286,9 @@ def scheme():
 
         # Имена файлов
         name_scheme_pattern=name_scheme_pattern,
-        name_scheme_detail_1_url=name_scheme_detail_1_url,
+        name_scheme_pattern_1_url=name_scheme_pattern_1_url,
         name_scheme_detail_2_url=name_scheme_detail_2_url,
-        name_scheme_detail_1=name_scheme_detail_1,
+        name_scheme_pattern_1=name_scheme_pattern_1,
         name_scheme_detail_2=name_scheme_detail_2,
         page=page,
 

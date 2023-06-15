@@ -81,8 +81,13 @@
                     </div>
                 {% else %}
                     <div class="scheme_view">
-                        <div class="title title-1 mb-2">Схемы выкройки "{{ pattern.loc[0, "Название"] }}":</div>
-                        {{ macros.render_pattern_scheme(name_scheme_detail_1_url, name_scheme_detail_1, zip) }}
+                        <div class="title title-1 mb-2">Схема выкройки "{{ pattern.loc[0, "Название"] }}":</div>
+                            <div class="block_scheme">
+                                <img src="{{ name_scheme_pattern_1_url }}" alt="" class="img_scheme">
+                                <div class="mt-3">
+                                    {{ name_scheme_pattern_1 }}
+                                </div>
+                            </div>
                     </div>
                 {% endif %}
 

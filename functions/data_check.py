@@ -1,7 +1,7 @@
 import math
 
 from flask import request, session
-from functions.create_scheme import create_user_scheme
+from functions.create_scheme_detail import *
 from models.admin_profile_model import *
 from models.model_general import *
 from models.scheme_model import get_param_standard_w
@@ -171,7 +171,7 @@ def is_correct_pattern(conn, name, category, picture, new_picture,detail_list, p
 
 
 def is_correct_scheme(conn, df_param_detail, detail_id, pdf):
-    scheme = create_user_scheme(conn, df_param_detail, detail_id, pdf, "admin")
+    scheme = create_user_scheme_detail(conn, df_param_detail, detail_id, pdf, "admin")
     if scheme == "error_mes":
         return "Ошибка! Выбраны не все мерки для формул"
     elif scheme == "error_form":

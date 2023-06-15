@@ -3,7 +3,7 @@ from flask import render_template
 from functions.data_check import *
 from models.admin_profile_model import *
 from utils import get_db_connection
-from functions.create_scheme import *
+from functions.create_scheme_detail import *
 from matplotlib.backends.backend_pdf import PdfPages
 import os
 
@@ -228,7 +228,7 @@ def admin_profile():
         name_scheme = 'static/image/save_details/' + str(get_detail_name(conn, detail_id)) + '.jpg'
         pdf = PdfPages('static/pdf/admin.pdf')
         if is_correct_scheme(conn, df_param_detail, detail_id, pdf) == "True":
-            create_user_scheme(conn, df_param_detail, detail_id, pdf, "admin")
+            create_user_scheme_detail(conn, df_param_detail, detail_id, pdf, "admin")
         else:
             admin_panel_button = "Детали"
             error_info = is_correct_scheme(conn, df_param_detail, detail_id, pdf)
