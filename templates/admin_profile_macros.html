@@ -226,7 +226,7 @@
         <div class="admin_panel_right_data_text">
             <input type="text" name="new_detail_name" placeholder="Введите название детали"
                    value="{{ new_detail_list[0] }}" style="width:50%">
-            <input type="text" name="new_detail_size" placeholder="Введите эталонную длину (при наличии)"
+            <input type="text" name="new_detail_size" placeholder="Введите стандартную длину (при наличии)"
                    value="{{ new_detail_list[1] }}" style="width:50%; margin-left: 1%">
         </div>
 
@@ -440,8 +440,12 @@
         Схема
     </div>
     <div class="admin_panel_right_data_list" style="height: 82.5%; display: flex; justify-content: center">
-        <p class="fig mt-3">
+        <p class="fig mt-3 ms-5">
             <img src="{{ name_scheme }}" alt="">
+        </p>
+
+       <p class="fig mt-3 ms-3" style="display: flex; justify-content: center">
+            <img src="{{ name_scheme }}" alt="" width="34%">
         </p>
     </div>
 
@@ -678,7 +682,7 @@
                     {{ detail_info[0] }}
                 </p>
 
-                <p class="ms-2"><strong>Эталонная длина:</strong>
+                <p class="ms-2"><strong>Стандартная длина:</strong>
                     {% if detail_info[1] != '' %}
                         {{ detail_info[1] }}
                     {% else %}
