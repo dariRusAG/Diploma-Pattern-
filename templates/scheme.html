@@ -28,7 +28,7 @@
             <a href="#content-2">Построить деталь</a>
 
             {% if name_scheme_pattern != '' and len(error_info[0]) == 0 %}
-                <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>
+                <a href="{{ name_scheme_pattern }}" download>Скачать схему</a>
             {% endif %}
         </div>
     </div>
@@ -69,6 +69,14 @@
                                 {% for size in list_size %}
                                     <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
                                 {% endfor %}
+                            </div>
+
+                            <div class="title title-2">
+                                <p>Внешний вид готового изделия</p>
+                            </div>
+
+                            <div class="container_button mt-3 mb-3">
+                                <input type="submit" value="Посмотреть 3D-модель" class="button button_build" style="width: 100%;">
                             </div>
                         </form>
                     </div>
@@ -141,6 +149,15 @@
                                     {% for size in list_size %}
                                         <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
                                     {% endfor %}
+                                </div>
+
+                                <div class="title title-2">
+                                    <p>Внешний вид готового изделия</p>
+                                </div>
+
+                                <div class="container_button mt-3 mb-3">
+                                    <input type="submit" value="Посмотреть 3D-модель" class="button button_build"
+                                           style="width: 100%;">
                                 </div>
                             </form>
                         </div>
