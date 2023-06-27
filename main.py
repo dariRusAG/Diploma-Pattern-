@@ -119,7 +119,7 @@ VALUES
 INSERT INTO pattern (pattern_name, category_id, complexity, picture)
 VALUES
 ('Футболка поло', 4, 2, '/static/image/picture_pattern/Футболка%20поло.jpg'),
-('Лонгслив', 4, 1, '/static/image/picture_pattern/Лонгслив.jpg'),
+('Лонгслив', 4, 2, '/static/image/picture_pattern/Лонгслив.jpg'),
 ('Классическая футболка', 4, 1, '/static/image/picture_pattern/Классическая%20футболка.jpg'),
 ('Классическая рубашка', 3, 3, '/static/image/picture_pattern/Классическая%20рубашка.jpg'),
 ('Юбка-карандаш', 6, 1, '/static/image/picture_pattern/Юбка-карандаш.jpg'),
@@ -128,7 +128,7 @@ VALUES
 ('Брюки бананы', 1, 3, '/static/image/picture_pattern/Брюки%20бананы.jpg'),
 ('Брюки скинни', 1, 3, '/static/image/picture_pattern/Брюки%20скинни.jpg'),
 ('Брюки карго', 1, 4, '/static/image/picture_pattern/Брюки%20карго.jpg'),
-('Платье-футляр', 2, 5, '/static/image/picture_pattern/Платье%20футляр.jpg'),
+('Платье-футляр', 2, 5, '/static/image/picture_pattern/Платье-футляр.jpg'),
 ('Платье сафари', 2, 5, '/static/image/picture_pattern/Платье%20сафари.jpg');
 
 INSERT INTO pattern_detail (pattern_id, detail_id)
