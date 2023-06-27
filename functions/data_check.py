@@ -150,7 +150,7 @@ def is_correct_detail(conn, name, size, detail_id):
     elif get_detail_id(conn, name) != "error" and get_detail_id(conn, name) != int(detail_id):
         return "Ошибка! Такое название детали уже существует"
     elif is_float(size) != True and size != '':
-        return "Ошибка! Неверное значение эталонной длины"
+        return "Ошибка! Неверное значение стандартной длины"
     else:
         return 'True'
 

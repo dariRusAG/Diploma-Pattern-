@@ -177,6 +177,13 @@ def admin_profile():
         if request.values.get('edit_detail_line'):
             session['detail_lines'].pop(session['detail_lines'][len(session['detail_lines']) - 1][0])
             session['detail_lines'].pop(len(session['detail_lines']) - 1)
+            if request.values.get('first_coord_x').strip() != '' and request.values.get(
+                    'first_coord_y').strip() != '' and request.values.get(
+                    'second_coord_x').strip() != '' and request.values.get('second_coord_y').strip() != '':
+                session['detail_lines'].append(
+                    [request.values.get('first_coord_x').strip(), request.values.get('first_coord_y').strip(),
+                     request.values.get('second_coord_x').strip(), request.values.get('second_coord_y').strip(),
+                     request.values.get('x_deviation').strip(), request.values.get('y_deviation').strip()])
             admin_panel_button = "Просмотреть Список Линий"
         else:
             admin_panel_button = "Добавить Линии"
@@ -298,7 +305,8 @@ def admin_profile():
                                                                            len(number_measurements))))
             picture.save(picture_name)
             error_info = "True"
-            for detail in request.values.getlist('new_pattern_detail'):
+            print(request.values.getlist('new_pattern_detail'))
+            for detail in sorted(request.values.getlist('new_pattern_detail')):
                 add_pattern_detail(conn, int(get_pattern_id(conn, name)), detail)
         else:
             error_info = is_correct_pattern(conn, name, category, picture.filename, '', request.values.getlist('new_pattern_detail'),
