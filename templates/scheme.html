@@ -28,7 +28,7 @@
             <a href="#content-2">Построить деталь</a>
 
             {% if name_scheme_pattern != '' and len(error_info[0]) == 0 %}
-                <a href="{{ name_scheme_pattern }}" download>Скачать схему выкройки</a>
+                <a href="{{ name_scheme_pattern }}" download>Скачать файл</a>
             {% endif %}
         </div>
     </div>
@@ -70,6 +70,14 @@
                                     <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
                                 {% endfor %}
                             </div>
+
+                            <div class="title title-2">
+                                <p>Внешний вид готового изделия</p>
+                            </div>
+
+                            <div class="container_button mt-3 mb-3">
+                                <input type="submit" value="Посмотреть 3D-модель" class="button button_build" style="width: 100%;">
+                            </div>
                         </form>
                     </div>
                 {% endif %}
@@ -81,7 +89,7 @@
                     </div>
                 {% else %}
                     <div class="scheme_view">
-                        <div class="title title-1 mb-2">Схема выкройки "{{ pattern.loc[0, "Название"] }}":</div>
+                        <div class="title title-1 mb-2">Выкройка "{{ pattern.loc[0, "Название"] }}":</div>
                             <div class="block_scheme">
                                 <img src="{{ name_scheme_pattern_1_url }}" alt="" class="img_scheme">
                                 <div class="mt-3">
@@ -111,7 +119,7 @@
                     {% if len(measure) != 0 %}
                         <div class="block_measure">
                             <form action="{{ url_for('scheme') }}#content-2" method="post">
-                                <div class="title title-1"> Мерки выкройки "{{ pattern.loc[0, "Название"] }}":</div>
+                                <div class="title title-1"> Мерки деталей выкройки "{{ pattern.loc[0, "Название"] }}":</div>
 
                                 <label>
                                     <input hidden type="text" name="pattern" value="{{ pattern.loc[0, 'ID'] }}">
@@ -142,6 +150,15 @@
                                         <input type="submit" name="fill_standard_param" value="{{ size }}" class="button button_build">
                                     {% endfor %}
                                 </div>
+
+                                <div class="title title-2">
+                                    <p>Внешний вид готового изделия</p>
+                                </div>
+
+                                <div class="container_button mt-3 mb-3">
+                                    <input type="submit" value="Посмотреть 3D-модель" class="button button_build"
+                                           style="width: 100%;">
+                                </div>
                             </form>
                         </div>
                     {% endif %}
@@ -166,7 +183,7 @@
                         </div>
                     {% else %}
                         <div class="scheme_view">
-                            <div class="title title-1 mb-2"> Схема выкройки "{{ pattern.loc[0, "Название"] }}":</div>
+                            <div class="title title-1 mb-2"> Детали выкройки "{{ pattern.loc[0, "Название"] }}":</div>
                             {{ macros.render_pattern_scheme(name_scheme_detail_2_url, name_scheme_detail_2, zip) }}
                         </div>
                     {% endif %}
