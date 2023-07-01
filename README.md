@@ -32,14 +32,14 @@ git clone https://github.com/dariRusAG/Diploma_Pattern.git
 ```
 gh repo clone dariRusAG/Diploma_Pattern
 ```
-3. Установить окружение: ввести команду
+3. Установить окружение: ввести команды
 ```
-cd  /../project/Diploma_Pattern/
+cd  /../Diploma_Pattern/
 python -m pip install -r requirements.txt
 ```
 или 
 ```
-cd  /../project/Diploma_Pattern/
+cd  /../Diploma_Pattern/
 pip install -r requirements.txt
 ``` 
 4. Запустить проект: ввести по-очереди три команды
