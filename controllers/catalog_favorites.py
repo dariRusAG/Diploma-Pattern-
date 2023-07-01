@@ -66,6 +66,7 @@ def catalog_favorites():
         category = request.form.getlist('category')
         session['category'] = category
         complexity = int(request.values.get('complexity_shaded'))
+        session['complexity'] = complexity
 
         df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity, is_authorization)
         df_pattern = get_pattern(conn, category, complexity)
@@ -84,6 +85,20 @@ def catalog_favorites():
         df_pattern = get_pattern(conn, old_category, complexity)
 
         category = request.form.getlist('category')
+
+    elif request.values.get('shaded') or request.values.get('empty'):
+        if 'category' in session:
+            category = session['category']
+        else:
+            category = []
+
+        if 'complexity' in session:
+            complexity = int(session['complexity'])
+        else:
+            complexity = 0
+
+        df_favorite_pattern, favorite_list, is_authorization = favorites_pattern(conn, category, complexity, is_authorization)
+        df_pattern = get_pattern(conn, category, complexity)
 
     # Если нажата кнопка "Очистить"
     else:
