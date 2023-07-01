@@ -6,8 +6,11 @@
 
 ## Установка и запуск
 1. Установить IDE **PyCharm**: [ссылка на установку](https://www.jetbrains.com/pycharm/)
-2. Установить **FLASK**: ввести команду ```pip install flask``` в GitBash
-3. Создать проект: cкопировать репозиторий командой в GitBash
+2. Установить **FLASK**: ввести команду в GitBash
+```
+pip install flask
+```
+4. Создать проект: cкопировать репозиторий командой в GitBash
 ```
 git clone https://github.com/dariRusAG/Diploma_Pattern.git
 ```
@@ -15,8 +18,15 @@ git clone https://github.com/dariRusAG/Diploma_Pattern.git
 ```
 gh repo clone dariRusAG/Diploma_Pattern
 ```
-5. Установить окружение: ввести команду в GitBash ```python -m pip install -r requirements.txt``` или ```pip install -r requirements.txt``` 
-6. Запустить проект: в CommandPrompt ввести по-очереди три команды
+5. Установить окружение: ввести команду в GitBash
+```
+python -m pip install -r requirements.txt
+```
+или 
+```
+pip install -r requirements.txt
+``` 
+7. Запустить проект: в CommandPrompt ввести по-очереди три команды
 ```
 set FLASK_APP=app
 set FLASK_ENV=development
