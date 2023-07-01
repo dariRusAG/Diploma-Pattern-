@@ -135,7 +135,6 @@ INSERT INTO pattern_detail (pattern_id, detail_id)
 VALUES
 (5, 1), (5, 2),
 (2, 3), (2, 4), (2, 5),
-(1, 3), (1, 4), (1, 6), (1, 7),
 (12, 8), (12, 9), (12, 10), (12, 11), (12, 12), (12, 13), (12, 14);
 
 INSERT INTO detail (detail_name, detail_size)
@@ -406,7 +405,6 @@ con.executescript('''
 INSERT INTO users (users_login, users_password, users_role)
 VALUES
 ('nakao.pd','1234567','admin'),
-('srf_adlr','qwerty','admin'),
 ('test','testtest','user');
 
 INSERT INTO param (param_name, param_full_name, param_value_w, param_value_m, info_param, info_picture, min_value, max_value)
