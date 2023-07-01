@@ -5,12 +5,24 @@
 - Подсистема администратора (разрабатывала Накао Полина Дмитриевна)
 
 ## Установка и запуск
-1. Установить IDE **PyCharm**: https://www.jetbrains.com/pycharm/
+1. Установить IDE **PyCharm**: [ссылка на установку](https://www.jetbrains.com/pycharm/)
 2. Установить **FLASK**: ввести команду ```pip install flask``` в GitBash
-3. Создать проект: cкопировать репозиторий командой ```git clone https://github.com/dariRusAG/Diploma_Pattern.git``` или ```gh repo clone dariRusAG/Diploma_Pattern``` в GitBash
-4. Установить окружение: ввести команду ```python -m pip install -r requirements.txt``` или ```pip install -r requirements.txt``` в GitBash
-6. Запустить проект: в CommandPrompt ввести по-очереди три команды  ```set FLASK_APP=app ```,  ```set FLASK_ENV=development ```,  ```flask run ```
-8. В браузере ввести http://localhocs:5000
+3. Создать проект: cкопировать репозиторий командой в GitBash
+```
+git clone https://github.com/dariRusAG/Diploma_Pattern.git
+```
+или 
+```
+gh repo clone dariRusAG/Diploma_Pattern
+```
+5. Установить окружение: ввести команду в GitBash ```python -m pip install -r requirements.txt``` или ```pip install -r requirements.txt``` 
+6. Запустить проект: в CommandPrompt ввести по-очереди три команды
+```
+set FLASK_APP=app
+set FLASK_ENV=development
+flask run
+```
+8. В браузере ввести ```http://localhocs:5000```
  
 ## Доступный функционал
 Для неавторизованного пользователя часть функционала является ограниченной. Для полного доступа к возможностям подсистем, в соответсвующем пункте будут приведены login и пароль.
@@ -27,7 +39,6 @@ Password: testtest
 - Получить информацию о том, как измеряются параметры
 - Отфильтровать выкройки
 - Добавить/удалить выкройку в/из списка избранного
-
 
 ### Подсистема администратора
 Login: nakao.pd
