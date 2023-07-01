@@ -8,7 +8,7 @@
 ## Установка и запуск
 1. Установить IDE **PyCharm**: [ссылка на установку](https://www.jetbrains.com/pycharm/)
 2. Создать проект: выбрать Get from VCS и в URL вставить ссылку на репозиторий ```https://github.com/dariRusAG/Diploma_Pattern.git```
-3. Выбрать интерпретататор Python не ниже версии 3.10
+3. Выбрать интерпретатор Python не ниже версии 3.10
 4. Установить окружение: ввести команду в GitBash
 ```
 python -m pip install -r requirements.txt
