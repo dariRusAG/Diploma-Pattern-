@@ -6,11 +6,7 @@
 
 ## Установка и запуск
 1. Установить IDE **PyCharm**: [ссылка на установку](https://www.jetbrains.com/pycharm/)
-2. Установить **FLASK**: ввести команду в GitBash
-```
-pip install flask
-```
-4. Создать проект: cкопировать репозиторий командой в GitBash
+2. Создать проект: cкопировать репозиторий командой в GitBash
 ```
 git clone https://github.com/dariRusAG/Diploma_Pattern.git
 ```
@@ -18,7 +14,7 @@ git clone https://github.com/dariRusAG/Diploma_Pattern.git
 ```
 gh repo clone dariRusAG/Diploma_Pattern
 ```
-5. Установить окружение: ввести команду в GitBash
+3. Установить окружение: ввести команду в GitBash
 ```
 python -m pip install -r requirements.txt
 ```
@@ -26,13 +22,13 @@ python -m pip install -r requirements.txt
 ```
 pip install -r requirements.txt
 ``` 
-7. Запустить проект: в CommandPrompt ввести по-очереди три команды
+4. Запустить проект: в CommandPrompt ввести по-очереди три команды
 ```
 set FLASK_APP=app
 set FLASK_ENV=development
 flask run
 ```
-8. В браузере ввести ```http://localhocs:5000```
+5. В браузере ввести ```http://localhocs:5000```
  
 ## Доступный функционал
 Для неавторизованного пользователя часть функционала является ограниченной. Для полного доступа к возможностям подсистем, в соответсвующем пункте будут приведены login и пароль.
