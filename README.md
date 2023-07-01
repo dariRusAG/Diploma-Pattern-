@@ -6,6 +6,7 @@
 - Подсистема администратора (разрабатывала Накао Полина Дмитриевна)
 
 ## Установка и запуск
+1 вариант (PyCharm):
 1. Установить IDE **PyCharm**: [ссылка на установку](https://www.jetbrains.com/pycharm/)
 2. Создать проект: выбрать Get from VCS и в URL вставить ссылку на репозиторий ```https://github.com/dariRusAG/Diploma_Pattern.git```
 3. Выбрать интерпретатор Python не ниже версии 3.10
@@ -20,7 +21,35 @@ set FLASK_ENV=development
 flask run
 ```
 5. В браузере ввести ```http://localhocs:5000```
- 
+
+2 вариант:
+1. Установить любую IDE для работы с python
+2. Создать проект: cкопировать репозиторий командой
+```
+git clone https://github.com/dariRusAG/Diploma_Pattern.git
+```
+или 
+```
+gh repo clone dariRusAG/Diploma_Pattern
+```
+3. Установить окружение: ввести команду
+```
+cd  /../project/Diploma_Pattern/
+python -m pip install -r requirements.txt
+```
+или 
+```
+cd  /../project/Diploma_Pattern/
+pip install -r requirements.txt
+``` 
+4. Запустить проект: ввести по-очереди три команды
+```
+set FLASK_APP=app
+set FLASK_ENV=development
+flask run
+```
+5. В браузере ввести ```http://localhocs:5000```
+
 ## Доступный функционал
 Для неавторизованного пользователя часть функционала является ограниченной. Для полного доступа к возможностям подсистем, в соответсвующем пункте будут приведены login и пароль.
 
