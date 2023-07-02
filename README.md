@@ -9,20 +9,20 @@
 Для развертывания проекта требуется предустановленный Python версии 3.10 или выше.
 
 1 вариант (PyCharm):
-1. Установить IDE **PyCharm**: [ссылка на установку](https://www.jetbrains.com/pycharm/)
+1. Установить IDE PyCharm: [ссылка на установку](https://www.jetbrains.com/pycharm/)
 2. Создать проект: выбрать Get from VCS и в URL вставить ссылку на репозиторий ```https://github.com/dariRusAG/Diploma_Pattern.git```
 3. Выбрать интерпретатор Python версии 3.10
 4. Установить окружение: ввести команду в GitBash
 ```
 python -m pip install -r requirements.txt
 ``` 
-4. Запустить проект: в CommandPrompt ввести по-очереди три команды
+5. Запустить проект: в CommandPrompt ввести по-очереди три команды
 ```
 set FLASK_APP=app
 set FLASK_ENV=development
 flask run
 ```
-5. В браузере ввести ```http://localhost:5000```
+6. В браузере ввести ```http://localhost:5000```
 
 2 вариант:
 1. Создать проект: cкопировать репозиторий командой
